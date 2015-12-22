@@ -12,6 +12,16 @@
 		8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
 		8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
 		8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
+		8B3F35041C243BBF006A4B67 /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */; };
+		8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350A1C244371006A4B67 /* DVGAudioSource.m */; };
+		8B3F350D1C244398006A4B67 /* DVGAudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */; };
+		8B4CD0B31C282DDD00B88BAC /* 440Hz-5sec.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */; };
+		8B4CD0B61C28687E00B88BAC /* misha.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B51C28684A00B88BAC /* misha.m4v */; };
+		8B4CD0B81C28768E00B88BAC /* video.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B71C28768C00B88BAC /* video.m4v */; };
+		8B4CD0BA1C29964400B88BAC /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B91C29964400B88BAC /* Protocols.swift */; };
+		8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */; };
+		8B4CD0C11C299E9700B88BAC /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */; };
+		8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +32,18 @@
 		8B3F34F81C243BA6006A4B67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8B3F34FB1C243BA6006A4B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B3F34FD1C243BA7006A4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformView.swift; sourceTree = "<group>"; };
+		8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "440Hz-5sec.mp4"; sourceTree = "<group>"; };
+		8B3F35081C244370006A4B67 /* Waveform-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Waveform-Bridging-Header.h"; sourceTree = "<group>"; };
+		8B3F35091C244371006A4B67 /* DVGAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioSource.h; sourceTree = "<group>"; };
+		8B3F350A1C244371006A4B67 /* DVGAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGAudioSource.m; sourceTree = "<group>"; };
+		8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioAnalyzer.swift; sourceTree = "<group>"; };
+		8B4CD0B51C28684A00B88BAC /* misha.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = misha.m4v; sourceTree = "<group>"; };
+		8B4CD0B71C28768C00B88BAC /* video.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.m4v; sourceTree = "<group>"; };
+		8B4CD0B91C29964400B88BAC /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
+		8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlotModel.swift; sourceTree = "<group>"; };
+		8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +76,42 @@
 		8B3F34F01C243BA6006A4B67 /* Waveform */ = {
 			isa = PBXGroup;
 			children = (
+				8B4CD0B71C28768C00B88BAC /* video.m4v */,
+				8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */,
+				8B4CD0B51C28684A00B88BAC /* misha.m4v */,
 				8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */,
 				8B3F34F31C243BA6006A4B67 /* ViewController.swift */,
+				8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */,
+				8B4CD0BD1C29999900B88BAC /* New Style Proto */,
+				8B3F35091C244371006A4B67 /* DVGAudioSource.h */,
+				8B3F350A1C244371006A4B67 /* DVGAudioSource.m */,
+				8B4CD0AF1C28270300B88BAC /* Supported */,
+			);
+			path = Waveform;
+			sourceTree = "<group>";
+		};
+		8B4CD0AF1C28270300B88BAC /* Supported */ = {
+			isa = PBXGroup;
+			children = (
 				8B3F34F51C243BA6006A4B67 /* Main.storyboard */,
 				8B3F34F81C243BA6006A4B67 /* Assets.xcassets */,
 				8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */,
 				8B3F34FD1C243BA7006A4B67 /* Info.plist */,
+				8B3F35081C244370006A4B67 /* Waveform-Bridging-Header.h */,
 			);
-			path = Waveform;
+			name = Supported;
+			sourceTree = "<group>";
+		};
+		8B4CD0BD1C29999900B88BAC /* New Style Proto */ = {
+			isa = PBXGroup;
+			children = (
+				8B4CD0B91C29964400B88BAC /* Protocols.swift */,
+				8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */,
+				8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */,
+				8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */,
+				8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */,
+			);
+			name = "New Style Proto";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,6 +172,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4CD0B61C28687E00B88BAC /* misha.m4v in Resources */,
+				8B4CD0B81C28768E00B88BAC /* video.m4v in Resources */,
+				8B4CD0B31C282DDD00B88BAC /* 440Hz-5sec.mp4 in Resources */,
 				8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */,
 				8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */,
 				8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */,
@@ -135,7 +188,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B3F350D1C244398006A4B67 /* DVGAudioAnalyzer.swift in Sources */,
+				8B3F35041C243BBF006A4B67 /* AudioWaveformView.swift in Sources */,
+				8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */,
+				8B4CD0BA1C29964400B88BAC /* Protocols.swift in Sources */,
+				8B4CD0C11C299E9700B88BAC /* AudioWaveformPlotModel.swift in Sources */,
+				8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */,
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
+				8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -198,7 +258,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -237,7 +297,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -249,10 +309,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Waveform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
 			};
 			name = Debug;
 		};
@@ -260,10 +322,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = Waveform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -286,6 +350,7 @@
 				8B3F35021C243BA7006A4B67 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

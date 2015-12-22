@@ -6,20 +6,35 @@
 //  Copyright © 2015 developer. All rights reserved.
 //
 
-import UIKit
+import UIKit.UIView
 
 class ViewController: UIViewController {
 
+    var sourceFile = "video.m4v"//"misha.m4v" //"440Hz-5sec.mp4"
+
+    @IBOutlet weak var audioWaveformPlot: AudioWaveformPlot!
+    
+    lazy var audioWaveformPlotModel: AudioWaveformPlotModel = {
+        let url       = NSBundle.mainBundle().URLForResource(self.sourceFile, withExtension: nil)!
+        let viewModel = AudioWaveformPlotModel(asset: AVAsset(URL: url))
+        return viewModel
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    @IBAction func buttonPressed() {
+        self.prepareAudioWaveformPlot()
+        self.startReading()
     }
-
-
+    
+    func prepareAudioWaveformPlot() {
+        self.audioWaveformPlot.startSynchingWithDataSource()
+    }
+    
+    func startReading() {
+        self.audioWaveformPlotModel.buildWaveformPlot(self.audioWaveformPlot)
+    }
 }
 
