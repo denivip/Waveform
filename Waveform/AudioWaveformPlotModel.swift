@@ -31,13 +31,16 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     
     func buildWaveformPlot(waveformPlot: _AudioWaveformPlot) {
         self.plot = waveformPlot
+        
         self.addOriginalMaxWaveformView()
         self.addOriginalAverageWaveformView()
-
+        
+        self.plot?.startSynchingWithDataSource()
+        
         self.pcmReader.prepareToRead { [weak self] success in
             if success {
                 let date = NSDate()
-                self?.pcmReader.readPCMs(neededPulsesCount: 320) {
+                self?.pcmReader.readPCMs(neededPulsesCount: 2208) {
                     let time = -date.timeIntervalSinceNow
                     print("time = \(time)")
                 }
@@ -50,6 +53,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         waveformViewOrigMax?.lineColor = UIColor.lightGrayColor()
         
         let waveformViewModel                  = AudioWaveformViewModel()
+        //FIXME: Retain cycle
         waveformViewModel.onMaxPulse           = { return   self.pcmReader.maxPulse }
         waveformViewModel.onTotalPulsesCount   = { return   self.pcmReader.totalPulsesCount }
         waveformViewModel.onCurrentPulsesCount = { return   self.pcmReader.currentPulsesCount }
@@ -64,6 +68,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         waveformViewOrigMax?.lineColor = UIColor.blackColor()
         
         let waveformViewModel                  = AudioWaveformViewModel()
+        //FIXME: Retain cycle
         waveformViewModel.onMaxPulse           = { return   self.pcmReader.maxPulse }
         waveformViewModel.onTotalPulsesCount   = { return   self.pcmReader.totalPulsesCount }
         waveformViewModel.onCurrentPulsesCount = { return   self.pcmReader.currentPulsesCount }

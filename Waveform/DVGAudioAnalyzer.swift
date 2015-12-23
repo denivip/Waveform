@@ -14,8 +14,8 @@ private let kDVGNoiseFloor: Float = -40.0
 final
 class DVGAudioAnalyzer: NSObject {
     
-    let audioSource: DVGAudioSource!
-    let asset: AVAsset!
+    let audioSource: DVGAudioSource_
+    let asset: AVAsset
     var audioFormat: AudioStreamBasicDescription!
     
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
@@ -47,7 +47,7 @@ class DVGAudioAnalyzer: NSObject {
     //MARK:
     init(asset: AVAsset) {
         self.asset       = asset
-        self.audioSource = DVGAudioSource(asset: asset)
+        self.audioSource = DVGAudioSource_(asset: asset)
     }
 
     func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t!) {
@@ -107,10 +107,10 @@ class DVGAudioAnalyzer: NSObject {
             
 
             do{
-                let sampleBlock = { (data: NSData!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
+                let sampleBlock = { (pointer: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
-                    let dataSamplesCount = data.length / sizeof(Int16) / channelsCount
-                    let dataSamples      = UnsafePointer<Int16>(data.bytes);
+                    let dataSamplesCount = length / sizeof(Int16) / channelsCount
+                    let dataSamples      = pointer
                     
                     var currentBlock = globalIndex / sampleBlockLength
                     
@@ -122,7 +122,8 @@ class DVGAudioAnalyzer: NSObject {
                         
                         let sample = dataSamples[channelsCount * index]
                         
-                        avgSamplesDouble[currentBlock] += fabs(Double(sample) / Double(sampleBlockLength));
+                        let k = avgSamplesDouble[currentBlock]
+                        avgSamplesDouble[currentBlock] = k + fabs(Double(sample) / Double(sampleBlockLength));
                         
                         if maxSamples[currentBlock] < sample {
                             maxSamples[currentBlock] = sample
@@ -133,22 +134,23 @@ class DVGAudioAnalyzer: NSObject {
                             self.maxPulse = sample
                         }
                         
-                        globalIndex++
+                        globalIndex = globalIndex + 1
                         let oldBlock = currentBlock
                         currentBlock = globalIndex / sampleBlockLength
 
                         if currentBlock > oldBlock {
                             self.avgPulsesBuffer[oldBlock] = Int16(avgSamplesDouble[oldBlock])
                             self.maxPulsesBuffer[oldBlock] = maxSamples[oldBlock]
-                            self.currentBufferSize++
+                            self.currentBufferSize         = self.currentBufferSize + 1
                         }
-//                        NSThread.sleepForTimeInterval(0.00005)
                     }
                     
-                    samplesCount += dataSamplesCount
+                    samplesCount = samplesCount + dataSamplesCount
+                    
+                    return false
                 }
                 
-                try self.audioSource.readAudioSamplesIntervalData(sampleBlock, timerange: audioTimeRange)
+                try self.audioSource._readAudioSamplesData(sampleBlock)
             } catch {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }
@@ -156,114 +158,4 @@ class DVGAudioAnalyzer: NSObject {
         }
     }
     
-    func readFullAggregateWaveformDataWithSampleCount(aggregateSampleCount_: UInt, outAverage avgSamplesDataOut: NSMutableData!, outMaximum maxSamplesDataOut: NSMutableData!, maxAmplitude maxAmplitudeOut: UnsafeMutablePointer<Int16>) {
-    
-        let aggregateSampleCount = Int(aggregateSampleCount_)
-        let startTime = kCMTimeZero
-        let endTime   = self.asset.duration
-        let audioTimeRange = CMTimeRangeMake(startTime, CMTimeSubtract(endTime, startTime))
-        print(String("startTime=%@.1f <=> endTime=%@.1f",CMTimeGetSeconds(startTime), CMTimeGetSeconds(endTime)))
-        
-        let channelsCount = Int(self.audioFormat.mChannelsPerFrame)
-        // Samples in one channel
-        let estimatedSampleCount = CMTimeGetSeconds(audioTimeRange.duration) * self.audioFormat.mSampleRate
-
-//        let progress = DVGProgress.__discreteProgressWithTotalUnitCount(Int64(estimatedSampleCount * 1.1))
-//        progress.userDescription = NSLocalizedString("Loading sound", comment: "")
-        print("estimatedSampleCount = \(estimatedSampleCount)")
-
-        // How many original samples per one aggregated
-        let sampleBlockLength = Int(estimatedSampleCount / Double(aggregateSampleCount));
-        print("sampleBlockLength = \(sampleBlockLength), aggregateSampleCount = \(aggregateSampleCount)")
-    
-        self.runAsynchronouslyOnProcessingQueue{
-            [weak self] in
-            if self == nil { return }
-            
-            let avgSamplesDoubleData = NSMutableData(length: Int(aggregateSampleCount) * sizeof(Double))!
-            let avgSamplesDouble     = UnsafeMutablePointer<Double>(avgSamplesDoubleData.mutableBytes)
-
-            // Initialize maximum samples data
-            let maxSamplesData = NSMutableData(length: Int(aggregateSampleCount) * sizeof(Int16))!
-            let maxSamples     = UnsafeMutablePointer<Int16>(maxSamplesData.mutableBytes)
-            
-            for index in 0..<Int(aggregateSampleCount) {
-                avgSamplesDouble[index] = Double(kDVGNoiseFloor);
-                maxSamples[index]       = Int16(kDVGNoiseFloor);
-            }
-            
-            var maxAmplitude = Int16(kDVGNoiseFloor)
-            var globalIndex  = 0
-            var samplesCount = 0
-            
-            do{
-                let sampleBlock = { (data: NSData!, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-                    
-                    let dataSamplesCount = data.length / sizeof(Int16) / channelsCount
-                    let dataSamples = UnsafeMutablePointer<Int16>(data.bytes);
-                    
-                    for index in 0..<dataSamplesCount {
-                        
-                        let block = globalIndex / sampleBlockLength
-                        
-                        if (block > aggregateSampleCount){
-                            continue;
-                        }
-                        
-                        var sample = dataSamples[channelsCount * index]
-                        
-                        avgSamplesDouble[block] += fabs(Double(sample) / Double(sampleBlockLength));
-                        
-                        if maxSamples[block] < sample {
-                            maxSamples[block] = sample
-                        }
-                        
-                        if (maxAmplitude < sample) {
-                            maxAmplitude = sample
-                            maxAmplitudeOut.memory = sample
-                        }
-                        
-                        sample = UnsafeMutablePointer<Int16>(avgSamplesDouble)[block]
-
-                        var asdoValue = Int16(avgSamplesDouble[block])
-                        avgSamplesDataOut.replaceBytesInRange(NSMakeRange(block * sizeof(Int16), sizeof(Int16)), withBytes: &asdoValue)
-                        
-                        var msdoValue = maxSamples[block]
-                        maxSamplesDataOut.replaceBytesInRange(NSMakeRange(block * sizeof(Int16), sizeof(Int16)), withBytes: &msdoValue)
-                        
-                        globalIndex++
-                    }
-                    
-                    samplesCount += dataSamplesCount
-//                    progress.completedUnitCount = Int64(samplesCount)
-          
-//                    if (progress.cancelled){
-//                        stop.memory = true
-//                    }
-                }
-
-                try self!.audioSource.readAudioSamplesIntervalData(sampleBlock, timerange: audioTimeRange)
-            } catch let error {
-                print("\(__FUNCTION__) \(__LINE__) error: \(error)")
-                samplesCount = 0
-            }
-            
-            if maxAmplitude == 0 {
-                samplesCount = 0
-            }
-            
-//            progress.liveContext[kDVGTotalSamplesKey] = samplesCount
-            
-            if samplesCount == 0 {
-//                let error = NSError(domain: "ErrorDomain", code: -1, userInfo: [NSLocalizedDescriptionKey : NSLocalizedString("Error reading audio data", comment:"")])
-//                progress.completeWithError(error)
-                return
-            }
-            
-//            self!.samplesCount = samplesCount * channelsCount
-//            progress.completeWithError(nil)
-        }
-        return
-//        return progress
-    }
 }

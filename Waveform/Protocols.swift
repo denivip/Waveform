@@ -10,6 +10,9 @@ import UIKit.UIView
 
 protocol _AudioWaveformPlot: class {
     func addWaveformViewWithId(identifier: String) -> _AudioWaveformView
+    func startSynchingWithDataSource()
+    func stopSynchingWithDataSource()
+    func redraw()
 }
 
 protocol _AudioWaveformView: class {

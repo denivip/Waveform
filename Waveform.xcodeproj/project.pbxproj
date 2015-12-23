@@ -22,6 +22,7 @@
 		8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */; };
 		8B4CD0C11C299E9700B88BAC /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */; };
 		8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */; };
+		8B4CD0C51C29B7F400B88BAC /* DVGAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
 		8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlotModel.swift; sourceTree = "<group>"; };
 		8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformViewModel.swift; sourceTree = "<group>"; };
+		8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */,
 				8B3F34F31C243BA6006A4B67 /* ViewController.swift */,
 				8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */,
+				8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */,
 				8B4CD0BD1C29999900B88BAC /* New Style Proto */,
 				8B3F35091C244371006A4B67 /* DVGAudioSource.h */,
 				8B3F350A1C244371006A4B67 /* DVGAudioSource.m */,
@@ -189,6 +192,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B3F350D1C244398006A4B67 /* DVGAudioAnalyzer.swift in Sources */,
+				8B4CD0C51C29B7F400B88BAC /* DVGAudioSource.swift in Sources */,
 				8B3F35041C243BBF006A4B67 /* AudioWaveformView.swift in Sources */,
 				8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */,
 				8B4CD0BA1C29964400B88BAC /* Protocols.swift in Sources */,
@@ -239,6 +243,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -262,7 +267,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -284,6 +289,7 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -300,6 +306,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -310,6 +317,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Waveform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
@@ -323,6 +331,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = Waveform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;

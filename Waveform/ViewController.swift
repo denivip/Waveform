@@ -30,7 +30,6 @@ class ViewController: UIViewController {
     }
     
     func prepareAudioWaveformPlot() {
-        self.audioWaveformPlot.startSynchingWithDataSource()
     }
     
     func startReading() {

@@ -45,9 +45,9 @@ class AudioWaveformView: UIView, _AudioWaveformView {
         self.layer.addSublayer(self.pathLayer)
         self.pathLayer.frame           = self.bounds
 
-        self.pathLayer.shouldRasterize     = true
+//        self.pathLayer.shouldRasterize     = true
         self.pathLayer.drawsAsynchronously = true
-        self.pathLayer.rasterizationScale  = UIScreen.mainScreen().scale
+//        self.pathLayer.rasterizationScale  = UIScreen.mainScreen().scale
     }
     
     func redrawPulses() {
@@ -67,26 +67,27 @@ class AudioWaveformView: UIView, _AudioWaveformView {
     }
     
     private func appendNewPathToPathLayer() {
-
+            
         let currentPath = CGPathCreateMutableCopy(self.pathLayer.path) ?? CGPathCreateMutable()
         let path        = self.newPathPart()
         
         CGPathAddPath(currentPath, nil, path)
-        
         self.pathLayer.path = currentPath
     }
     
     private func newPathPart() -> CGPathRef {
         let loadedPulsesCount = self.dataSource!.currentPulsesCount
+        let totalPulses       = self.dataSource!.totalPulsesCount
+
         let mPath = CGPathCreateMutable()
 
         for index in self.drawedPulsesCount..<loadedPulsesCount {
             let pulsesMax = self.dataSource!.pulseAtIndex(index)
             
-            let xAdjustment = CGFloat(1)
+            let xAdjustment = self.bounds.width/CGFloat(totalPulses) //CGFloat(1)
             let yAdjustment = self.pathLayer.bounds.height/CGFloat(INT16_MAX)/2
-            CGPathMoveToPoint(   mPath, nil, CGFloat(index)/xAdjustment, self.pathLayer.bounds.midY - CGFloat(pulsesMax)*yAdjustment)
-            CGPathAddLineToPoint(mPath, nil, CGFloat(index)/xAdjustment, self.pathLayer.bounds.midY + CGFloat(pulsesMax)*yAdjustment)
+            CGPathMoveToPoint(   mPath, nil, CGFloat(index)*xAdjustment, self.pathLayer.bounds.midY - CGFloat(pulsesMax)*yAdjustment)
+            CGPathAddLineToPoint(mPath, nil, CGFloat(index)*xAdjustment, self.pathLayer.bounds.midY + CGFloat(pulsesMax)*yAdjustment)
         }
         return mPath
     }
