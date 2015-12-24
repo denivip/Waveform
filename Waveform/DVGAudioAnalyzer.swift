@@ -12,7 +12,7 @@ import AVFoundation
 private let kDVGNoiseFloor: Float = -40.0
 
 final
-class DVGAudioAnalyzer: NSObject {
+class DVGAudioAnalyzer {
     
     let audioSource: DVGAudioSource_
     let asset: AVAsset
@@ -92,7 +92,9 @@ class DVGAudioAnalyzer: NSObject {
             let estimatedSampleCount = CMTimeGetSeconds(audioTimeRange.duration) * self.audioFormat.mSampleRate
             //???: Возможно нужно округлять sampleBlockLength в большую сторону (сейчас последний кусок данных меньший размера блока пропускается)
             let sampleBlockLength    = Int(estimatedSampleCount / Double(self.neededPulsesCount));
-
+            
+            print("sampleBlockLength = \(sampleBlockLength)")
+            
             let avgSamplesDouble     = UnsafeMutablePointer<Double>.alloc(self.neededPulsesCount)
             let maxSamples           = UnsafeMutablePointer<Int16>.alloc(self.neededPulsesCount)
             
@@ -107,17 +109,14 @@ class DVGAudioAnalyzer: NSObject {
             
 
             do{
-                let sampleBlock = { (pointer: UnsafePointer<Int16>!, length: Int) -> Bool in
-                    
-                    let dataSamplesCount = length / sizeof(Int16) / channelsCount
-                    let dataSamples      = pointer
+                let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
                     var currentBlock = globalIndex / sampleBlockLength
                     
-                    for index in 0..<dataSamplesCount {
+                    for index in 0..<length {
                         
                         if (currentBlock > self.neededPulsesCount){
-                            continue;
+                            break;
                         }
                         
                         let sample = dataSamples[channelsCount * index]
@@ -143,17 +142,27 @@ class DVGAudioAnalyzer: NSObject {
                             self.maxPulsesBuffer[oldBlock] = maxSamples[oldBlock]
                             self.currentBufferSize         = self.currentBufferSize + 1
                         }
+//                        NSThread.sleepForTimeInterval(0.00001)
                     }
-                    
-                    samplesCount = samplesCount + dataSamplesCount
+
+//                    print("globalIndex: \(globalIndex)")
+
+                    samplesCount = samplesCount + length
                     
                     return false
                 }
                 
-                try self.audioSource._readAudioSamplesData(sampleBlock)
+                try self.audioSource._readAudioSamplesData(sampleBlock: sampleBlock)
             } catch {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }
+            avgSamplesDouble.destroy()
+            avgSamplesDouble.dealloc(self.neededPulsesCount)
+            
+            maxSamples.destroy()
+            maxSamples.dealloc(self.neededPulsesCount)
+            
+            self.neededPulsesCount = self.currentBufferSize
             completion()
         }
     }

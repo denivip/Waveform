@@ -43,6 +43,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
                 self?.pcmReader.readPCMs(neededPulsesCount: 2208) {
                     let time = -date.timeIntervalSinceNow
                     print("time = \(time)")
+                    self?.plot?.redraw()
                 }
             }
         }
@@ -50,7 +51,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     
     private func addOriginalMaxWaveformView() {
         let waveformViewOrigMax        = self.plot?.addWaveformViewWithId("orig.max")
-        waveformViewOrigMax?.lineColor = UIColor.lightGrayColor()
+        waveformViewOrigMax?.lineColor = UIColor.blackColor()
         
         let waveformViewModel                  = AudioWaveformViewModel()
         //FIXME: Retain cycle
@@ -65,7 +66,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     
     private func addOriginalAverageWaveformView() {
         let waveformViewOrigMax        = self.plot?.addWaveformViewWithId("orig.avg")
-        waveformViewOrigMax?.lineColor = UIColor.blackColor()
+        waveformViewOrigMax?.lineColor = UIColor.lightGrayColor()
         
         let waveformViewModel                  = AudioWaveformViewModel()
         //FIXME: Retain cycle

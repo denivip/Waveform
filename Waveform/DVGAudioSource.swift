@@ -89,116 +89,10 @@ class DVGAudioSource_: NSObject {
         
         return audioFormat
     }
-    
-    func readAudioSamplesData(sampleBlock: (NSData!) -> (Bool)) throws {
 
-        let timerange = CMTimeRangeMake(kCMTimeZero, self.asset.duration)
-        
-        let sound = self.assetAudioTrack
-        
-        if sound == nil {
-            
-            let error = NSError(
-                domain: "DVGAudioProcessorErrorDomain",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey : NSLocalizedString("This video does not contain sound", comment:"")
-                ])
-            throw error
-        }
-        
-        let assetReader: AVAssetReader
-        do {
-            assetReader = try AVAssetReader(asset: self.asset)
-        } catch {
-            throw error
-        }
-        
-        
-        let audioReadSettings: [String: AnyObject] = [
-            AVFormatIDKey : NSNumber(unsignedInt: kAudioFormatLinearPCM),
-            AVSampleRateKey : 44100,
-            AVNumberOfChannelsKey : 2,
-            AVLinearPCMBitDepthKey : 16,
-            AVLinearPCMIsBigEndianKey : false,
-            AVLinearPCMIsFloatKey : false,
-            AVLinearPCMIsNonInterleaved : false
-        ]
-        
-        let readerOutput = AVAssetReaderTrackOutput.init(track: sound!, outputSettings: audioReadSettings)
 
-        assetReader.addOutput(readerOutput)
-        assetReader.timeRange = timerange
+    func _readAudioSamplesData(_format: AudioStreamBasicDescription? = nil, sampleBlock: (UnsafePointer<Int16>!, length: Int) -> (Bool)) throws {
         
-        let started = assetReader.startReading()
-        
-        if !started {
-            let error = NSError(
-                domain: "DVGAudioProcessorErrorDomain",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey: NSLocalizedString("Asset reader not started", comment:"")
-                ])
-            throw assetReader.error ?? error
-        }
-        
-        //DVGLog(@"DEBUG Started reading audio track");
-        while assetReader.status == .Reading {
-            var stop = false
-            autoreleasepool { () -> () in
-                
-                let sampleBuffer = readerOutput.copyNextSampleBuffer()
-                
-                if sampleBuffer == nil {
-                    return // continue while-loop (autorelease is closure in Swift)
-                }
-                
-                // Get buffer
-                let buffer = CMSampleBufferGetDataBuffer(sampleBuffer!)
-                if buffer == nil {
-                    fatalError()
-                }
-                
-                let length = CMBlockBufferGetDataLength(buffer!)
-                let bytes  = UnsafeMutablePointer<Void>.alloc(length)
-//                // Append new data
-
-                var returnedPointer = UnsafeMutablePointer<Int8>.alloc(0)
-                CMBlockBufferAccessDataBytes(buffer!, 0, length, bytes, &returnedPointer)
-                let data = NSData(bytesNoCopy: returnedPointer, length: length, freeWhenDone: false)
-                
-                autoreleasepool({ () -> () in
-                    stop = sampleBlock(data)
-                })
-
-                if stop {
-                    return
-                }
-            }
-        }
-        
-        switch assetReader.status {
-        case .Unknown, .Failed, .Cancelled, .Reading:
-            let error = NSError(
-                domain: "DVGAudioProcessorErrorDomain",
-                code: -1,
-                userInfo: [
-                    NSLocalizedDescriptionKey: NSLocalizedString("Unknown error", comment:"")
-                ])
-            throw assetReader.error ?? error
-        case .Completed:
-            return
-        }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    func _readAudioSamplesData(sampleBlock: (UnsafePointer<Int16>!, length: Int) -> (Bool)) throws {
         
         let timerange = CMTimeRangeMake(kCMTimeZero, self.asset.duration)
         
@@ -222,12 +116,13 @@ class DVGAudioSource_: NSObject {
             throw error
         }
         
-        
+        let format = _format ?? self.audioFormat!
+
         let audioReadSettings: [String: AnyObject] = [
-            AVFormatIDKey : NSNumber(unsignedInt: kAudioFormatLinearPCM),
-            AVSampleRateKey : 44100,
-            AVNumberOfChannelsKey : 2,
-            AVLinearPCMBitDepthKey : 16,
+            AVFormatIDKey : NSNumber(unsignedInt: format.mFormatID),//NSNumber(unsignedInt: kAudioFormatLinearPCM),
+            AVSampleRateKey : format.mSampleRate,
+            AVNumberOfChannelsKey : NSNumber(unsignedInt: format.mChannelsPerFrame),
+            AVLinearPCMBitDepthKey : NSNumber(unsignedInt: format.mBitsPerChannel),
             AVLinearPCMIsBigEndianKey : false,
             AVLinearPCMIsFloatKey : false,
             AVLinearPCMIsNonInterleaved : false
@@ -270,22 +165,27 @@ class DVGAudioSource_: NSObject {
                 }
                 
                 let length = CMBlockBufferGetDataLength(buffer!)
-                //                // Append new data
+                
+                // Append new data
                 
                 let tempBytes       = UnsafeMutablePointer<Void>.alloc(length)
                 var returnedPointer = UnsafeMutablePointer<Int8>()
                 CMBlockBufferAccessDataBytes(buffer!, 0, length, tempBytes, &returnedPointer)
-                let pointer = UnsafePointer<Int16>(returnedPointer)
+                let pointer         = UnsafePointer<Int16>(returnedPointer)
                 
                 tempBytes.destroy()
                 tempBytes.dealloc(length)
                 
-                sampleBlock(pointer, length: length)
+                stop = sampleBlock(pointer, length: length / sizeof(Int16) / Int(format.mChannelsPerFrame))
+            }
+            if stop {
+                assetReader.cancelReading()
+                break
             }
         }
         
         switch assetReader.status {
-        case .Unknown, .Failed, .Cancelled, .Reading:
+        case .Unknown, .Failed, .Reading:
             let error = NSError(
                 domain: "DVGAudioProcessorErrorDomain",
                 code: -1,
@@ -293,7 +193,7 @@ class DVGAudioSource_: NSObject {
                     NSLocalizedDescriptionKey: NSLocalizedString("Unknown error", comment:"")
                 ])
             throw assetReader.error ?? error
-        case .Completed:
+        case .Cancelled, .Completed:
             return
         }
     }
