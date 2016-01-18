@@ -32,7 +32,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         let pointX     = scaledStartX + scaledDx * CGFloat(index)
         let pointIndex = startIndex + index
         
-        let pointY: Int16
+        let pointY: CGFloat
         if pointIndex < self.channel!.count {
             pointY = self.channel![pointIndex]
         } else {
@@ -64,13 +64,13 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         
         self.pointsCount = count
         
-        var maxValue = CGFloat(Int16.max) // CGFloat = 0.0
-//        for index in 0..<self.channel!.count {
-//            let value: CGFloat = self.channel![index]
-//            if maxValue < value {
-//                maxValue = value
-//            }
-//        }
+        var maxValue: CGFloat = 1.0
+        for index in 0..<self.channel!.count {
+            let value: CGFloat = self.channel![index]
+            if maxValue < value {
+                maxValue = value
+            }
+        }
         self.bounds = CGSize(width: 1.0, height: maxValue)
     }
 }

@@ -83,10 +83,10 @@ class Channel<T: NumberType>: ChannelProtocol {
     let logicProvider: LogicProvider
     public init(logicProvider: LogicProvider) {
         self.logicProvider = logicProvider
-        
         self.space = 0
         self.buffer = UnsafeMutablePointer<T>.alloc(0)
         self.buffer.initializeFrom(nil, count: 0)
+        self.logicProvider.channel = self
     }
     
     public final var blockSize = 1
@@ -147,14 +147,14 @@ class Channel<T: NumberType>: ChannelProtocol {
     
     private
     func clear() {
-        self.appendValueToBuffer(self.logicProvider.valueForSave())
         self.logicProvider.clear()
         self.onChanged(self)
     }
     
     public
     func finalize() {
-        print(self.space, self.count)
+        print(self.space, self.count, self.totalCount)
+        //TODO: Clear odd space
         self.clear()
     }
     
@@ -167,23 +167,27 @@ class Channel<T: NumberType>: ChannelProtocol {
     var onChanged: (Channel) -> () = {_ in return}
 }
 
+private protocol _Channel: class {
+    func appendValueToBuffer(value: NumberWrapper)
+}
+
+extension Channel : _Channel {}
+
 public
 class LogicProvider {
+    weak private var channel: _Channel?
     class var identifier: String { return "" }
     var identifier: String { return self.dynamicType.identifier }
     public required init(){}
-    public func valueForSave() -> NumberWrapper {
-        return NumberWrapper(0)
-    }
+
     public func handleValue(value: NumberWrapper) {}
     public func clear() {}
 }
 
 public
 final
-class SearchMaxValueLogicProvider: LogicProvider {
-    class override var identifier: String { return "SearchMaxValue" }
-    var globalMax: NumberWrapper?
+class MaxValueLogicProvider: LogicProvider {
+    class override var identifier: String { return "max" }
     private var max: NumberWrapper?
     public required init(){}
 
@@ -194,14 +198,30 @@ class SearchMaxValueLogicProvider: LogicProvider {
             max = value
         }
     }
-    public final override func valueForSave() -> NumberWrapper {
-        return max ?? NumberWrapper.int(0)
-    }
+
     public final override func clear() {
-        if globalMax == nil || (max != nil && globalMax! > max!) {
-            globalMax = max
-        }
+        self.channel?.appendValueToBuffer(max ?? NumberWrapper.int(0))
         max = nil
+    }
+}
+
+public
+final
+class AverageValueLogicProvider: LogicProvider {
+    class override var identifier: String { return "avg" }
+    private var summ = NumberWrapper.double(0.0)
+    var count = 0
+    public required init(){}
+    
+    public final override func handleValue(value: NumberWrapper) {
+        summ = summ + value
+        count++
+    }
+    
+    public final override func clear() {
+        self.channel?.appendValueToBuffer(summ/count)
+        summ = NumberWrapper.double(0.0)
+        count = 0
     }
 }
 
@@ -250,6 +270,15 @@ func +(l:NumberWrapper, r: NumberWrapper) -> NumberWrapper {
         return NumberWrapper.double(left + Double(right))
     case (.double(let left), .double(let right)):
         return NumberWrapper.double(left + right)
+    }
+}
+
+func /(l:NumberWrapper, r: Int) -> NumberWrapper {
+    switch l {
+    case .int(let left):
+        return NumberWrapper.int(left / r)
+    case .double(let left):
+        return NumberWrapper.double(left / Double(r))
     }
 }
 

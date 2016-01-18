@@ -38,9 +38,8 @@ class AudioWaveformView: UIView {
     func setupPathLayer() {
         
         self.pathLayer                 = CAShapeLayer()
-        self.pathLayer.backgroundColor = UIColor.greenColor().colorWithAlphaComponent(0.4).CGColor
         self.pathLayer.strokeColor     = UIColor.blackColor().CGColor
-        self.pathLayer.lineWidth       = 1.0/UIScreen.mainScreen().scale
+        self.pathLayer.lineWidth       = 1.0
         self.layer.addSublayer(self.pathLayer)
         
         //        self.pathLayer.shouldRasterize     = true

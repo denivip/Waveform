@@ -92,7 +92,7 @@ class DVGAudioAnalyzer: ChannelSource {
             }
         }
     }
-    var channelPerType = 7
+    var channelPerType = 10
     func configureChannelsForBlockSize(blockSize: Int, totalCount: Int) {
         for index in 0..<channelPerType {
             for logicIndex in self.logicProviderTypes.indices {
@@ -179,23 +179,13 @@ class DVGAudioAnalyzer: ChannelSource {
             do{
                 let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
-                    for index in 0..<self.channelPerType {
+                    for index in 0..<self.cachedChannels.count {
                         let channel = self.cachedChannels[index]
                         for index in 0..<length {
                             let sample = dataSamples[channelsCount * index]
                             channel.handleValue(NumberWrapper(sample))
                         }
                     }
-                    
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
-                        for index in self.channelPerType..<self.cachedChannels.count {
-                            let channel = self.cachedChannels[index]
-                            for index in 0..<length {
-                                let sample = dataSamples[channelsCount * index]
-                                channel.handleValue(NumberWrapper(sample))
-                            }
-                        }
-                    })
                     
                     return false
                 }

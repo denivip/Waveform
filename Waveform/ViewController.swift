@@ -34,7 +34,10 @@ class ViewController: UIViewController {
     func prepareAudioWaveformPlot() {
         // 1. Prepare DataSource with logic providers
         let dataSource = analizer
-        dataSource.configureWithLogicTypes([SearchMaxValueLogicProvider.self])
+        dataSource.configureWithLogicTypes([
+            MaxValueLogicProvider.self,
+            AverageValueLogicProvider.self
+            ])
         
         // 2. Prepare Plot Model with DataSource ???
         self.audioWaveformPlotModel.addChannelSource(dataSource)
@@ -43,8 +46,11 @@ class ViewController: UIViewController {
         self.audioWaveformPlot.dataSource = self.audioWaveformPlotModel
         self.audioWaveformPlot.delegate   = self.audioWaveformPlotModel
         // 4. Customization
-        let waveform1 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(SearchMaxValueLogicProvider))
+        let waveform1 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(MaxValueLogicProvider))
         waveform1?.lineColor = UIColor.redColor()
+        
+        let waveform2 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(AverageValueLogicProvider))
+        waveform2?.lineColor = UIColor.greenColor()
     }
     
     func startReading() {
@@ -53,7 +59,7 @@ class ViewController: UIViewController {
         self.analizer.prepareToRead {
             [weak self] (success) -> () in
             if success {
-                self?.analizer.read(2048) {
+                self?.analizer.read(320) {
                     print("time: \(-date.timeIntervalSinceNow)")
 //                    self?.audioWaveformPlot.stopSynchingWithDataSource()
                 }
