@@ -16,9 +16,6 @@
 		8B3F35041C243BBF006A4B67 /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */; };
 		8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350A1C244371006A4B67 /* DVGAudioSource.m */; };
 		8B3F350D1C244398006A4B67 /* DVGAudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */; };
-		8B4CD0B31C282DDD00B88BAC /* 440Hz-5sec.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */; };
-		8B4CD0B61C28687E00B88BAC /* misha.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B51C28684A00B88BAC /* misha.m4v */; };
-		8B4CD0B81C28768E00B88BAC /* video.m4v in Resources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B71C28768C00B88BAC /* video.m4v */; };
 		8B4CD0BA1C29964400B88BAC /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B91C29964400B88BAC /* Protocols.swift */; };
 		8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */; };
 		8B4CD0C11C299E9700B88BAC /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */; };
@@ -36,13 +33,10 @@
 		8B3F34FB1C243BA6006A4B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B3F34FD1C243BA7006A4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformView.swift; sourceTree = "<group>"; };
-		8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "440Hz-5sec.mp4"; sourceTree = "<group>"; };
 		8B3F35081C244370006A4B67 /* Waveform-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Waveform-Bridging-Header.h"; sourceTree = "<group>"; };
 		8B3F35091C244371006A4B67 /* DVGAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioSource.h; sourceTree = "<group>"; };
 		8B3F350A1C244371006A4B67 /* DVGAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGAudioSource.m; sourceTree = "<group>"; };
 		8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioAnalyzer.swift; sourceTree = "<group>"; };
-		8B4CD0B51C28684A00B88BAC /* misha.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = misha.m4v; sourceTree = "<group>"; };
-		8B4CD0B71C28768C00B88BAC /* video.m4v */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.m4v; sourceTree = "<group>"; };
 		8B4CD0B91C29964400B88BAC /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
 		8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlotModel.swift; sourceTree = "<group>"; };
@@ -80,9 +74,6 @@
 		8B3F34F01C243BA6006A4B67 /* Waveform */ = {
 			isa = PBXGroup;
 			children = (
-				8B4CD0B71C28768C00B88BAC /* video.m4v */,
-				8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */,
-				8B4CD0B51C28684A00B88BAC /* misha.m4v */,
 				8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */,
 				5BE379E51C47CB7A00163588 /* Types.swift */,
 				8B3F34F31C243BA6006A4B67 /* ViewController.swift */,
@@ -179,9 +170,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B4CD0B61C28687E00B88BAC /* misha.m4v in Resources */,
-				8B4CD0B81C28768E00B88BAC /* video.m4v in Resources */,
-				8B4CD0B31C282DDD00B88BAC /* 440Hz-5sec.mp4 in Resources */,
 				8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */,
 				8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */,
 				8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */,
