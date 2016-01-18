@@ -8,8 +8,7 @@
 
 import UIKit.UIControl
 
-final
-class AudioWaveformView: UIView, _AudioWaveformView {
+class AudioWaveformView: UIView {
     
     weak var dataSource: AudioWaveformViewDataSource?
     var lineColor: UIColor = .blackColor() {
@@ -17,11 +16,9 @@ class AudioWaveformView: UIView, _AudioWaveformView {
             self.pathLayer.strokeColor = lineColor.CGColor
         }
     }
-    var identifier: String = ""
+    var identifier: String { return self.dataSource?.identifier ?? ""}
     
-    private var drawedPulsesCount = 0
     private var pathLayer: CAShapeLayer!
-    private var maxPulse: Int16 = 0 // ???: duplicate logic
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -39,65 +36,59 @@ class AudioWaveformView: UIView, _AudioWaveformView {
     }
     
     func setupPathLayer() {
+        
         self.pathLayer                 = CAShapeLayer()
+        self.pathLayer.backgroundColor = UIColor.greenColor().colorWithAlphaComponent(0.4).CGColor
         self.pathLayer.strokeColor     = UIColor.blackColor().CGColor
         self.pathLayer.lineWidth       = 1.0/UIScreen.mainScreen().scale
         self.layer.addSublayer(self.pathLayer)
-        self.pathLayer.frame           = self.bounds
-
-//        self.pathLayer.shouldRasterize     = true
+        
+        //        self.pathLayer.shouldRasterize     = true
         self.pathLayer.drawsAsynchronously = true
-//        self.pathLayer.rasterizationScale  = UIScreen.mainScreen().scale
+        //        self.pathLayer.rasterizationScale  = UIScreen.mainScreen().scale
     }
     
-    func redrawPulses() {
-
-        let loadedPulsesCount = self.dataSource!.currentPulsesCount
-        
-        if loadedPulsesCount < drawedPulsesCount {
-            fatalError()
-        }
-        
-        if loadedPulsesCount == drawedPulsesCount {
-            return
-        }
-        self.normalizeIfNeeded()
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.pathLayer.frame = self.bounds
+        self.redraw()
+    }
+    
+    func redraw() {
         self.appendNewPathToPathLayer()
-        self.drawedPulsesCount = loadedPulsesCount
     }
     
     private func appendNewPathToPathLayer() {
-            
-        let currentPath = CGPathCreateMutableCopy(self.pathLayer.path) ?? CGPathCreateMutable()
-        let path        = self.newPathPart()
-        
-        CGPathAddPath(currentPath, nil, path)
-        self.pathLayer.path = currentPath
+        self.dataSource?.updateGeometry()        
+        self.pathLayer.path = self.newPathPart()
     }
     
     private func newPathPart() -> CGPathRef {
-        let loadedPulsesCount = self.dataSource!.currentPulsesCount
-        let totalPulses       = self.dataSource!.totalPulsesCount
-
-        let mPath = CGPathCreateMutable()
-
-        for index in self.drawedPulsesCount..<loadedPulsesCount {
-            let pulsesMax = self.dataSource!.pulseAtIndex(index)
-            
-            let xAdjustment = self.bounds.width/CGFloat(totalPulses) //CGFloat(1)
-            let yAdjustment = self.pathLayer.bounds.height/CGFloat(INT16_MAX)/2
-            CGPathMoveToPoint(   mPath, nil, CGFloat(index)*xAdjustment, self.pathLayer.bounds.midY - CGFloat(pulsesMax)*yAdjustment)
-            CGPathAddLineToPoint(mPath, nil, CGFloat(index)*xAdjustment, self.pathLayer.bounds.midY + CGFloat(pulsesMax)*yAdjustment)
+        
+        guard let dataSource = self.dataSource else {
+            return CGPathCreateMutable()
         }
+        
+        let currentCount = dataSource.pointsCount
+        let sourceBounds = dataSource.bounds
+        
+        let mPath        = CGPathCreateMutable()
+        
+        CGPathMoveToPoint(mPath, nil, 0, self.bounds.midY)
+        
+        for index in 0..<currentCount {
+            let point         = dataSource.pointAtIndex(index)
+            let adjustedPoint = CGPoint(
+                x: point.x * self.bounds.size.width / sourceBounds.width,
+                y: point.y * self.bounds.size.height / sourceBounds.height / 2.0)
+            
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY - adjustedPoint.y)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY + adjustedPoint.y)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
+        }
+        CGPathMoveToPoint(mPath, nil, CGPathGetCurrentPoint(mPath).x, self.bounds.midY)
+        
         return mPath
     }
-    
-    private func normalizeIfNeeded() {
-        let globalMax = self.dataSource!.maxPulse
-        if self.maxPulse < globalMax {
-            self.maxPulse = globalMax
-            self.pathLayer.transform = CATransform3DMakeScale(1.0, CGFloat(INT16_MAX)/CGFloat(maxPulse), 1.0)
-        }
-    }
-    
 }

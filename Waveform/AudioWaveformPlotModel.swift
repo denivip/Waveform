@@ -9,73 +9,85 @@
 import Foundation
 import UIKit.UIColor
 
-final
 class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
-
-    private var asset: AVAsset!
-    private lazy var pcmReader : DVGAudioAnalyzer = {
-        let analizer = DVGAudioAnalyzer(asset: self.asset)
-        return analizer
-    }()
     
-    private var plot: _AudioWaveformPlot?
     private var viewModels = [AudioWaveformViewModel]()
     
-    private override init() {
+    override init() {
         super.init()
     }
-    convenience init(asset: AVAsset) {
-        self.init()
-        self.asset = asset
+
+    var scale: CGFloat = 1.0
+    var start: CGFloat = 0.0
+    var onPlotUpdate: () -> () = {}
+    var dataSources = [ChannelSource]()
+
+    var waveformDataSourcesCount: Int { return self.viewModels.count }
+    func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource {
+        return self.viewModels[index]
     }
     
-    func buildWaveformPlot(waveformPlot: _AudioWaveformPlot) {
-        self.plot = waveformPlot
-        
-        self.addOriginalMaxWaveformView()
-        self.addOriginalAverageWaveformView()
-        
-        self.plot?.startSynchingWithDataSource()
-        
-        self.pcmReader.prepareToRead { [weak self] success in
-            if success {
-                let date = NSDate()
-                self?.pcmReader.readPCMs(neededPulsesCount: 2208) {
-                    let time = -date.timeIntervalSinceNow
-                    print("time = \(time)")
-                    self?.plot?.redraw()
-                }
+    func addChannelSource(cSource: ChannelSource) {
+        self.dataSources.append(cSource)
+        for index in 0..<cSource.channelsCount {
+            let vm       = AudioWaveformViewModel()
+            vm.channel   = cSource.channelAtIndex(index)
+            vm.plotModel = self
+            self.viewModels.append(vm)
+        }
+        self.onPlotUpdate()
+    }
+    
+    func resetChannelsFromDataSources() {
+        var channels = [ChannelProtocol]()
+        for dataSource in self.dataSources {
+            for index in 0..<dataSource.channelsCount {
+                let channel = dataSource.channelAtIndex(index)
+                channels.append(channel)
             }
+        }
+
+        assert(channels.count == viewModels.count)
+
+        for index in channels.indices {
+            self.viewModels[index].channel = channels[index]
+        }
+    }
+}
+
+extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
+    func zoom(start start: CGFloat, scale: CGFloat) {
+        self.scale = scale
+        self.start = start
+        for viewModel in self.viewModels {
+            viewModel.updateGeometry()
         }
     }
     
-    private func addOriginalMaxWaveformView() {
-        let waveformViewOrigMax        = self.plot?.addWaveformViewWithId("orig.max")
-        waveformViewOrigMax?.lineColor = UIColor.blackColor()
-        
-        let waveformViewModel                  = AudioWaveformViewModel()
-        //FIXME: Retain cycle
-        waveformViewModel.onMaxPulse           = { return   self.pcmReader.maxPulse }
-        waveformViewModel.onTotalPulsesCount   = { return   self.pcmReader.totalPulsesCount }
-        waveformViewModel.onCurrentPulsesCount = { return   self.pcmReader.currentPulsesCount }
-        waveformViewModel.onPulseAtIndex       = { index in self.pcmReader.maxPulseAtIndex(index) }
-        
-        waveformViewOrigMax?.dataSource = waveformViewModel
-        self.viewModels.append(waveformViewModel)
+    func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat) {
+        let newScale = max(1.0, relativeScale * self.scale)
+        var start    = self.start + zoomAreaCenter * (1/self.scale - 1/newScale)
+        start        = max(0, min(start, 1 - 1/newScale))
+        self.zoom(start: start, scale: newScale)
     }
     
-    private func addOriginalAverageWaveformView() {
-        let waveformViewOrigMax        = self.plot?.addWaveformViewWithId("orig.avg")
-        waveformViewOrigMax?.lineColor = UIColor.lightGrayColor()
-        
-        let waveformViewModel                  = AudioWaveformViewModel()
-        //FIXME: Retain cycle
-        waveformViewModel.onMaxPulse           = { return   self.pcmReader.maxPulse }
-        waveformViewModel.onTotalPulsesCount   = { return   self.pcmReader.totalPulsesCount }
-        waveformViewModel.onCurrentPulsesCount = { return   self.pcmReader.currentPulsesCount }
-        waveformViewModel.onPulseAtIndex       = { index in self.pcmReader.avgPulseAtIndex(index) }
-        
-        waveformViewOrigMax?.dataSource = waveformViewModel
-        self.viewModels.append(waveformViewModel)
+    func moveToPosition(start: CGFloat) {
+        self.start = max(0, min(start, 1 - 1/scale))
+        for viewModel in self.viewModels {
+            viewModel.updateGeometry()
+        }
     }
+    
+    func moveByDistance(relativeDeltaX: CGFloat) {
+        let relativeStart = self.start - relativeDeltaX / self.scale
+        self.moveToPosition(relativeStart)
+    }
+}
+
+protocol ChannelSource {
+    var identifier: String { get }
+    func identifierForLogicProviderType(type: LogicProvider.Type) -> String
+    var channelsCount: Int { get }
+    func channelAtIndex(index: Int) -> ChannelProtocol
+    var onChannelsChanged: (ChannelSource) -> () { get set }
 }

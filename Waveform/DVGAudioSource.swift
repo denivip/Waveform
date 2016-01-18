@@ -16,19 +16,19 @@ class DVGAudioSource_: NSObject {
         self.asset = asset
     }
     
-    var audioFormat: AudioStreamBasicDescription?
+    var audioFormat = AudioStreamBasicDescription()
     
-    func readAudioFormat(completionBlock: (Bool, NSError?) -> ()) {
+    func readAudioFormat(completionBlock: (AudioStreamBasicDescription?, NSError?) -> ()) {
         
         do {
         
-            let format = try self._readAudioFormat()
+            let format       = try self._readAudioFormat()
             self.audioFormat = format
-            completionBlock(true, nil)
+            completionBlock(format, nil)
             
         } catch let error as NSError {
 
-            completionBlock(true, error)
+            completionBlock(nil, error)
 
         } catch {}
     }
@@ -116,7 +116,7 @@ class DVGAudioSource_: NSObject {
             throw error
         }
         
-        let format = _format ?? self.audioFormat!
+        let format = _format ?? self.audioFormat
 
         let audioReadSettings: [String: AnyObject] = [
             AVFormatIDKey : NSNumber(unsignedInt: format.mFormatID),//NSNumber(unsignedInt: kAudioFormatLinearPCM),

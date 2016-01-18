@@ -11,39 +11,47 @@ import AVFoundation
 
 private let kDVGNoiseFloor: Float = -40.0
 
-final
-class DVGAudioAnalyzer {
+struct DataRange {
+    let location: Double
+    let length: Double
+    
+    init(location: Double, length: Double) {
+        assert(location >= 0.0)
+        assert(length > 0.0)
+        assert(location + length <= 1.0)
+        
+        self.location = location
+        self.length   = length
+    }
+    
+    init() {
+        self.location = 0.0
+        self.length   = 1.0
+    }
+}
+
+class DVGAudioAnalyzer: ChannelSource {
     
     let audioSource: DVGAudioSource_
     let asset: AVAsset
-    var audioFormat: AudioStreamBasicDescription!
+    var audioFormat = AudioStreamBasicDescription()
     
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     
-    var neededPulsesCount = 0
-    var currentBufferSize = 0
-    
-    var currentPulsesCount: Int { return self.currentBufferSize }
-    var totalPulsesCount: Int   { return self.neededPulsesCount }
-    
-    var maxPulse = Int16(-40)
-    
-    private lazy var maxPulsesBuffer: UnsafeMutablePointer<Int16> = {
-        return UnsafeMutablePointer<Int16>.alloc(self.neededPulsesCount)
-    }()
-    
-    private lazy var avgPulsesBuffer: UnsafeMutablePointer<Int16>! = {
-        return UnsafeMutablePointer<Int16>.alloc(self.neededPulsesCount)
-    }()
-
-    //TODO: Проверить происводительность с проверкой на выход за границы массива
-    func maxPulseAtIndex(index: Int) -> Int16 {
-        return self.maxPulsesBuffer[index]
-    }
-    func avgPulseAtIndex(index: Int) -> Int16 {
-        return self.avgPulsesBuffer[index]
+    var channelsCount: Int {
+        return self.logicProviderTypes.count
     }
     
+    func channelAtIndex(index: Int) -> ChannelProtocol {
+        return channels[index]
+    }
+    
+    var onChannelsChanged: (ChannelSource) -> () = {_ in}
+    
+    var channels           = [Channel<Int16>]()
+    var cachedChannels     = [Channel<Int16>]()
+    var logicProviderTypes = [LogicProvider.Type]()
+    var identifier         = "reader"
     //MARK:
     init(asset: AVAsset) {
         self.asset       = asset
@@ -64,107 +72,147 @@ class DVGAudioAnalyzer {
             
             if self == nil { return }
             
-            self!.audioSource.readAudioFormat{ success, _ in
-                
-                if !success {
+            self!.audioSource.readAudioFormat{ audioFormat, _ in
+
+                if self == nil { return }
+
+                guard let audioFormat = audioFormat else {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(false)
-                        return
                     }
+                    return
                 }
                 
-                self!.audioFormat = self!.audioSource.audioFormat
+                print(audioFormat)
+                self!.audioFormat = audioFormat
+                print(self!.audioFormat.mBitsPerChannel)
                 dispatch_async(dispatch_get_main_queue()) {
-                    completion(success)
+                    completion(true)
                 }
             }
         }
     }
+    var channelPerType = 7
+    func configureChannelsForBlockSize(blockSize: Int, totalCount: Int) {
+        for index in 0..<channelPerType {
+            for logicIndex in self.logicProviderTypes.indices {
+                let channel = self.cachedChannels[index * self.logicProviderTypes.count + logicIndex]
+                channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
+                channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
+            }
+        }
+    }
     
-    func readPCMs(neededPulsesCount neededPulsesCount: Int = 2208, completion: () -> () = {}) {
-        self.neededPulsesCount = neededPulsesCount
-        self.runAsynchronouslyOnProcessingQueue {
+    func configureWithLogicTypes(logicProviderTypes: [LogicProvider.Type]) {
+        self.logicProviderTypes = logicProviderTypes
+        var cachedChannels      = [Channel<Int16>]()
+        
+        for _ in 0..<channelPerType {
+            for type in self.logicProviderTypes {
+                let channel        = Channel<Int16>(logicProvider: type.init())
+                channel.identifier = self.identifierForLogicProviderType(type)
+                cachedChannels.append(channel)
+            }
+        }
+        
+        self.cachedChannels = cachedChannels
+        self.channels       = Array(cachedChannels[0..<self.logicProviderTypes.count])
+    }
+    
+    func adjustedScaleFromScale(scale: Double) -> Int {
+        switch scale {
+        case 0..<1.5:
+            return 1
+        case 1.5..<3:
+            return 2
+        case 3..<6:
+            return 4
+        case 6..<12:
+            return 8
+        case 12..<24:
+            return 16
+        case 24..<48:
+            return 32
+        case 48..<96:
+            return 64
+        case 96..<192:
+            return 128
+        case 192..<394:
+            return 256
+        case 294..<798:
+            return 512
+        default:
+            return 1
+        }
+    }
+    
+    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
+        return "\(type.identifier).\(self.identifier)"
+    }
+    
+    func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
+
+        let scale         = 1.0 / dataRange.length
+        let adjustedScale = self.adjustedScaleFromScale(scale)
+        
+        if adjustedScale == 1 {
+            
             let startTime      = kCMTimeZero
             let endTime        = self.asset.duration
             let audioTimeRange = CMTimeRange(start: startTime, end: endTime)
-            let channelsCount  = Int(self.audioFormat.mChannelsPerFrame)
+            
+            let estimatedSampleCount = audioTimeRange.duration.seconds * self.audioFormat.mSampleRate
+            let sampleBlockLength    = Int(estimatedSampleCount / Double(count))
+            self.configureChannelsForBlockSize(sampleBlockLength, totalCount: count)
+            self._read(count, completion: completion)
+            return
+        }
+        // change channel
+        return
+    }
+    
+    func _read(count: Int, completion: () -> () = {}) {
+        self.runAsynchronouslyOnProcessingQueue {
 
-            let estimatedSampleCount = CMTimeGetSeconds(audioTimeRange.duration) * self.audioFormat.mSampleRate
-            //???: Возможно нужно округлять sampleBlockLength в большую сторону (сейчас последний кусок данных меньший размера блока пропускается)
-            let sampleBlockLength    = Int(estimatedSampleCount / Double(self.neededPulsesCount));
-            
-            print("sampleBlockLength = \(sampleBlockLength)")
-            
-            let avgSamplesDouble     = UnsafeMutablePointer<Double>.alloc(self.neededPulsesCount)
-            let maxSamples           = UnsafeMutablePointer<Int16>.alloc(self.neededPulsesCount)
-            
-            for index in 0..<self.neededPulsesCount {
-                avgSamplesDouble[index] = Double(kDVGNoiseFloor);
-                maxSamples[index]       = Int16(kDVGNoiseFloor);
-            }
-            
-            var maxAmplitude = Int16(kDVGNoiseFloor)
-            var globalIndex  = 0
-            var samplesCount = 0
-            
+            let channelsCount  = Int(self.audioFormat.mChannelsPerFrame)
 
             do{
                 let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
-                    var currentBlock = globalIndex / sampleBlockLength
-                    
-                    for index in 0..<length {
-                        
-                        if (currentBlock > self.neededPulsesCount){
-                            break;
+                    for index in 0..<self.channelPerType {
+                        let channel = self.cachedChannels[index]
+                        for index in 0..<length {
+                            let sample = dataSamples[channelsCount * index]
+                            channel.handleValue(NumberWrapper(sample))
                         }
-                        
-                        let sample = dataSamples[channelsCount * index]
-                        
-                        let k = avgSamplesDouble[currentBlock]
-                        avgSamplesDouble[currentBlock] = k + fabs(Double(sample) / Double(sampleBlockLength));
-                        
-                        if maxSamples[currentBlock] < sample {
-                            maxSamples[currentBlock] = sample
-                        }
-                        
-                        if (maxAmplitude < sample) {
-                            maxAmplitude = sample
-                            self.maxPulse = sample
-                        }
-                        
-                        globalIndex = globalIndex + 1
-                        let oldBlock = currentBlock
-                        currentBlock = globalIndex / sampleBlockLength
-
-                        if currentBlock > oldBlock {
-                            self.avgPulsesBuffer[oldBlock] = Int16(avgSamplesDouble[oldBlock])
-                            self.maxPulsesBuffer[oldBlock] = maxSamples[oldBlock]
-                            self.currentBufferSize         = self.currentBufferSize + 1
-                        }
-//                        NSThread.sleepForTimeInterval(0.00001)
                     }
-
-//                    print("globalIndex: \(globalIndex)")
-
-                    samplesCount = samplesCount + length
+                    
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
+                        for index in self.channelPerType..<self.cachedChannels.count {
+                            let channel = self.cachedChannels[index]
+                            for index in 0..<length {
+                                let sample = dataSamples[channelsCount * index]
+                                channel.handleValue(NumberWrapper(sample))
+                            }
+                        }
+                    })
                     
                     return false
                 }
                 
                 try self.audioSource._readAudioSamplesData(sampleBlock: sampleBlock)
+                
+                print(self.cachedChannels)
+                
+                for channel in self.cachedChannels {
+                    channel.finalize()
+                }
+                
+                completion()
+                
             } catch {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }
-            avgSamplesDouble.destroy()
-            avgSamplesDouble.dealloc(self.neededPulsesCount)
-            
-            maxSamples.destroy()
-            maxSamples.dealloc(self.neededPulsesCount)
-            
-            self.neededPulsesCount = self.currentBufferSize
-            completion()
         }
     }
-    
 }

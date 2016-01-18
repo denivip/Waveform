@@ -8,17 +8,29 @@
 
 import UIKit
 
-final
 class AudioWaveformPlot: UIView {
     
     var containerView: UIView!
+    var pan: UIPanGestureRecognizer!
     var pinch: UIPinchGestureRecognizer!
+    
+    weak var delegate: AudioWaveformPlotDelegate?
+    weak var dataSource: AudioWaveformPlotDataSource? {
+        didSet{
+            if let newDataSource = dataSource {
+                for index in 0..<newDataSource.waveformDataSourcesCount {
+                    let dataSource = newDataSource.waveformDataSourceAtIndex(index)
+                    self.addWaveformViewWithDataSource(dataSource)
+                }
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
@@ -31,61 +43,101 @@ class AudioWaveformPlot: UIView {
     
     func addContainerView() {
         let containerView = UIView()
-        // FIXME: do right work with constraints
-        containerView.frame = self.bounds
         self.addSubview(containerView)
+        let views = ["view": containerView]
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("|[view]|", options: [], metrics: nil, views: views)
+        self.addConstraints(horizontalConstraints)
+        let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: [], metrics: nil, views: views)
+        self.addConstraints(verticalConstraints)
         self.containerView = containerView
     }
     
     func addGestures() {
-        let pinch = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
+        let pan = UIPanGestureRecognizer(target: self, action: "pan:")
+        self.addGestureRecognizer(pan)
+        let pinch = UIPinchGestureRecognizer(target: self, action: "pinch:")
         self.addGestureRecognizer(pinch)
-        self.pinch = pinch
     }
     
-    var waveformViews = [AudioWaveformView]()
-    var displayLink: CADisplayLink?
-    
-    var scale = CGFloat(1)
-    
-    @objc(handlePinch:)
-    func handlePinch(pinch: UIPinchGestureRecognizer) {
-        switch pinch.state {
-        case .Began: ()
-        case .Cancelled, .Ended, .Failed, .Possible:
-            self.scale *= pinch.scale
-            normalizeScale(&self.scale)
+    func pan(gesture: UIPanGestureRecognizer) {
+        
+        if delegate == nil { return }
+        
+        switch gesture.state {
         case .Changed:
-            var scale = self.scale * pinch.scale
-            normalizeScale(&scale)
-            let layer = self.containerView.layer
-
-            //TODO: zoom relative to pinch location
-            layer.transform = CATransform3DMakeScale(scale, 1.0, 1.0)
+            let deltaX                      = gesture.translationInView(gesture.view).x
+            let relativeDeltaX              = deltaX/gesture.view!.bounds.width
+            self.delegate?.moveByDistance(relativeDeltaX)
+            gesture.setTranslation(.zero, inView: gesture.view)
+        default:()
         }
     }
     
-    func normalizeScale(inout scale: CGFloat) {
-        scale = max(1.0, min(scale, 10.0))
+    var scale: CGFloat = 1.0
+    
+    func pinch(gesture: UIPinchGestureRecognizer) {
+        if gesture.numberOfTouches() < 2 {
+            return
+        }
+        
+        switch gesture.state {
+        case .Changed:
+            let scale            = gesture.scale
+            let locationX        = gesture.locationInView(gesture.view).x
+            let relativeLocation = locationX/gesture.view!.bounds.width
+            self.delegate?.zoomAt(relativeLocation, relativeScale: scale)
+            gesture.scale = 1.0
+        default:()
+        }
     }
+    
+    //    override func layoutSubviews() {
+    //        super.layoutSubviews()
+    //        for v in self.waveformViews {
+    //            v.setNeedsLayout()
+    //        }
+    //    }
+    
+    var waveformViews = [AudioWaveformView]()
+    var displayLink: CADisplayLink?
 }
 
-extension AudioWaveformPlot: _AudioWaveformPlot {
+extension AudioWaveformPlot {
     
-    func addWaveformViewWithId(identifier: String) -> _AudioWaveformView {
+    func addWaveformViewWithDataSource(dataSource: AudioWaveformViewDataSource) -> AudioWaveformView {
         
         let audioWaveformView = AudioWaveformView(frame: self.bounds)
-        audioWaveformView.identifier = identifier
+        audioWaveformView.dataSource = dataSource
         
         self.waveformViews.append(audioWaveformView)
+        
+        audioWaveformView.translatesAutoresizingMaskIntoConstraints = false
         self.containerView.addSubview(audioWaveformView)
+        
+        let views = ["view": audioWaveformView]
+        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("|[view]|", options: [], metrics: nil, views: views)
+        self.containerView.addConstraints(horizontalConstraints)
+        let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: [], metrics: nil, views: views)
+        self.containerView.addConstraints(verticalConstraints)
+        
+        audioWaveformView.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.5)
         
         return audioWaveformView
     }
     
+    func waveformWithIdentifier(identifier: String) -> AudioWaveformView? {
+        for waveform in self.waveformViews {
+            if waveform.identifier == identifier {
+                return waveform
+            }
+        }
+        return nil
+    }
+    
     func redraw() {
         for waveformView in self.waveformViews {
-            waveformView.redrawPulses()
+            waveformView.redraw()
         }
     }
     

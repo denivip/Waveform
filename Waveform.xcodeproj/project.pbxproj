@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5BE379E61C47CB7A00163588 /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE379E51C47CB7A00163588 /* Types.swift */; };
 		8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */; };
 		8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F31C243BA6006A4B67 /* ViewController.swift */; };
 		8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5BE379E51C47CB7A00163588 /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		8B3F34EE1C243BA6006A4B67 /* Waveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B3F34F31C243BA6006A4B67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				8B3F35051C243C0C006A4B67 /* 440Hz-5sec.mp4 */,
 				8B4CD0B51C28684A00B88BAC /* misha.m4v */,
 				8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */,
+				5BE379E51C47CB7A00163588 /* Types.swift */,
 				8B3F34F31C243BA6006A4B67 /* ViewController.swift */,
 				8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */,
 				8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */,
@@ -149,6 +152,7 @@
 				TargetAttributes = {
 					8B3F34ED1C243BA6006A4B67 = {
 						CreatedOnToolsVersion = 7.2;
+						DevelopmentTeam = VVU5C37FM9;
 					};
 				};
 			};
@@ -200,6 +204,7 @@
 				8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */,
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
 				8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */,
+				5BE379E61C47CB7A00163588 /* Types.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,11 +249,10 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
+				ENABLE_TESTABILITY = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -267,6 +271,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -288,8 +293,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -305,6 +308,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -321,7 +325,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -336,7 +339,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
 			name = Release;
 		};

@@ -8,25 +8,22 @@
 
 import UIKit.UIView
 
-protocol _AudioWaveformPlot: class {
-    func addWaveformViewWithId(identifier: String) -> _AudioWaveformView
-    func startSynchingWithDataSource()
-    func stopSynchingWithDataSource()
-    func redraw()
-}
-
-protocol _AudioWaveformView: class {
-    var identifier: String { get }
-    weak var dataSource: AudioWaveformViewDataSource? { get set }
-    var lineColor: UIColor { get set }
-}
-
 protocol AudioWaveformViewDataSource: class {
-    var maxPulse: Int16 { get }
-    var currentPulsesCount: Int { get }
-    var totalPulsesCount: Int { get }
-    
-    func pulseAtIndex(index: Int) -> Int16
+    var identifier: String { get }
+    var bounds: CGSize { get }
+    var pointsCount: Int { get }
+    func updateGeometry()
+    func pointAtIndex(index: Int) -> CGPoint
 }
 
-protocol AudioWaveformPlotDataSource: class {}
+protocol AudioWaveformPlotDataSource: class {
+    var onPlotUpdate: () -> () { get set }
+    var waveformDataSourcesCount: Int { get }
+    func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource
+}
+protocol AudioWaveformPlotDelegate: class {
+    var scale: CGFloat { get }
+    var start: CGFloat { get }
+    func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat)
+    func moveByDistance(relativeDeltaX: CGFloat)
+}
