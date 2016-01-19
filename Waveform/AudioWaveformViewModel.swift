@@ -71,6 +71,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
                 maxValue = value
             }
         }
+        // TODO: If there are negative numbers too, height == 2 * max(maxValue, abs(minValue))
         self.bounds = CGSize(width: 1.0, height: maxValue)
     }
 }

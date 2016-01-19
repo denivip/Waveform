@@ -39,23 +39,30 @@ class DVGAudioAnalyzer: ChannelSource {
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     
     var channelsCount: Int {
-        return self.logicProviderTypes.count
+        return 1
     }
     
     func channelAtIndex(index: Int) -> AbstractChannel {
-        return channels[index]
+//        if index == 0 {
+//            return self.maxValueChannels[0]
+//        } else {
+            return self.avgValueChannels[0]
+//        }
     }
     
     var onChannelsChanged: (ChannelSource) -> () = {_ in}
+    var identifier       = "reader"
+
+    var maxValueChannels = [Channel<Int16>]()
+    var avgValueChannels = [Channel<Float>]()
     
-    var channels           = [Channel<Int16>]()
-    var cachedChannels     = [Channel<Int16>]()
-    var logicProviderTypes = [LogicProvider.Type]()
-    var identifier         = "reader"
+    var channelPerLogicProviderType = 10
+
     //MARK:
     init(asset: AVAsset) {
         self.asset       = asset
         self.audioSource = DVGAudioSource_(asset: asset)
+        self.configureChannels()
     }
 
     func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t!) {
@@ -92,32 +99,39 @@ class DVGAudioAnalyzer: ChannelSource {
             }
         }
     }
-    var channelPerType = 10
+
     func configureChannelsForBlockSize(blockSize: Int, totalCount: Int) {
-        for index in 0..<channelPerType {
-            for logicIndex in self.logicProviderTypes.indices {
-                let channel = self.cachedChannels[index * self.logicProviderTypes.count + logicIndex]
-                channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
-                channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
-            }
+        for index in self.maxValueChannels.indices {
+            let channel = self.maxValueChannels[index]
+            channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
+            channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
+        }
+
+        for index in self.avgValueChannels.indices {
+            let channel = self.avgValueChannels[index]
+            channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
+            channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
         }
     }
     
-    func configureChannelsForLogicProviderTypes(logicProviderTypes: [LogicProvider.Type]) {
-        self.logicProviderTypes = logicProviderTypes
-        var cachedChannels      = [Channel<Int16>]()
-        
-        for _ in 0..<channelPerType {
-            for type in self.logicProviderTypes {
-                let channel        = Channel<Int16>(logicProvider: type.init())
-                channel.identifier = self.identifierForLogicProviderType(type)
-                cachedChannels.append(channel)
-            }
+    func configureChannels() {
+        var maxValueChannels = [Channel<Int16>]()
+        for _ in 0..<channelPerLogicProviderType {
+            let channel        = Channel<Int16>(logicProvider: MaxValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(MaxValueLogicProvider)
+            maxValueChannels.append(channel)
         }
+        self.maxValueChannels = maxValueChannels
         
-        self.cachedChannels = cachedChannels
-        self.channels       = Array(cachedChannels[0..<self.logicProviderTypes.count])
+        var avgValueChannels = [Channel<Float>]()
+        for _ in 0..<channelPerLogicProviderType {
+            let channel        = Channel<Float>(logicProvider: AverageValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(AverageValueLogicProvider)
+            avgValueChannels.append(channel)
+        }
+        self.avgValueChannels = avgValueChannels
     }
+
     
     func adjustedScaleFromScale(scale: Double) -> Int {
         switch scale {
@@ -173,28 +187,34 @@ class DVGAudioAnalyzer: ChannelSource {
     
     func _read(count: Int, completion: () -> () = {}) {
         self.runAsynchronouslyOnProcessingQueue {
-
-            let channelsCount  = Int(self.audioFormat.mChannelsPerFrame)
+            [weak self] in
+            if self == nil { return }
+            
+            let channelsCount  = Int(self!.audioFormat.mChannelsPerFrame)
 
             do{
                 let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
-                    for index in 0..<self.cachedChannels.count {
-                        let channel = self.cachedChannels[index]
+                    for index in 0..<self!.channelPerLogicProviderType {
+                        let maxValueChannel = self!.maxValueChannels[index]
+                        let avgValueChannel = self!.avgValueChannels[index]
                         for index in 0..<length {
                             let sample = dataSamples[channelsCount * index]
-                            channel.handleValue(NumberWrapper(sample))
+                            maxValueChannel.handleValue(NumberWrapper(sample))
+                            avgValueChannel.handleValue(NumberWrapper(sample))
                         }
                     }
                     
                     return false
                 }
                 
-                try self.audioSource._readAudioSamplesData(sampleBlock: sampleBlock)
+                try self!.audioSource._readAudioSamplesData(sampleBlock: sampleBlock)
                 
-                print(self.cachedChannels)
+                for channel in self!.maxValueChannels {
+                    channel.finalize()
+                }
                 
-                for channel in self.cachedChannels {
+                for channel in self!.avgValueChannels {
                     channel.finalize()
                 }
                 

@@ -32,15 +32,8 @@ class ViewController: UIViewController {
     }
     
     func prepareAudioWaveformPlot() {
-        // 1. Prepare DataSource with logic providers
-        let dataSource = analizer
-        dataSource.configureChannelsForLogicProviderTypes([
-            MaxValueLogicProvider.self,
-            AverageValueLogicProvider.self
-            ])
-        
         // 2. Prepare Plot Model with DataSource ???
-        self.audioWaveformPlotModel.addChannelSource(dataSource)
+        self.audioWaveformPlotModel.addChannelSource(self.analizer)
 
         // 3. Set plot model to plot view
         self.audioWaveformPlot.viewModel = self.audioWaveformPlotModel
