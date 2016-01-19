@@ -11,7 +11,7 @@ import Foundation
 class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     
     weak var plotModel: AudioWaveformPlotModel?
-    weak var channel: ChannelProtocol?
+    weak var channel: AbstractChannel?
     
     var pointsCount = 0
     var bounds      = CGSize(width: 1.0, height: 1.0)

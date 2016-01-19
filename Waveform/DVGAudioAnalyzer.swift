@@ -42,7 +42,7 @@ class DVGAudioAnalyzer: ChannelSource {
         return self.logicProviderTypes.count
     }
     
-    func channelAtIndex(index: Int) -> ChannelProtocol {
+    func channelAtIndex(index: Int) -> AbstractChannel {
         return channels[index]
     }
     
