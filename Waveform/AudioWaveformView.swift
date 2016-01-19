@@ -10,7 +10,14 @@ import UIKit.UIControl
 
 class AudioWaveformView: UIView {
     
-    weak var dataSource: AudioWaveformViewDataSource?
+    weak var dataSource: AudioWaveformViewDataSource? {
+        didSet {
+            dataSource?.onGeometryUpdate = {
+                self.appendNewPathToPathLayer()
+            }
+        }
+    }
+    
     var lineColor: UIColor = .blackColor() {
         didSet{
             self.pathLayer.strokeColor = lineColor.CGColor
@@ -58,7 +65,7 @@ class AudioWaveformView: UIView {
     }
     
     private func appendNewPathToPathLayer() {
-        self.dataSource?.updateGeometry()        
+//        self.dataSource?.updateGeometry()        
         self.pathLayer.path = self.newPathPart()
     }
     

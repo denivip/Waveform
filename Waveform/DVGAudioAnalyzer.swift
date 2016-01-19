@@ -30,24 +30,32 @@ struct DataRange {
     }
 }
 
+enum AudioAnalizerState {
+    case Idle
+    case Reading
+    case Finished
+}
+
 class DVGAudioAnalyzer: ChannelSource {
     
     let audioSource: DVGAudioSource_
     let asset: AVAsset
     var audioFormat = AudioStreamBasicDescription()
-    
+    var state = AudioAnalizerState.Idle
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     
     var channelsCount: Int {
         return 1
     }
     
+    private var scaleIndex = 0
+    
     func channelAtIndex(index: Int) -> AbstractChannel {
-//        if index == 0 {
-//            return self.maxValueChannels[0]
-//        } else {
-            return self.avgValueChannels[0]
-//        }
+        if index == 0 {
+            return self.maxValueChannels[scaleIndex]
+        } else {
+            return self.avgValueChannels[scaleIndex]
+        }
     }
     
     var onChannelsChanged: (ChannelSource) -> () = {_ in}
@@ -117,16 +125,16 @@ class DVGAudioAnalyzer: ChannelSource {
     func configureChannels() {
         var maxValueChannels = [Channel<Int16>]()
         for _ in 0..<channelPerLogicProviderType {
-            let channel        = Channel<Int16>(logicProvider: MaxValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(MaxValueLogicProvider)
+            let channel        = Channel<Int16>(logicProvider: AudioMaxValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(AudioMaxValueLogicProvider)
             maxValueChannels.append(channel)
         }
         self.maxValueChannels = maxValueChannels
         
         var avgValueChannels = [Channel<Float>]()
         for _ in 0..<channelPerLogicProviderType {
-            let channel        = Channel<Float>(logicProvider: AverageValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(AverageValueLogicProvider)
+            let channel        = Channel<Float>(logicProvider: AudioAverageValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(AudioAverageValueLogicProvider)
             avgValueChannels.append(channel)
         }
         self.avgValueChannels = avgValueChannels
@@ -151,12 +159,12 @@ class DVGAudioAnalyzer: ChannelSource {
             return 64
         case 96..<192:
             return 128
-        case 192..<394:
+        case 192..<384:
             return 256
-        case 294..<798:
+        case 384..<768:
             return 512
         default:
-            return 1
+            return 1024
         }
     }
     
@@ -169,7 +177,7 @@ class DVGAudioAnalyzer: ChannelSource {
         let scale         = 1.0 / dataRange.length
         let adjustedScale = self.adjustedScaleFromScale(scale)
         
-        if adjustedScale == 1 {
+        if adjustedScale == 1 && self.state == .Idle {
             
             let startTime      = kCMTimeZero
             let endTime        = self.asset.duration
@@ -179,16 +187,22 @@ class DVGAudioAnalyzer: ChannelSource {
             let sampleBlockLength    = Int(estimatedSampleCount / Double(count))
             self.configureChannelsForBlockSize(sampleBlockLength, totalCount: count)
             self._read(count, completion: completion)
-            return
+        } else {
+             // change channel
+            let log = Int(log2(Double(adjustedScale)))
+            if log != self.scaleIndex {
+                print(log)
+                self.scaleIndex = log
+                self.onChannelsChanged(self)
+            }
         }
-        // change channel
-        return
     }
     
     func _read(count: Int, completion: () -> () = {}) {
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
             if self == nil { return }
+            self!.state = .Reading
             
             let channelsCount  = Int(self!.audioFormat.mChannelsPerFrame)
 
@@ -219,7 +233,7 @@ class DVGAudioAnalyzer: ChannelSource {
                 }
                 
                 completion()
-                
+                self!.state = .Finished
             } catch {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }

@@ -12,6 +12,7 @@ protocol AudioWaveformViewDataSource: class {
     var identifier: String { get }
     var bounds: CGSize { get }
     var pointsCount: Int { get }
+    var onGeometryUpdate: () -> () {set get}
     func updateGeometry()
     func pointAtIndex(index: Int) -> CGPoint
 }
@@ -21,9 +22,14 @@ protocol AudioWaveformPlotDataSource: class {
     var waveformDataSourcesCount: Int { get }
     func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource
 }
+
 protocol AudioWaveformPlotDelegate: class {
     var scale: CGFloat { get }
     var start: CGFloat { get }
     func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat)
     func moveByDistance(relativeDeltaX: CGFloat)
+}
+
+protocol AudioWaveformPlotViewModelDelegate: class {
+    func plotMoved(scale: CGFloat, start: CGFloat)
 }

@@ -8,7 +8,7 @@
 
 import UIKit.UIView
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, AudioWaveformPlotViewModelDelegate {
 
     var sourceFile = "video.m4v" //"440Hz-5sec.mp4"
 
@@ -32,9 +32,11 @@ class ViewController: UIViewController {
     }
     
     func prepareAudioWaveformPlot() {
+        
         // 2. Prepare Plot Model with DataSource ???
         self.audioWaveformPlotModel.addChannelSource(self.analizer)
-
+        self.audioWaveformPlotModel.delegate = self
+        
         // 3. Set plot model to plot view
         self.audioWaveformPlot.viewModel = self.audioWaveformPlotModel
         
@@ -52,12 +54,16 @@ class ViewController: UIViewController {
         self.analizer.prepareToRead {
             [weak self] (success) -> () in
             if success {
-                self?.analizer.read(320) {
+                self?.analizer.read(1024) {
                     print("time: \(-date.timeIntervalSinceNow)")
-//                    self?.audioWaveformPlot.stopSynchingWithDataSource()
+                    self?.audioWaveformPlot.stopSynchingWithDataSource()
                 }
             }
         }
+    }
+    
+    func plotMoved(scale: CGFloat, start: CGFloat) {
+        self.analizer.read(1024, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
     }
 }
 

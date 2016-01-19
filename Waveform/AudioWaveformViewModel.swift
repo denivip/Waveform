@@ -21,7 +21,8 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
-    var identifier: String { return self.channel?.identifier ?? "" }
+    var identifier: String = ""
+    var onGeometryUpdate: () -> () = {}
     
     func pointAtIndex(index: Int) -> CGPoint {
         
@@ -57,21 +58,20 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         let dx       = 1.0/CGFloat(channel!.totalCount - 1)
         scaledDx     = dx * scale
         startIndex   = Int(ceil(start/dx))
+
+        print(Float(startIndex))
+        print(Float(startIndex)/Float(channel!.totalCount))
+        
         scaledStartX = (CGFloat(startIndex) * dx - start) * scale
         
         var count = Int(ceil((1 - scaledStartX)/scaledDx + 0.000001))
         count     = max(0, min(count, self.channel!.count - startIndex))
         
         self.pointsCount = count
+
+        let bounds = self.plotModel!.maxWafeformBounds()
+        self.bounds = bounds
         
-        var maxValue: CGFloat = 1.0
-        for index in 0..<self.channel!.count {
-            let value: CGFloat = self.channel![index]
-            if maxValue < value {
-                maxValue = value
-            }
-        }
-        // TODO: If there are negative numbers too, height == 2 * max(maxValue, abs(minValue))
-        self.bounds = CGSize(width: 1.0, height: maxValue)
+        self.onGeometryUpdate()
     }
 }

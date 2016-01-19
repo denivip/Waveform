@@ -142,7 +142,7 @@ extension AudioWaveformPlot {
     
     func redraw() {
         for waveformView in self.waveformViews {
-            waveformView.redraw()
+            waveformView.dataSource?.updateGeometry()//redraw()
         }
     }
     

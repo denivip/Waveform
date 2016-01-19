@@ -11,10 +11,9 @@ protocol AbstractChannel: class {
     var totalCount: Int { get }
     var count: Int { get }
     var identifier: String { get }
-    subscript(index: Int) -> Int { get }
-    subscript(index: Int) -> Int16 { get }
-    subscript(index: Int) -> Double { get }
-    subscript(index: Int) -> Float { get }
+    var maxValue: CGFloat { get }
+    var minValue: CGFloat { get }
+
     subscript(index: Int) -> CGFloat { get }
 }
 
@@ -31,35 +30,26 @@ class Channel<T: NumberType>: AbstractChannel {
         self.logicProvider.channel = self
     }
     
-    public final var blockSize = 1
-    private var currentBlockSize = 0
-    
-    private var space: Int = 0
-    public final var count: Int = 0
-    public final var totalCount: Int = 0
-
+    public var blockSize = 1
+    public var count: Int = 0
+    public var totalCount: Int = 0
     public var identifier = ""
-    
+    public var onChanged: (Channel) -> () = {_ in return } //???: What the purpose?
+    public var maxValue: CGFloat { return self._maxValue.value() }
+    public var minValue: CGFloat { return self._minValue.value() }
 
-    public final subscript(index: Int) -> Int {
-        get { return self.buffer[index].int }
-    }
-    public final subscript(index: Int) -> Int16 {
-        get { return self.buffer[index].int16 }
-    }
-    public final subscript(index: Int) -> Double {
-        get { return self.buffer[index].double }
-    }
-    public final subscript(index: Int) -> Float {
-        get { return self.buffer[index].float }
-    }
-    public final subscript(index: Int) -> CGFloat {
+    
+    private var currentBlockSize = 0
+    private var space: Int = 0
+    private var buffer: UnsafeMutablePointer<T>
+    private var _maxValue = NumberWrapper(CGFloat.min)
+    private var _minValue = NumberWrapper(CGFloat.max)
+
+    public subscript(index: Int) -> CGFloat {
         get { return self.buffer[index].cgfloat }
     }
 
-    public
-    final
-    func handleValue(value: NumberWrapper) {
+    public func handleValue(value: NumberWrapper) {
         if currentBlockSize == blockSize {
             self.clear()
             currentBlockSize = 0
@@ -68,10 +58,11 @@ class Channel<T: NumberType>: AbstractChannel {
         self.logicProvider.handleValue(value)
     }
     
-    private var buffer: UnsafeMutablePointer<T>
-    
-    final
     func appendValueToBuffer(value: NumberWrapper) {
+        if count >= totalCount { return }
+        
+        if _maxValue < value { _maxValue = value }
+        if _minValue > value { _minValue = value }
         if space == count {
             let newSpace = max(space * 2, 16)
             let newPtr = UnsafeMutablePointer<T>.alloc(newSpace)
@@ -87,14 +78,12 @@ class Channel<T: NumberType>: AbstractChannel {
         count++
     }
     
-    private
-    func clear() {
+    private func clear() {
         self.logicProvider.clear()
         self.onChanged(self)
     }
     
-    public
-    func finalize() {
+    public func finalize() {
         print(self.space, self.count, self.totalCount)
         //TODO: Clear odd space
         self.clear()
@@ -104,13 +93,11 @@ class Channel<T: NumberType>: AbstractChannel {
         buffer.destroy(count)
         buffer.dealloc(count)
     }
-    
-    final
-    var onChanged: (Channel) -> () = {_ in return}
 }
 
 private protocol LogicUser: class {
     func appendValueToBuffer(value: NumberWrapper)
+    var blockSize: Int { get }
 }
 
 extension Channel: LogicUser {}
@@ -133,7 +120,7 @@ class MaxValueLogicProvider: LogicProvider {
     private var max: NumberWrapper?
     public required init(){}
 
-    public final override func handleValue(value: NumberWrapper) {
+    public override func handleValue(value: NumberWrapper) {
         if max == nil {
             max = value
         } else if value > max! {
@@ -141,7 +128,7 @@ class MaxValueLogicProvider: LogicProvider {
         }
     }
 
-    public final override func clear() {
+    public override func clear() {
         self.channel?.appendValueToBuffer(max ?? NumberWrapper.int(0))
         max = nil
     }
@@ -155,18 +142,57 @@ class AverageValueLogicProvider: LogicProvider {
     var count = 0
     public required init(){}
     
-    public final override func handleValue(value: NumberWrapper) {
+    public override func handleValue(value: NumberWrapper) {
         summ = summ + value
         count++
     }
     
-    public final override func clear() {
+    public override func clear() {
         self.channel?.appendValueToBuffer(summ/count)
         summ = NumberWrapper.double(0.0)
         count = 0
     }
 }
 
+
+public
+final
+class AudioMaxValueLogicProvider: LogicProvider {
+    class override var identifier: String { return "max" }
+    private var max = NumberWrapper(-40.0)
+    public required init(){}
+    
+    public override func handleValue(value: NumberWrapper) {
+        if value > max {
+            max = value
+        }
+    }
+    
+    public override func clear() {
+        self.channel?.appendValueToBuffer(max)
+        max = NumberWrapper(-40.0)
+    }
+}
+
+public
+final
+class AudioAverageValueLogicProvider: LogicProvider {
+    class override var identifier: String { return "avg" }
+    private var summ = NumberWrapper.double(0.0)
+    var count = 0
+    public required init(){}
+    
+    public override func handleValue(value: NumberWrapper) {
+        summ = summ + abs(value)
+        count++
+    }
+    
+    public override func clear() {
+        self.channel?.appendValueToBuffer(summ/count)
+        summ = NumberWrapper.double(0.0)
+        count = 0
+    }
+}
 
 public
 func measure(block: () -> ()) {

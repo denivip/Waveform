@@ -79,6 +79,15 @@ enum NumberWrapper {
     }
 }
 
+func abs(number: NumberWrapper) -> NumberWrapper {
+    switch number {
+    case .int(let v):
+        return NumberWrapper( abs(v))
+    case .double(let v):
+        return NumberWrapper( abs(v))
+    }
+}
+
 public
 extension NumberWrapper {
     public init(_ value: Int) {
@@ -115,7 +124,16 @@ func +(l:NumberWrapper, r: NumberWrapper) -> NumberWrapper {
 func /(l:NumberWrapper, r: Int) -> NumberWrapper {
     switch l {
     case .int(let left):
-        return NumberWrapper.int(left / r)
+        return NumberWrapper.double(Double(left) / Double(r))
+    case .double(let left):
+        return NumberWrapper.double(left / Double(r))
+    }
+}
+
+func /(l:NumberWrapper, r: Double) -> NumberWrapper {
+    switch l {
+    case .int(let left):
+        return NumberWrapper.double(Double(left) / r)
     case .double(let left):
         return NumberWrapper.double(left / Double(r))
     }

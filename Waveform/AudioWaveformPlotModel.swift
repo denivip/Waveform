@@ -11,6 +11,8 @@ import UIKit.UIColor
 
 class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     
+    weak var delegate: AudioWaveformPlotViewModelDelegate?
+    
     private var viewModels = [AudioWaveformViewModel]()
     
     override init() {
@@ -30,10 +32,16 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     func addChannelSource(channelsSource: ChannelSource) {
         self.dataSources.append(channelsSource)
         for index in 0..<channelsSource.channelsCount {
+            
+            let channel = channelsSource.channelAtIndex(index)
+            
             let viewModel       = AudioWaveformViewModel()
-            viewModel.channel   = channelsSource.channelAtIndex(index)
+            viewModel.channel   = channel
             viewModel.plotModel = self
             self.viewModels.append(viewModel)
+
+            let identifier = channel.identifier
+            viewModel.identifier = identifier
         }
         channelsSource.onChannelsChanged = {
             [weak self]
@@ -51,8 +59,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     func updateViewModelsForChannelsSource(channelsSource: ChannelSource) {
         for index in 0..<channelsSource.channelsCount {
             let channel = channelsSource.channelAtIndex(index)
-            let identifier = "\(channelsSource.identifier).\(channel.identifier)"
-          
+            let identifier = channel.identifier
             if let viewModel = self.viewModelWithIdentifier(identifier) {
                 viewModel.channel = channel
             } else {
@@ -72,12 +79,26 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         }
         return nil
     }
+
+    func maxWafeformBounds() -> CGSize {
+        var maxHeight: CGFloat = 0.1
+        for dataSource in self.dataSources {
+            for index in 0..<dataSource.channelsCount {
+                let channel = dataSource.channelAtIndex(index)
+                if channel.maxValue > maxHeight {
+                    maxHeight = channel.maxValue
+                }
+            }
+        }
+        return CGSize(width: 1.0, height: maxHeight)
+    }
 }
 
 extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
     func zoom(start start: CGFloat, scale: CGFloat) {
         self.scale = scale
         self.start = start
+        self.delegate?.plotMoved(scale, start: start)
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }
@@ -92,6 +113,7 @@ extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
     
     func moveToPosition(start: CGFloat) {
         self.start = max(0, min(start, 1 - 1/scale))
+        self.delegate?.plotMoved(scale, start: start)
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }
