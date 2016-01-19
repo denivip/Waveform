@@ -35,7 +35,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         
         let pointY: CGFloat
         if pointIndex < self.channel!.count {
-            pointY = self.channel![pointIndex]
+            pointY = CGFloat(self.channel![pointIndex])
         } else {
             pointY = 0
         }

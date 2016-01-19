@@ -85,8 +85,8 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         for dataSource in self.dataSources {
             for index in 0..<dataSource.channelsCount {
                 let channel = dataSource.channelAtIndex(index)
-                if channel.maxValue > maxHeight {
-                    maxHeight = channel.maxValue
+                if CGFloat(channel.maxValue) > maxHeight {
+                    maxHeight = CGFloat(channel.maxValue)
                 }
             }
         }

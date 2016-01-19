@@ -189,8 +189,8 @@ class DVGAudioAnalyzer: ChannelSource {
                         let avgValueChannel = self!.avgValueChannels[index]
                         for index in 0..<length {
                             let sample = dataSamples[channelsCount * index]
-                            maxValueChannel.handleValue(NumberWrapper(sample))
-                            avgValueChannel.handleValue(NumberWrapper(sample))
+                            maxValueChannel.handleValue(Double(sample))
+                            avgValueChannel.handleValue(Double(sample))
                         }
                     }
                     
