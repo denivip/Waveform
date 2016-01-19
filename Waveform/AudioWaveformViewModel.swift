@@ -55,12 +55,9 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
             return
         }
         
-        let dx       = 1.0/CGFloat(channel!.totalCount - 1)
+        let dx       = 1.0/(CGFloat(channel!.totalCount) - 1)
         scaledDx     = dx * scale
         startIndex   = Int(ceil(start/dx))
-
-        print(Float(startIndex))
-        print(Float(startIndex)/Float(channel!.totalCount))
         
         scaledStartX = (CGFloat(startIndex) * dx - start) * scale
         
@@ -69,7 +66,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         
         self.pointsCount = count
 
-        let bounds = self.plotModel!.maxWafeformBounds()
+        let bounds  = self.plotModel!.maxWafeformBounds()
         self.bounds = bounds
         
         self.onGeometryUpdate()

@@ -73,7 +73,7 @@ class DVGAudioAnalyzer: ChannelSource {
         self.configureChannels()
     }
 
-    func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t!) {
+    func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
         if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(self.processingQueue)) {
             autoreleasepool(block)
         } else {
@@ -140,44 +140,17 @@ class DVGAudioAnalyzer: ChannelSource {
         self.avgValueChannels = avgValueChannels
     }
 
-    
-    func adjustedScaleFromScale(scale: Double) -> Int {
-        switch scale {
-        case 0..<1.5:
-            return 1
-        case 1.5..<3:
-            return 2
-        case 3..<6:
-            return 4
-        case 6..<12:
-            return 8
-        case 12..<24:
-            return 16
-        case 24..<48:
-            return 32
-        case 48..<96:
-            return 64
-        case 96..<192:
-            return 128
-        case 192..<384:
-            return 256
-        case 384..<768:
-            return 512
-        default:
-            return 1024
-        }
-    }
-    
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
         return "\(type.identifier).\(self.identifier)"
     }
     
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
 
-        let scale         = 1.0 / dataRange.length
-        let adjustedScale = self.adjustedScaleFromScale(scale)
+        let scale      = 1.0 / dataRange.length
+        var scaleIndex = (round(scale) == 1) ? 0 : Int(round(log2(scale)))
+        scaleIndex     = min(9, scaleIndex)
         
-        if adjustedScale == 1 && self.state == .Idle {
+        if scaleIndex == 0 && self.state == .Idle {
             
             let startTime      = kCMTimeZero
             let endTime        = self.asset.duration
@@ -189,10 +162,11 @@ class DVGAudioAnalyzer: ChannelSource {
             self._read(count, completion: completion)
         } else {
              // change channel
-            let log = Int(log2(Double(adjustedScale)))
-            if log != self.scaleIndex {
-                print(log)
-                self.scaleIndex = log
+
+            if scaleIndex != self.scaleIndex {
+                print(scaleIndex)
+                print(Int(round(log2(scale))))
+                self.scaleIndex = scaleIndex
                 self.onChannelsChanged(self)
             }
         }
@@ -202,6 +176,7 @@ class DVGAudioAnalyzer: ChannelSource {
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
             if self == nil { return }
+           
             self!.state = .Reading
             
             let channelsCount  = Int(self!.audioFormat.mChannelsPerFrame)

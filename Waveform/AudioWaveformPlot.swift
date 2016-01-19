@@ -99,13 +99,6 @@ class AudioWaveformPlot: UIView {
         }
     }
     
-    //    override func layoutSubviews() {
-    //        super.layoutSubviews()
-    //        for v in self.waveformViews {
-    //            v.setNeedsLayout()
-    //        }
-    //    }
-    
     var waveformViews = [AudioWaveformView]()
     var displayLink: CADisplayLink?
 }
