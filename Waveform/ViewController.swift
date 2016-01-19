@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     func prepareAudioWaveformPlot() {
         // 1. Prepare DataSource with logic providers
         let dataSource = analizer
-        dataSource.configureWithLogicTypes([
+        dataSource.configureChannelsForLogicProviderTypes([
             MaxValueLogicProvider.self,
             AverageValueLogicProvider.self
             ])
@@ -43,8 +43,8 @@ class ViewController: UIViewController {
         self.audioWaveformPlotModel.addChannelSource(dataSource)
 
         // 3. Set plot model to plot view
-        self.audioWaveformPlot.dataSource = self.audioWaveformPlotModel
-        self.audioWaveformPlot.delegate   = self.audioWaveformPlotModel
+        self.audioWaveformPlot.viewModel = self.audioWaveformPlotModel
+        
         // 4. Customization
         let waveform1 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(MaxValueLogicProvider))
         waveform1?.lineColor = UIColor.redColor()

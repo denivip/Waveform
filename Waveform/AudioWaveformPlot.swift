@@ -26,6 +26,13 @@ class AudioWaveformPlot: UIView {
         }
     }
     
+    weak var viewModel: protocol<AudioWaveformPlotDelegate, AudioWaveformPlotDataSource>? {
+        didSet {
+            self.delegate   = viewModel
+            self.dataSource = viewModel
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -120,8 +127,6 @@ extension AudioWaveformPlot {
         self.containerView.addConstraints(horizontalConstraints)
         let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: [], metrics: nil, views: views)
         self.containerView.addConstraints(verticalConstraints)
-        
-        audioWaveformView.backgroundColor = UIColor.redColor().colorWithAlphaComponent(0.5)
         
         return audioWaveformView
     }

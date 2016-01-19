@@ -27,31 +27,50 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         return self.viewModels[index]
     }
     
-    func addChannelSource(cSource: ChannelSource) {
-        self.dataSources.append(cSource)
-        for index in 0..<cSource.channelsCount {
-            let vm       = AudioWaveformViewModel()
-            vm.channel   = cSource.channelAtIndex(index)
-            vm.plotModel = self
-            self.viewModels.append(vm)
+    func addChannelSource(channelsSource: ChannelSource) {
+        self.dataSources.append(channelsSource)
+        for index in 0..<channelsSource.channelsCount {
+            let viewModel       = AudioWaveformViewModel()
+            viewModel.channel   = channelsSource.channelAtIndex(index)
+            viewModel.plotModel = self
+            self.viewModels.append(viewModel)
         }
-        self.onPlotUpdate()
+        channelsSource.onChannelsChanged = {
+            [weak self]
+            channelsSource in
+            self?.updateViewModelsForChannelsSource(channelsSource)
+        }
     }
     
     func resetChannelsFromDataSources() {
-        var channels = [ChannelProtocol]()
         for dataSource in self.dataSources {
-            for index in 0..<dataSource.channelsCount {
-                let channel = dataSource.channelAtIndex(index)
-                channels.append(channel)
+            self.updateViewModelsForChannelsSource(dataSource)
+        }
+    }
+    
+    func updateViewModelsForChannelsSource(channelsSource: ChannelSource) {
+        for index in 0..<channelsSource.channelsCount {
+            let channel = channelsSource.channelAtIndex(index)
+            let identifier = "\(channelsSource.identifier).\(channel.identifier)"
+          
+            if let viewModel = self.viewModelWithIdentifier(identifier) {
+                viewModel.channel = channel
+            } else {
+                let viewModel       = AudioWaveformViewModel()
+                viewModel.channel   = channel
+                viewModel.plotModel = self
+                self.viewModels.append(viewModel)
             }
         }
-
-        assert(channels.count == viewModels.count)
-
-        for index in channels.indices {
-            self.viewModels[index].channel = channels[index]
+    }
+    
+    func viewModelWithIdentifier(identifier: String) -> AudioWaveformViewModel? {
+        for viewModel in self.viewModels {
+            if viewModel.identifier == identifier {
+                return viewModel
+            }
         }
+        return nil
     }
 }
 
@@ -84,10 +103,10 @@ extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
     }
 }
 
-protocol ChannelSource {
+protocol ChannelSource: class {
     var identifier: String { get }
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String
     var channelsCount: Int { get }
-    func channelAtIndex(index: Int) -> ChannelProtocol
+    func channelAtIndex(index: Int) -> AbstractChannel
     var onChannelsChanged: (ChannelSource) -> () { get set }
 }

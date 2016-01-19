@@ -103,7 +103,7 @@ class DVGAudioAnalyzer: ChannelSource {
         }
     }
     
-    func configureWithLogicTypes(logicProviderTypes: [LogicProvider.Type]) {
+    func configureChannelsForLogicProviderTypes(logicProviderTypes: [LogicProvider.Type]) {
         self.logicProviderTypes = logicProviderTypes
         var cachedChannels      = [Channel<Int16>]()
         
