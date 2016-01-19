@@ -65,18 +65,6 @@ extension CGFloat: NumberType {
 }
 
 public
-protocol ChannelProtocol: class {
-    var totalCount: Int { get }
-    var count: Int { get }
-    var identifier: String { get }
-    subscript(index: Int) -> Int { get }
-    subscript(index: Int) -> Int16 { get }
-    subscript(index: Int) -> Double { get }
-    subscript(index: Int) -> Float { get }
-    subscript(index: Int) -> CGFloat { get }
-}
-
-public
 enum NumberWrapper {
     case int(Int)
     case double(Double)

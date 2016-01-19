@@ -6,10 +6,21 @@
 //  Copyright © 2016 qqqqq. All rights reserved.
 //
 
+public
+protocol AbstractChannel: class {
+    var totalCount: Int { get }
+    var count: Int { get }
+    var identifier: String { get }
+    subscript(index: Int) -> Int { get }
+    subscript(index: Int) -> Int16 { get }
+    subscript(index: Int) -> Double { get }
+    subscript(index: Int) -> Float { get }
+    subscript(index: Int) -> CGFloat { get }
+}
 
 public
 final
-class Channel<T: NumberType>: ChannelProtocol {
+class Channel<T: NumberType>: AbstractChannel {
     
     let logicProvider: LogicProvider
     public init(logicProvider: LogicProvider) {
@@ -98,15 +109,15 @@ class Channel<T: NumberType>: ChannelProtocol {
     var onChanged: (Channel) -> () = {_ in return}
 }
 
-private protocol _Channel: class {
+private protocol LogicUser: class {
     func appendValueToBuffer(value: NumberWrapper)
 }
 
-extension Channel : _Channel {}
+extension Channel: LogicUser {}
 
 public
 class LogicProvider {
-    weak private var channel: _Channel?
+    weak private var channel: LogicUser?
     class var identifier: String { return "" }
     var identifier: String { return self.dynamicType.identifier }
     public required init(){}
