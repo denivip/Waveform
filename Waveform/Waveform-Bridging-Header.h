@@ -3,3 +3,4 @@
 //
 
 #import "DVGAudioSource.h"
+#import "DVGVideosCollectionViewController.h"

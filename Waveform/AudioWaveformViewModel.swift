@@ -11,7 +11,11 @@ import Foundation
 class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     
     weak var plotModel: AudioWaveformPlotModel?
-    weak var channel: AbstractChannel?
+    var channel: AbstractChannel? {
+        didSet{
+            self.identifier = channel?.identifier ?? ""
+        }
+    }
     
     var pointsCount = 0
     var bounds      = CGSize(width: 1.0, height: 1.0)
@@ -21,7 +25,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
-    var identifier: String = ""
+    var identifier: String    = ""
     var onGeometryUpdate: () -> () = {}
     
     func pointAtIndex(index: Int) -> CGPoint {
@@ -70,5 +74,9 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         self.bounds = bounds
         
         self.onGeometryUpdate()
+    }
+    
+    deinit {
+        self.channel = nil
     }
 }

@@ -15,10 +15,11 @@ struct DataRange {
     let location: Double
     let length: Double
     
-    init(location: Double, length: Double) {
+    init(var location: Double, length: Double) {
         assert(location >= 0.0)
         assert(length > 0.0)
-        assert(location + length <= 1.0)
+        assert(length <= 1.0)
+        location = min(location, 1 - length)
         
         self.location = location
         self.length   = length
@@ -111,7 +112,6 @@ class DVGAudioAnalyzer: ChannelSource {
     func configureChannelsForValuesCount(count: Int, timeRange: CMTimeRange) {
         
         let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
-        let sampleBlockLength    = Int(estimatedSampleCount / Double(count))
         
         for index in self.maxValueChannels.indices {
             let channel = self.maxValueChannels[index]
@@ -145,7 +145,7 @@ class DVGAudioAnalyzer: ChannelSource {
     }
 
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return "\(type.identifier).\(self.identifier)"
+        return "\(self.identifier).\(type.identifier)"
     }
     
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {

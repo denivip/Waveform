@@ -70,13 +70,13 @@
     AVAssetTrack *sound = [self assetAudioTrack];
     if (!sound) {
         if (errorOut) *errorOut = [NSError errorWithDomain:@"DVGAudioProcessorErrorDomain" code:-1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"This video does not contain sound", nil) }];
-        return nil;
+        return NO;
     }
     
     CMFormatDescriptionRef formatDescription = (__bridge CMFormatDescriptionRef)([[sound formatDescriptions] firstObject]);
     if (!formatDescription) {
         if (errorOut) *errorOut = [NSError errorWithDomain:@"DVGAudioProcessorErrorDomain" code:-1 userInfo:@{ NSLocalizedDescriptionKey : NSLocalizedString(@"Invalid audio format", nil) }];
-        return nil;
+        return NO;
     }
     
     NSLog(@"DEBUG Audio format description => %@", formatDescription);

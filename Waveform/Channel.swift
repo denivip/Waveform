@@ -36,8 +36,8 @@ class Channel<T: NumberType>: AbstractChannel {
     public init(logicProvider: LogicProvider) {
         self.logicProvider = logicProvider
         self.space = 0
-        self.buffer = UnsafeMutablePointer<T>.alloc(0)
-        self.buffer.initializeFrom(nil, count: 0)
+//        self.buffer = UnsafeMutablePointer<T>.alloc(0)
+//        self.buffer.initializeFrom(nil, count: 0)
         self.logicProvider.channel = self
     }
     
@@ -50,7 +50,7 @@ class Channel<T: NumberType>: AbstractChannel {
     
     private var currentBlockSize = 0
     private var space: Int = 0
-    private var buffer: UnsafeMutablePointer<T>
+    private var buffer = Array<T>() //UnsafeMutablePointer<T>
     private var _maxValue = Double(CGFloat.min)
     private var _minValue = Double(CGFloat.max)
 
@@ -68,26 +68,31 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     func appendValueToBuffer(value: Double) {
-        if count >= totalCount { return }
         
-        if _maxValue < value { _maxValue = value }
-        if _minValue > value { _minValue = value }
-        
-        if space == count {
-            let newSpace = max(space * 2, 16)
-            let newPtr = UnsafeMutablePointer<T>.alloc(newSpace)
-            
-            newPtr.moveInitializeFrom(buffer, count: count)
-            
-            buffer.dealloc(count)
-            
-            buffer = newPtr
-            space = newSpace
+        if self._maxValue < value { self._maxValue = value }
+        if self._minValue > value { self._minValue = value }
+
+        dispatch_async(dispatch_get_main_queue()) { // test this
+            self.buffer.append(T(value))
+            self.count = self.buffer.count
         }
-        (buffer + count).initialize(T(value))
-        count++
+//
+//            if self.space == self.count {
+//                let newSpace = max(self.space * 2, 16)
+//                let newPtr = UnsafeMutablePointer<T>.alloc(newSpace)
+//                
+//                newPtr.moveInitializeFrom(self.buffer, count: self.count)
+//                
+//                self.buffer.dealloc(self.count)
+//                
+//                self.buffer = newPtr
+//                self.space = newSpace
+//            }
+//            (self.buffer + self.count).initialize(T(value))
+//            self.count++
+//        }
     }
-    
+
     private func clear() {
         self.logicProvider.clear()
     }
@@ -100,8 +105,8 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     deinit {
-        buffer.destroy(count)
-        buffer.dealloc(count)
+//        buffer.destroy(count)
+//        buffer.dealloc(count)
     }
 }
 
@@ -180,7 +185,7 @@ class AudioMaxValueLogicProvider: LogicProvider {
     }
     
     public override func clear() {
-        self.channel?.appendValueToBuffer(max)
+        self.channel?.appendValueToBuffer(min(max, Double(Int16.max)))
         max = Double(Int16.min)//-40.0
     }
 }

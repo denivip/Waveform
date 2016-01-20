@@ -6,17 +6,14 @@
 //  Copyright © 2015 developer. All rights reserved.
 //
 
-import UIKit.UIView
+import UIKit
+import Photos
 
 class ViewController: UIViewController, AudioWaveformPlotViewModelDelegate {
 
-    var sourceFile = "video.m4v" //"440Hz-5sec.mp4"
-
-    lazy var analizer: DVGAudioAnalyzer = {
-        
-        let fileURL = NSBundle.mainBundle().URLForResource(self.sourceFile, withExtension: nil)!
-        return DVGAudioAnalyzer(asset: AVAsset(URL: fileURL))
-    }()
+    var phAsset: PHAsset?
+    var asset: AVAsset?
+    var analizer: DVGAudioAnalyzer?
     
     @IBOutlet weak var audioWaveformPlot: AudioWaveformPlot!
     
@@ -24,37 +21,52 @@ class ViewController: UIViewController, AudioWaveformPlotViewModelDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let phAsset = self.phAsset {
+            let options = PHContentEditingInputRequestOptions()
+            options.canHandleAdjustmentData = {_ in return false}
+            
+            phAsset.requestContentEditingInputWithOptions(options) { contentEditingInput, info in
+                self.asset = contentEditingInput!.avAsset!
+                if let asset = self.asset {
+                    self.analizer = DVGAudioAnalyzer(asset: asset)
+                }
+            }
+        }
     }
     
-    @IBAction func buttonPressed() {
+    @IBAction func readAudioAndDrawWaveform() {
+        if analizer == nil { return }
+
         self.prepareAudioWaveformPlot()
         self.startReading()
     }
     
     func prepareAudioWaveformPlot() {
-        
         // 2. Prepare Plot Model with DataSource ???
-        self.audioWaveformPlotModel.addChannelSource(self.analizer)
+        self.audioWaveformPlotModel.addChannelSource(self.analizer!)
         self.audioWaveformPlotModel.delegate = self
         
         // 3. Set plot model to plot view
         self.audioWaveformPlot.viewModel = self.audioWaveformPlotModel
         
         // 4. Customization
-        let waveform1 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(MaxValueLogicProvider))
+        let waveform1 = self.audioWaveformPlot.waveformWithIdentifier(analizer!.identifierForLogicProviderType(MaxValueLogicProvider))
         waveform1?.lineColor = UIColor.redColor()
         
-        let waveform2 = self.audioWaveformPlot.waveformWithIdentifier(analizer.identifierForLogicProviderType(AverageValueLogicProvider))
+        let waveform2 = self.audioWaveformPlot.waveformWithIdentifier(analizer!.identifierForLogicProviderType(AverageValueLogicProvider))
         waveform2?.lineColor = UIColor.greenColor()
     }
+    
+    var plotPointsCount = 512
     
     func startReading() {
         self.audioWaveformPlot.startSynchingWithDataSource()
         let date = NSDate()
-        self.analizer.prepareToRead {
+        self.analizer!.prepareToRead {
             [weak self] (success) -> () in
             if success {
-                self?.analizer.read(1024) {
+                self?.analizer!.read(self!.plotPointsCount) {
                     print("time: \(-date.timeIntervalSinceNow)")
                     self?.audioWaveformPlot.stopSynchingWithDataSource()
                 }
@@ -63,7 +75,9 @@ class ViewController: UIViewController, AudioWaveformPlotViewModelDelegate {
     }
     
     func plotMoved(scale: CGFloat, start: CGFloat) {
-        self.analizer.read(1024, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
+        self.analizer!.read(plotPointsCount, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
     }
 }
+
+
 

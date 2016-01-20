@@ -30,18 +30,18 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     }
     
     func addChannelSource(channelsSource: ChannelSource) {
+        
         self.dataSources.append(channelsSource)
+        
         for index in 0..<channelsSource.channelsCount {
             
-            let channel = channelsSource.channelAtIndex(index)
-            
+            let channel         = channelsSource.channelAtIndex(index)
             let viewModel       = AudioWaveformViewModel()
+            
             viewModel.channel   = channel
             viewModel.plotModel = self
+            
             self.viewModels.append(viewModel)
-
-            let identifier = channel.identifier
-            viewModel.identifier = identifier
         }
         channelsSource.onChannelsChanged = {
             [weak self]
