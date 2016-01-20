@@ -45,7 +45,7 @@ class DVGAudioAnalyzer: ChannelSource {
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     
     var channelsCount: Int {
-        return 1
+        return 2
     }
     
     private var scaleIndex = 0
@@ -70,7 +70,7 @@ class DVGAudioAnalyzer: ChannelSource {
     init(asset: AVAsset) {
         self.asset       = asset
         self.audioSource = DVGAudioSource_(asset: asset)
-        self.configureChannels()
+        self.configureChannelsForLogic()
     }
 
     func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
@@ -108,21 +108,25 @@ class DVGAudioAnalyzer: ChannelSource {
         }
     }
 
-    func configureChannelsForBlockSize(blockSize: Int, totalCount: Int) {
+    func configureChannelsForValuesCount(count: Int, timeRange: CMTimeRange) {
+        
+        let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
+        let sampleBlockLength    = Int(estimatedSampleCount / Double(count))
+        
         for index in self.maxValueChannels.indices {
             let channel = self.maxValueChannels[index]
-            channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
-            channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
+            channel.totalCount = Int(Double(count) * pow(2.0, Double(index)))
+            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
         }
 
         for index in self.avgValueChannels.indices {
             let channel = self.avgValueChannels[index]
-            channel.blockSize  = blockSize / Int(pow(2.0, Double(index)))
-            channel.totalCount = totalCount * Int(pow(2.0, Double(index)))
+            channel.totalCount = Int(Double(count) * pow(2.0, Double(index)))
+            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
         }
     }
     
-    func configureChannels() {
+    func configureChannelsForLogic() {
         var maxValueChannels = [Channel<Int16>]()
         for _ in 0..<channelPerLogicProviderType {
             let channel        = Channel<Int16>(logicProvider: AudioMaxValueLogicProvider())
@@ -147,25 +151,21 @@ class DVGAudioAnalyzer: ChannelSource {
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
 
         let scale      = 1.0 / dataRange.length
-        var scaleIndex = (round(scale) == 1) ? 0 : Int(round(log2(scale)))
-        scaleIndex     = min(9, scaleIndex)
+        var scaleIndex = Int(floor(log2(scale)))
+        scaleIndex     = min(self.channelPerLogicProviderType - 1, scaleIndex)
         
         if scaleIndex == 0 && self.state == .Idle {
             
             let startTime      = kCMTimeZero
             let endTime        = self.asset.duration
             let audioTimeRange = CMTimeRange(start: startTime, end: endTime)
-            
-            let estimatedSampleCount = audioTimeRange.duration.seconds * self.audioFormat.mSampleRate
-            let sampleBlockLength    = Int(estimatedSampleCount / Double(count))
-            self.configureChannelsForBlockSize(sampleBlockLength, totalCount: count)
+        
+            self.configureChannelsForValuesCount(count, timeRange: audioTimeRange)
             self._read(count, completion: completion)
         } else {
              // change channel
 
             if scaleIndex != self.scaleIndex {
-                print(scaleIndex)
-                print(Int(round(log2(scale))))
                 self.scaleIndex = scaleIndex
                 self.onChannelsChanged(self)
             }

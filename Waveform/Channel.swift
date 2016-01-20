@@ -15,6 +15,17 @@ protocol AbstractChannel: class {
     var minValue: Double { get }
 
     subscript(index: Int) -> Double { get }
+    func values() -> [Int]
+}
+
+extension AbstractChannel {
+    public func values() -> [Int] {
+        var array = [Int]()
+        for index in 0..<self.count {
+            array.append(self[index].int)
+        }
+        return array
+    }
 }
 
 public
@@ -82,6 +93,7 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     public func finalize() {
+        self.totalCount = self.count
         print(self.space, self.count, self.totalCount)
         //TODO: Clear odd space
         self.clear()
@@ -157,10 +169,11 @@ public
 final
 class AudioMaxValueLogicProvider: LogicProvider {
     class override var identifier: String { return "max" }
-    private var max = -40.0
+    private var max = Double(Int16.min)//-40.0
     public required init(){}
     
-    public override func handleValue(value: Double) {
+    public override func handleValue(var value: Double) {
+        value = abs(value)
         if value > max {
             max = value
         }
@@ -168,7 +181,7 @@ class AudioMaxValueLogicProvider: LogicProvider {
     
     public override func clear() {
         self.channel?.appendValueToBuffer(max)
-        max = -40.0
+        max = Double(Int16.min)//-40.0
     }
 }
 

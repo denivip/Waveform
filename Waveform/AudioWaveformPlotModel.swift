@@ -62,6 +62,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
             let identifier = channel.identifier
             if let viewModel = self.viewModelWithIdentifier(identifier) {
                 viewModel.channel = channel
+                viewModel.updateGeometry()
             } else {
                 let viewModel       = AudioWaveformViewModel()
                 viewModel.channel   = channel
@@ -112,8 +113,8 @@ extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
     }
     
     func moveToPosition(start: CGFloat) {
-        self.start = max(0, min(start, 1 - 1/scale))
-        self.delegate?.plotMoved(scale, start: start)
+        self.start = max(0, min(start, 1 - 1/self.scale))
+        self.delegate?.plotMoved(self.scale, start: self.start)
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }
