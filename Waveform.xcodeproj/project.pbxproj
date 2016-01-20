@@ -8,6 +8,27 @@
 
 /* Begin PBXBuildFile section */
 		5B0A1EB81C4DFA1B003B1EE6 /* NumberTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */; };
+		5B7003CF1C4FFC2C00EA6313 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
+		5B7003D11C4FFC3500EA6313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
+		5B7003D21C4FFC3900EA6313 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
+		5B7003D31C4FFC3D00EA6313 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FD1C243BA7006A4B67 /* Info.plist */; };
+		5B7003D41C4FFC3D00EA6313 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FD1C243BA7006A4B67 /* Info.plist */; };
+		5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33251C4FE6C1006C6F3C /* DVGDenivipAppearance.m */; };
+		5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331F1C4FE681006C6F3C /* DenoiseCollectionViewCell.m */; };
+		5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33221C4FE69A006C6F3C /* DVGCollectionReusableView.m */; };
+		5B7003D81C4FFC5D00EA6313 /* DVCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331C1C4FE656006C6F3C /* DVCollectionViewController.m */; };
+		5B7003D91C4FFC5D00EA6313 /* DVGVideosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33191C4FE51C006C6F3C /* DVGVideosCollectionViewController.m */; };
+		5B7003DA1C4FFCF300EA6313 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */; };
+		5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F31C243BA6006A4B67 /* ViewController.swift */; };
+		5B7003DC1C4FFCF300EA6313 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B91C29964400B88BAC /* Protocols.swift */; };
+		5B7003DD1C4FFCF300EA6313 /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */; };
+		5B7003DE1C4FFCF300EA6313 /* AudioWaveformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */; };
+		5B7003DF1C4FFCF300EA6313 /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */; };
+		5B7003E01C4FFCF300EA6313 /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */; };
+		5B7003E11C4FFCF300EA6313 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE379E51C47CB7A00163588 /* Channel.swift */; };
+		5B7003E21C4FFCF300EA6313 /* NumberTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */; };
+		5B7003E31C4FFCF300EA6313 /* DVGAudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */; };
+		5B7003E41C4FFCF300EA6313 /* DVGAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */; };
 		5BE379E61C47CB7A00163588 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BE379E51C47CB7A00163588 /* Channel.swift */; };
 		8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */; };
 		8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F31C243BA6006A4B67 /* ViewController.swift */; };
@@ -31,6 +52,7 @@
 
 /* Begin PBXFileReference section */
 		5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberTypes.swift; sourceTree = "<group>"; };
+		5B7003BD1C4FFB7B00EA6313 /* Release Waveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Release Waveform.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5BE379E51C47CB7A00163588 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		8B3F34EE1C243BA6006A4B67 /* Waveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +84,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5B7003BA1C4FFB7B00EA6313 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B3F34EB1C243BA6006A4B67 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -84,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				8B3F34EE1C243BA6006A4B67 /* Waveform.app */,
+				5B7003BD1C4FFB7B00EA6313 /* Release Waveform.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,6 +180,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5B7003BC1C4FFB7B00EA6313 /* Waveform WMO */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B7003CE1C4FFB7B00EA6313 /* Build configuration list for PBXNativeTarget "Waveform WMO" */;
+			buildPhases = (
+				5B7003B91C4FFB7B00EA6313 /* Sources */,
+				5B7003BA1C4FFB7B00EA6313 /* Frameworks */,
+				5B7003BB1C4FFB7B00EA6313 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Waveform WMO";
+			productName = "Release Waveform";
+			productReference = 5B7003BD1C4FFB7B00EA6313 /* Release Waveform.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8B3F34ED1C243BA6006A4B67 /* Waveform */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B3F35001C243BA7006A4B67 /* Build configuration list for PBXNativeTarget "Waveform" */;
@@ -177,6 +224,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = developer;
 				TargetAttributes = {
+					5B7003BC1C4FFB7B00EA6313 = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					8B3F34ED1C243BA6006A4B67 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = VVU5C37FM9;
@@ -197,15 +247,28 @@
 			projectRoot = "";
 			targets = (
 				8B3F34ED1C243BA6006A4B67 /* Waveform */,
+				5B7003BC1C4FFB7B00EA6313 /* Waveform WMO */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5B7003BB1C4FFB7B00EA6313 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B7003D41C4FFC3D00EA6313 /* Info.plist in Resources */,
+				5B7003D21C4FFC3900EA6313 /* LaunchScreen.storyboard in Resources */,
+				5B7003D11C4FFC3500EA6313 /* Assets.xcassets in Resources */,
+				5B7003CF1C4FFC2C00EA6313 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B3F34EC1C243BA6006A4B67 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B7003D31C4FFC3D00EA6313 /* Info.plist in Resources */,
 				8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */,
 				8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */,
 				8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */,
@@ -215,6 +278,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5B7003B91C4FFB7B00EA6313 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5B7003E21C4FFCF300EA6313 /* NumberTypes.swift in Sources */,
+				5B7003DA1C4FFCF300EA6313 /* AppDelegate.swift in Sources */,
+				5B7003D91C4FFC5D00EA6313 /* DVGVideosCollectionViewController.m in Sources */,
+				5B7003E41C4FFCF300EA6313 /* DVGAudioSource.swift in Sources */,
+				5B7003D81C4FFC5D00EA6313 /* DVCollectionViewController.m in Sources */,
+				5B7003E11C4FFCF300EA6313 /* Channel.swift in Sources */,
+				5B7003DF1C4FFCF300EA6313 /* AudioWaveformPlot.swift in Sources */,
+				5B7003E31C4FFCF300EA6313 /* DVGAudioAnalyzer.swift in Sources */,
+				5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */,
+				5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */,
+				5B7003E01C4FFCF300EA6313 /* AudioWaveformView.swift in Sources */,
+				5B7003DD1C4FFCF300EA6313 /* AudioWaveformPlotModel.swift in Sources */,
+				5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */,
+				5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */,
+				5B7003DE1C4FFCF300EA6313 /* AudioWaveformViewModel.swift in Sources */,
+				5B7003DC1C4FFCF300EA6313 /* Protocols.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8B3F34EA1C243BA6006A4B67 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -261,6 +347,30 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5B7003CC1C4FFB7B00EA6313 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Waveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "novilab-mobile.Release-Waveform";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		5B7003CD1C4FFB7B00EA6313 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				INFOPLIST_FILE = Waveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "novilab-mobile.Release-Waveform";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		8B3F34FE1C243BA7006A4B67 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -301,6 +411,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Waveform-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -338,6 +449,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Waveform-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -375,6 +487,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5B7003CE1C4FFB7B00EA6313 /* Build configuration list for PBXNativeTarget "Waveform WMO" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5B7003CC1C4FFB7B00EA6313 /* Debug */,
+				5B7003CD1C4FFB7B00EA6313 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		8B3F34E91C243BA6006A4B67 /* Build configuration list for PBXProject "Waveform" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

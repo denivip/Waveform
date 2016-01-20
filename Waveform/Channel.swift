@@ -5,6 +5,7 @@
 //  Created by qqqqq on 09/01/16.
 //  Copyright © 2016 qqqqq. All rights reserved.
 //
+import UIKit
 
 public
 protocol AbstractChannel: class {

@@ -6,6 +6,7 @@
 //  Copyright © 2015 developer. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
 class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
