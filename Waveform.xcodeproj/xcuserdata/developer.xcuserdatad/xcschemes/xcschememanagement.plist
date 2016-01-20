@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>Waveform WMO.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Waveform.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,6 +22,11 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>5B7003BC1C4FFB7B00EA6313</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>8B3F34ED1C243BA6006A4B67</key>
 		<dict>
 			<key>primary</key>
