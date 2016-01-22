@@ -18,15 +18,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="S1y-GG-6g9" customClass="AudioWaveformPlot" customModule="Waveform" customModuleProvider="target">
-                                <rect key="frame" x="20" y="81" width="280" height="128"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hy8-VM-AFu" customClass="DVGWaveformView" customModule="Waveform" customModuleProvider="target">
+                                <rect key="frame" x="20" y="84" width="280" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="qtN-AN-vTh"/>
+                                    <constraint firstAttribute="height" constant="128" id="daE-xY-Bz2"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ByL-Zw-ogk">
-                                <rect key="frame" x="20" y="280" width="280" height="39"/>
+                                <rect key="frame" x="20" y="421" width="280" height="39"/>
                                 <color key="backgroundColor" red="0.1960784314" green="0.94509803920000002" blue="0.55294117649999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="bdp-iO-1Ip"/>
@@ -41,18 +41,18 @@
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="right" secondItem="S1y-GG-6g9" secondAttribute="right" constant="20" symbolic="YES" id="XhL-Im-fEu"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ByL-Zw-ogk" secondAttribute="bottom" constant="20" id="F9M-Ag-vLE"/>
+                            <constraint firstAttribute="trailing" secondItem="hy8-VM-AFu" secondAttribute="trailing" constant="20" symbolic="YES" id="FMd-f7-WXm"/>
+                            <constraint firstItem="hy8-VM-AFu" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="T8z-aC-JkS"/>
                             <constraint firstAttribute="trailing" secondItem="ByL-Zw-ogk" secondAttribute="trailing" constant="20" symbolic="YES" id="dkS-ep-woD"/>
-                            <constraint firstItem="S1y-GG-6g9" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="17" id="keb-FG-K5t"/>
-                            <constraint firstItem="ByL-Zw-ogk" firstAttribute="top" secondItem="S1y-GG-6g9" secondAttribute="bottom" constant="71" id="mtT-iP-KUs"/>
                             <constraint firstItem="ByL-Zw-ogk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="tH3-Lu-fLe"/>
-                            <constraint firstItem="S1y-GG-6g9" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="20" symbolic="YES" id="uEc-EG-kPd"/>
+                            <constraint firstItem="hy8-VM-AFu" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="txH-k8-F7U"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Waveform" id="ifV-lg-vUs"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
-                        <outlet property="audioWaveformPlot" destination="S1y-GG-6g9" id="OcY-bu-j4i"/>
+                        <outlet property="waveformView" destination="hy8-VM-AFu" id="ZVd-yT-bp8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

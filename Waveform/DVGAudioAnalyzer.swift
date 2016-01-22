@@ -39,8 +39,25 @@ enum AudioAnalizerState {
 
 class DVGAudioAnalyzer: ChannelSource {
     
-    let audioSource: DVGAudioSource_
-    let asset: AVAsset
+    //MARK: Initialization
+    convenience init(asset: AVAsset) {
+        self.init()
+        self.asset       = asset
+        self.audioSource = DVGAudioSource_(asset: asset)
+    }
+    
+    init() {
+        self.configureChannelsForLogic()
+    }
+    
+    var audioSource: DVGAudioSource_?
+    var asset: AVAsset? {
+        didSet{
+            if let asset = self.asset {
+                self.audioSource = DVGAudioSource_(asset: asset)
+            }
+        }
+    }
     var audioFormat = AudioStreamBasicDescription()
     var state = AudioAnalizerState.Idle
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
@@ -67,12 +84,7 @@ class DVGAudioAnalyzer: ChannelSource {
     
     var channelPerLogicProviderType = 10
 
-    //MARK:
-    init(asset: AVAsset) {
-        self.asset       = asset
-        self.audioSource = DVGAudioSource_(asset: asset)
-        self.configureChannelsForLogic()
-    }
+
 
     func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
         if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(self.processingQueue)) {
@@ -83,12 +95,15 @@ class DVGAudioAnalyzer: ChannelSource {
     }
     
     func prepareToRead(completion: (Bool) -> ()) {
+        
+        assert(self.audioSource != nil, "No audio source")
+        
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
             
             if self == nil { return }
             
-            self!.audioSource.readAudioFormat{ audioFormat, _ in
+            self?.audioSource?.readAudioFormat{ audioFormat, _ in
 
                 if self == nil { return }
 
@@ -150,6 +165,8 @@ class DVGAudioAnalyzer: ChannelSource {
     
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
 
+        assert(self.asset != nil, "No asset")
+        
         let scale      = 1.0 / dataRange.length
         var scaleIndex = Int(floor(log2(scale)))
         scaleIndex     = min(self.channelPerLogicProviderType - 1, scaleIndex)
@@ -157,7 +174,7 @@ class DVGAudioAnalyzer: ChannelSource {
         if scaleIndex == 0 && self.state == .Idle {
             
             let startTime      = kCMTimeZero
-            let endTime        = self.asset.duration
+            let endTime        = self.asset!.duration
             let audioTimeRange = CMTimeRange(start: startTime, end: endTime)
         
             self.configureChannelsForValuesCount(count, timeRange: audioTimeRange)
@@ -173,11 +190,14 @@ class DVGAudioAnalyzer: ChannelSource {
     }
     
     func _read(count: Int, completion: () -> () = {}) {
+        
+        assert(self.audioSource != nil, "No audio source")
+        
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
             if self == nil { return }
            
-            self!.state = .Reading
+            self?.state = .Reading
             
             let channelsCount  = Int(self!.audioFormat.mChannelsPerFrame)
 
@@ -197,7 +217,7 @@ class DVGAudioAnalyzer: ChannelSource {
                     return false
                 }
                 
-                try self!.audioSource._readAudioSamplesData(sampleBlock: sampleBlock)
+                try self?.audioSource?._readAudioSamplesData(sampleBlock: sampleBlock)
                 
                 for channel in self!.maxValueChannels {
                     channel.finalize()
