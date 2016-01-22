@@ -9,37 +9,9 @@
 import Foundation
 import AVFoundation
 
-private let kDVGNoiseFloor: Float = -40.0
+class AudioSamplesSource {
 
-struct DataRange {
-    let location: Double
-    let length: Double
-    
-    init(var location: Double, length: Double) {
-        assert(location >= 0.0)
-        assert(length > 0.0)
-        assert(length <= 1.0)
-        location = min(location, 1 - length)
-        
-        self.location = location
-        self.length   = length
-    }
-    
-    init() {
-        self.location = 0.0
-        self.length   = 1.0
-    }
-}
-
-enum AudioAnalizerState {
-    case Idle
-    case Reading
-    case Finished
-}
-
-class AudioSamplesSource: ChannelSource {
-    
-    //MARK: Initialization
+    //MARK: - Initialization
     convenience init(asset: AVAsset) {
         self.init()
         self.asset       = asset
@@ -47,53 +19,52 @@ class AudioSamplesSource: ChannelSource {
     }
     
     init() {
-        self.configureChannelsForLogic()
+        self.createChannelsForDefaultLogicTypes()
     }
     
-    var audioSource: DVGAudioSource_?
-    var asset: AVAsset? {
-        didSet{
-            if let asset = self.asset {
-                self.audioSource = DVGAudioSource_(asset: asset)
-            }
+    //MARK: -
+    //MARK: - Inner configuration
+    func configureChannelsForSamplesCount(samplesCount: Int, timeRange: CMTimeRange) {
+        
+        let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
+        
+        for index in self.maxValueChannels.indices {
+            let channel = self.maxValueChannels[index]
+            channel.totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
+            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
         }
-    }
-    var audioFormat = AudioStreamBasicDescription()
-    var state = AudioAnalizerState.Idle
-    var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
-    
-    var channelsCount: Int {
-        return 2
-    }
-    
-    private var scaleIndex = 0
-    
-    func channelAtIndex(index: Int) -> AbstractChannel {
-        if index == 0 {
-            return self.maxValueChannels[scaleIndex]
-        } else {
-            return self.avgValueChannels[scaleIndex]
+        
+        for index in self.avgValueChannels.indices {
+            let channel = self.avgValueChannels[index]
+            channel.totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
+            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
         }
     }
     
-    var onChannelsChanged: (ChannelSource) -> () = {_ in}
-    var identifier       = "reader"
-
-    var maxValueChannels = [Channel<Int16>]()
-    var avgValueChannels = [Channel<Float>]()
-    
-    var channelPerLogicProviderType = 10
-
-
-
-    func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
-        if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(self.processingQueue)) {
-            autoreleasepool(block)
-        } else {
-            dispatch_async(self.processingQueue, block);
+    func createChannelsForDefaultLogicTypes() {
+        
+        var maxValueChannels = [Channel<Int16>]()
+        
+        for _ in 0..<channelPerLogicProviderType {
+            let channel        = Channel<Int16>(logicProvider: AudioMaxValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(AudioMaxValueLogicProvider)
+            maxValueChannels.append(channel)
         }
+        
+        self.maxValueChannels = maxValueChannels
+        //???: Is there any reason to store Float?
+        var avgValueChannels = [Channel<Float>]()
+        
+        for _ in 0..<channelPerLogicProviderType {
+            let channel        = Channel<Float>(logicProvider: AudioAverageValueLogicProvider())
+            channel.identifier = self.identifierForLogicProviderType(AudioAverageValueLogicProvider)
+            avgValueChannels.append(channel)
+        }
+        self.avgValueChannels = avgValueChannels
     }
-    
+
+    //MARK: - Reading
+    //TODO: There's no need in such public methods (combine with read method)
     func prepareToRead(completion: (Bool) -> ()) {
         
         assert(self.audioSource != nil, "No audio source")
@@ -114,9 +85,7 @@ class AudioSamplesSource: ChannelSource {
                     return
                 }
                 
-                print(audioFormat)
                 self!.audioFormat = audioFormat
-                print(self!.audioFormat.mBitsPerChannel)
                 dispatch_async(dispatch_get_main_queue()) {
                     completion(true)
                 }
@@ -124,45 +93,7 @@ class AudioSamplesSource: ChannelSource {
         }
     }
 
-    func configureChannelsForValuesCount(count: Int, timeRange: CMTimeRange) {
-        
-        let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
-        
-        for index in self.maxValueChannels.indices {
-            let channel = self.maxValueChannels[index]
-            channel.totalCount = Int(Double(count) * pow(2.0, Double(index)))
-            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
-        }
-
-        for index in self.avgValueChannels.indices {
-            let channel = self.avgValueChannels[index]
-            channel.totalCount = Int(Double(count) * pow(2.0, Double(index)))
-            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
-        }
-    }
-    
-    func configureChannelsForLogic() {
-        var maxValueChannels = [Channel<Int16>]()
-        for _ in 0..<channelPerLogicProviderType {
-            let channel        = Channel<Int16>(logicProvider: AudioMaxValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(AudioMaxValueLogicProvider)
-            maxValueChannels.append(channel)
-        }
-        self.maxValueChannels = maxValueChannels
-        
-        var avgValueChannels = [Channel<Float>]()
-        for _ in 0..<channelPerLogicProviderType {
-            let channel        = Channel<Float>(logicProvider: AudioAverageValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(AudioAverageValueLogicProvider)
-            avgValueChannels.append(channel)
-        }
-        self.avgValueChannels = avgValueChannels
-    }
-
-    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return "\(self.identifier).\(type.typeIdentifier)"
-    }
-    
+    //TODO: Method should return NSProgress, to trace it outside
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
 
         assert(self.asset != nil, "No asset")
@@ -177,7 +108,7 @@ class AudioSamplesSource: ChannelSource {
             let endTime        = self.asset!.duration
             let audioTimeRange = CMTimeRange(start: startTime, end: endTime)
         
-            self.configureChannelsForValuesCount(count, timeRange: audioTimeRange)
+            self.configureChannelsForSamplesCount(count, timeRange: audioTimeRange)
             self._read(count, completion: completion)
         } else {
              // change channel
@@ -234,4 +165,81 @@ class AudioSamplesSource: ChannelSource {
             }
         }
     }
+    
+    //MARK: -
+    //MARK: - Private Variables
+    var audioSource: DVGAudioSource_?
+    var audioFormat = AudioStreamBasicDescription()
+    var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
+    var maxValueChannels = [Channel<Int16>]()
+    var avgValueChannels = [Channel<Float>]()
+    
+    private var scaleIndex = 0
+    
+    //MARK: - Public Variables
+    var asset: AVAsset? {
+        didSet{
+            if let asset = self.asset {
+                self.audioSource = DVGAudioSource_(asset: asset)
+            }
+        }
+    }
+    
+    var state = AudioAnalizerState.Idle
+    var channelPerLogicProviderType = 10
+    var onChannelsChanged: (ChannelSource) -> () = {_ in}
 }
+
+//MARK: -
+//MARK: - ChannelSource
+extension AudioSamplesSource: ChannelSource {
+    var channelsCount: Int {
+        return 2
+    }
+    
+    func channelAtIndex(index: Int) -> AbstractChannel {
+        if index == 0 {
+            return self.maxValueChannels[scaleIndex]
+        } else {
+            return self.avgValueChannels[scaleIndex]
+        }
+    }
+}
+
+//MARK: -
+//MARK: - Utility
+struct DataRange {
+    let location: Double
+    let length: Double
+    
+    init(var location: Double, length: Double) {
+        assert(location >= 0.0)
+        assert(length > 0.0)
+        assert(length <= 1.0)
+        location = min(location, 1 - length)
+        
+        self.location = location
+        self.length   = length
+    }
+    
+    init() {
+        self.location = 0.0
+        self.length   = 1.0
+    }
+}
+
+extension AudioSamplesSource {
+    enum AudioAnalizerState {
+        case Idle
+        case Reading
+        case Finished
+    }
+    func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
+        if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(self.processingQueue)) {
+            autoreleasepool(block)
+        } else {
+            dispatch_async(self.processingQueue, block);
+        }
+    }
+}
+
