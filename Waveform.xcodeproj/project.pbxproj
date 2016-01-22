@@ -36,7 +36,6 @@
 		8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
 		8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
 		8B3F35041C243BBF006A4B67 /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */; };
-		8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350A1C244371006A4B67 /* DVGAudioSource.m */; };
 		8B3F350D1C244398006A4B67 /* DVGAudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */; };
 		8B4CD0BA1C29964400B88BAC /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0B91C29964400B88BAC /* Protocols.swift */; };
 		8B4CD0BF1C299BEC00B88BAC /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */; };
@@ -67,8 +66,6 @@
 		8B3F34FD1C243BA7006A4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformView.swift; sourceTree = "<group>"; };
 		8B3F35081C244370006A4B67 /* Waveform-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Waveform-Bridging-Header.h"; sourceTree = "<group>"; };
-		8B3F35091C244371006A4B67 /* DVGAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioSource.h; sourceTree = "<group>"; };
-		8B3F350A1C244371006A4B67 /* DVGAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGAudioSource.m; sourceTree = "<group>"; };
 		8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioAnalyzer.swift; sourceTree = "<group>"; };
 		8B4CD0B91C29964400B88BAC /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
@@ -131,8 +128,6 @@
 				8BDC33271C4FE6C9006C6F3C /* Denoise part */,
 				8B3F34F31C243BA6006A4B67 /* ViewController.swift */,
 				8B4CD0BD1C29999900B88BAC /* Waveform Module */,
-				8B3F35091C244371006A4B67 /* DVGAudioSource.h */,
-				8B3F350A1C244371006A4B67 /* DVGAudioSource.m */,
 				8B4CD0AF1C28270300B88BAC /* Supported */,
 			);
 			path = Waveform;
@@ -325,7 +320,6 @@
 				8BDC331A1C4FE51C006C6F3C /* DVGVideosCollectionViewController.m in Sources */,
 				8B4CD0C11C299E9700B88BAC /* AudioWaveformPlotModel.swift in Sources */,
 				5B0A1EB81C4DFA1B003B1EE6 /* NumberTypes.swift in Sources */,
-				8B3F350B1C244371006A4B67 /* DVGAudioSource.m in Sources */,
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
 				8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */,
 				8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */,
