@@ -115,10 +115,8 @@ private protocol LogicUser: class {
 extension Channel: LogicUser {}
 
 public
-class LogicProvider {
+class LogicProvider: Identifiable {
     weak private var channel: LogicUser?
-    class var identifier: String { return "" }
-    var identifier: String { return self.dynamicType.identifier }
     public required init(){}
 
     public func handleValue(value: Double) {}
@@ -128,7 +126,7 @@ class LogicProvider {
 public
 final
 class MaxValueLogicProvider: LogicProvider {
-    class override var identifier: String { return "max" }
+    var identifier: String = "max"
     private var max: Double?
     public required init(){}
 
@@ -149,7 +147,7 @@ class MaxValueLogicProvider: LogicProvider {
 public
 final
 class AverageValueLogicProvider: LogicProvider {
-    class override var identifier: String { return "avg" }
+    var identifier: String = "avg"
     private var summ = 0.0
     var count = 0
     public required init(){}
@@ -170,7 +168,7 @@ class AverageValueLogicProvider: LogicProvider {
 public
 final
 class AudioMaxValueLogicProvider: LogicProvider {
-    class override var identifier: String { return "max" }
+    var identifier = "max"
     private var max = Double(Int16.min)//-40.0
     public required init(){}
     
@@ -190,7 +188,7 @@ class AudioMaxValueLogicProvider: LogicProvider {
 public
 final
 class AudioAverageValueLogicProvider: LogicProvider {
-    class override var identifier: String { return "avg" }
+    var identifier = "avg"
     private var summ = 0.0
     var count = 0
     public required init(){}

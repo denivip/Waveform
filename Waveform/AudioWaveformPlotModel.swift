@@ -125,11 +125,3 @@ extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
         self.moveToPosition(relativeStart)
     }
 }
-
-protocol ChannelSource: class {
-    var identifier: String { get }
-    func identifierForLogicProviderType(type: LogicProvider.Type) -> String
-    var channelsCount: Int { get }
-    func channelAtIndex(index: Int) -> AbstractChannel
-    var onChannelsChanged: (ChannelSource) -> () { get set }
-}
