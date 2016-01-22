@@ -37,7 +37,7 @@ enum AudioAnalizerState {
     case Finished
 }
 
-class DVGAudioAnalyzer: ChannelSource {
+class AudioSamplesSource: ChannelSource {
     
     //MARK: Initialization
     convenience init(asset: AVAsset) {

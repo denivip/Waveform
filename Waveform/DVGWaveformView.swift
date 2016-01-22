@@ -42,11 +42,10 @@ class DVGWaveformView: UIView {
         self.addSubview(self.plotView)
         self.plotView.attachBoundsOfSuperview()
     }
-
-
+    
     func configure() {
         
-        self.waveformDataSource = DVGAudioAnalyzer()
+        self.waveformDataSource = AudioSamplesSource()
         
         // 1. Prepare Plot Model with DataSource ???
         self.plotViewModel.addChannelSource(self.waveformDataSource!)
@@ -95,7 +94,7 @@ class DVGWaveformView: UIView {
     //MARK: - Private vars
     private var plotView: AudioWaveformPlot!
     private var plotViewModel: AudioWaveformPlotModel! = AudioWaveformPlotModel()
-    private var waveformDataSource: DVGAudioAnalyzer!
+    private var waveformDataSource: AudioSamplesSource!
     
     //MARK: - Public vars
     var asset: AVAsset? {
