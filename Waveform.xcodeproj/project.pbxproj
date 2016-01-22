@@ -153,6 +153,7 @@
 		8B4CD0BD1C29999900B88BAC /* Waveform Module */ = {
 			isa = PBXGroup;
 			children = (
+				8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */,
 				8B4CD0B91C29964400B88BAC /* Protocols.swift */,
 				8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */,
 				8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */,
@@ -163,7 +164,6 @@
 				5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */,
 				8B3F350C1C244398006A4B67 /* DVGAudioAnalyzer.swift */,
 				8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */,
-				8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */,
 			);
 			name = "Waveform Module";
 			sourceTree = "<group>";
