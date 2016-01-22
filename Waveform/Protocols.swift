@@ -41,11 +41,18 @@ protocol ChannelSource: class, Identifiable {
     var onChannelsChanged: (ChannelSource) -> () { get set }
 }
 
+extension ChannelSource {
+    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
+        return self.identifier + "." + type.typeIdentifier
+    }
+}
+
 protocol Identifiable {
+    static var typeIdentifier: String { get }
     var identifier: String { get }
 }
 
 extension Identifiable {
-    static var identifier: String { return "\(self.dynamicType)" }
-    var identifier: String { return "\(self.dynamicType.identifier)" }
+    static var typeIdentifier: String { return "\(self)" }
+    var identifier: String { return "\(self.dynamicType)" }
 }

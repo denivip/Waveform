@@ -160,7 +160,7 @@ class AudioSamplesSource: ChannelSource {
     }
 
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return "\(self.identifier).\(type.identifier)"
+        return "\(self.identifier).\(type.typeIdentifier)"
     }
     
     func read(count: Int, dataRange: DataRange = DataRange(), completion: () -> () = {}) {
