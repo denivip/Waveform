@@ -112,14 +112,10 @@ extension AudioWaveformPlot {
         
         self.waveformViews.append(audioWaveformView)
         
-        audioWaveformView.translatesAutoresizingMaskIntoConstraints = false
         self.containerView.addSubview(audioWaveformView)
         
-        let views = ["view": audioWaveformView]
-        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("|[view]|", options: [], metrics: nil, views: views)
-        self.containerView.addConstraints(horizontalConstraints)
-        let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: [], metrics: nil, views: views)
-        self.containerView.addConstraints(verticalConstraints)
+        audioWaveformView.translatesAutoresizingMaskIntoConstraints = false
+        audioWaveformView.attachBoundsOfSuperview()
         
         return audioWaveformView
     }

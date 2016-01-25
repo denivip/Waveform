@@ -155,7 +155,7 @@ static const NSString* kDVGExportProgress = @"progress";
                                     kAudioFileFlags_EraseFile,
                                     &_outFileRef);
     if(err != noErr){
-        NSLog(@"DVGAudioWriter: Failed to ExtAudioFileCreateWithURL: url=%@, code=%i",fileURL,err);
+        NSLog(@"DVGAudioWriter: Failed to ExtAudioFileCreateWithURL: url=%@, code=%i",fileURL,(int)err);
     }
     __Require_noErr_String(err, exceptionLabel, "Error creating audio file");
     
@@ -211,7 +211,7 @@ exceptionLabel:
     // write the data
     OSStatus err = ExtAudioFileWriteAsync(self.outFileRef, totalFramesInFile, &outputData);
     if(err != noErr){
-        NSLog(@"DVGAudioWriter: Failed to ExtAudioFileWrite: code=%i", err);
+        NSLog(@"DVGAudioWriter: Failed to ExtAudioFileWrite: code=%i", (int)err);
     }
     return err;
 }
