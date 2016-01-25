@@ -10,6 +10,10 @@ import UIKit
 import Photos
 import AVFoundation
 
+/// Entry point for Waveform UI Component
+/// Creates all needed data sources, view models and views and sets needed dependencies between them
+/// By default draws waveforms for max values and average values (see. LogicProvider class)
+
 class DVGWaveformView: UIView {
 
     //MARK: - Initialization
@@ -47,11 +51,11 @@ class DVGWaveformView: UIView {
         
         self.waveformDataSource = AudioSamplesSource()
         
-        // 1. Prepare Plot Model with DataSource ???
+        // Prepare Plot Model with DataSource
         self.plotViewModel.addChannelSource(self.waveformDataSource!)
         self.plotViewModel.delegate = self
         
-        // 2. Set plot model to plot view
+        // Set plot model to plot view
         self.plotView.viewModel = self.plotViewModel
     }
     
