@@ -40,6 +40,7 @@
 
 
 @implementation DVGNoiseFilter
+@synthesize channelsCount = _channelsCount, identifier = _identifier;
 - (instancetype)initWithAsset:(AVAsset *)asset
 {
     if (self = [super init]) {
@@ -232,7 +233,7 @@
             NSMutableData* data = adata.mutableCopy;
             SInt16 *dataSamples = data.mutableBytes;
             for (int i = 0; i < channelsCount; ++i) {
-                self.dataLen[i] = dataSamplesCount;
+                self.dataLen[i] = (int)dataSamplesCount;
                 self.inSampleCount[i] += dataSamplesCount;
                 self.dataOffset[i] = 0;
                 self.cleanBytesOffset[i] = 0;
@@ -584,6 +585,37 @@
     _mGains[channelNum*_historyLen] = lastGain;
     _mRealFFTs[channelNum*_historyLen] = lastRealFFT;
     _mImagFFTs[channelNum*_historyLen] = lastImagFFT;
+}
+
+- (void) fillFirstHistoryWindow:(int)channelNum {
+    [self runSynchronouslyOnProcessingQueue:^{
+        // Prepare data for vDSP
+        vDSP_ctoz((COMPLEX *)self.mInWaveBuffer[channelNum], 2, &self->_complex_output, 1, self.windowSize/2);
+        // Forward FFT transform
+        vDSP_fft_zrip(self.setup, &self->_complex_output, 1, 11, kFFTDirection_Forward);
+        
+        for(int i = 1; i < self.spectrumSize-1; ++i) {
+            self.mRealFFTs[channelNum*self.historyLen][i] = self.complex_output.realp[i];
+            self.mImagFFTs[channelNum*self.historyLen][i] = self.complex_output.imagp[i];
+            self.mSpectrums[channelNum*self.historyLen][i] = self.mRealFFTs[channelNum*self.historyLen][i]*self.mRealFFTs[channelNum*self.historyLen][i]
+            + self.mImagFFTs[channelNum*self.historyLen][i]*self.mImagFFTs[channelNum*self.historyLen][i];
+            self.mGains[channelNum*self.historyLen][i] = self.noiseAttenFactor;
+        }
+        // DC and Fs/2 bins need to be handled specially
+        self.mSpectrums[channelNum*self.historyLen][0] = self.complex_output.realp[0]*self.complex_output.realp[0];
+        self.mSpectrums[channelNum*self.historyLen][self.spectrumSize-1] =
+        self.complex_output.imagp[0]*self.complex_output.imagp[0];
+        self.mGains[channelNum*self.historyLen][0] = self.noiseAttenFactor;
+        self.mGains[channelNum*self.historyLen][self.spectrumSize-1] = self.noiseAttenFactor;
+    }];
+}
+
+- (id <AbstractChannel>)channelAtIndex:(NSInteger)index {
+    return nil;
+}
+
+- (NSString *)identifierForLogicProviderType:(SWIFT_METATYPE(LogicProvider))type {
+    return [NSString stringWithFormat:@"filtered_noise.%@", type];
 }
 
 @end

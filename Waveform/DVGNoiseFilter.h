@@ -13,8 +13,7 @@
 #import "DVGProgress.h"
 #import "Waveform-Swift.h"
 
-@interface DVGNoiseFilter : NSObject
-//<ChannelSource>// DVGAudioAnalyzer
+@interface DVGNoiseFilter : NSObject<ChannelSource>// DVGAudioAnalyzer
 
 /**
  *  The noise profile calculated for original sound track.
@@ -28,6 +27,10 @@
 @property (nonatomic, assign) NSInteger samplesCountInChannel;
 @property (atomic) float processedData;
 
+@property (nonatomic, readonly) NSInteger channelsCount;
+@property (nonatomic, copy) void (^ onChannelsChanged)(id <ChannelSource>);
+- (id <AbstractChannel>)channelAtIndex:(NSInteger)index;
+- (NSString *)identifierForLogicProviderType:(SWIFT_METATYPE(LogicProvider))type;
 /**
  *  Filters PCM data according to the previously analyzed spectrum
  *
@@ -39,8 +42,5 @@
 /**
  *  Saves video into url provided
  */
-- (void)saveVideoToURL:(NSURL *)videoURL
-     completionHandler:(void (^)(BOOL completed,
-                                 NSError *error))completionHandler;
 
 @end
