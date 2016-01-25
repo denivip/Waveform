@@ -145,7 +145,7 @@ class DVGAudioSource_: NSObject {
             throw assetReader.error ?? error
         }
         
-        //DVGLog(@"DEBUG Started reading audio track");
+        //NSLog(@"DEBUG Started reading audio track");
 
         
         while assetReader.status == .Reading {
