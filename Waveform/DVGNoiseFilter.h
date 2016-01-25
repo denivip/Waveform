@@ -6,9 +6,13 @@
 //  Copyright (c) 2014 Denis Bulichenko. All rights reserved.
 //
 
-#import "DVGAudioAnalyzer.h"
+@import Foundation;
+@import CoreMedia;
+@import AVFoundation;
 
-@interface DVGNoiseFilter : DVGAudioAnalyzer
+#import "DVGProgress.h"
+
+@interface DVGNoiseFilter : NSObject
 
 /**
  *  The noise profile calculated for original sound track.
@@ -16,6 +20,11 @@
  *  Frequencies present in the spectrum will be surpressed.
  */
 @property (nonatomic, readonly, copy) NSArray *oneChannelNoiseProfile;
+@property (nonatomic) AudioStreamBasicDescription audioFormat;
+@property (nonatomic) float* frequencySpectrum;
+@property (nonatomic, strong) NSMutableData *channelsFrequencySpectrumProfile;
+@property (nonatomic, assign) NSInteger samplesCountInChannel;
+@property (atomic) float processedData;
 
 /**
  *  Filters PCM data according to the previously analyzed spectrum

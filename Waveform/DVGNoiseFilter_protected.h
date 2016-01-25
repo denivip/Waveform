@@ -1,24 +1,17 @@
 //
-//  DVGAudioAnalyzer_protected.h
-//  Denoise
+//  DVGNoiseFilter_protected.h
+//  Waveform
 //
-//  Created by Denis Bulichenko on 18/11/15.
-//  Copyright © 2015 DENIVIP Group. All rights reserved.
+//  Created by developer on 25/01/16.
+//  Copyright © 2016 developer. All rights reserved.
 //
 
-//#ifndef DVGAudioAnalyzer_protected_h
-//#define DVGAudioAnalyzer_protected_h
+#ifndef DVGNoiseFilter_protected_h
+#define DVGNoiseFilter_protected_h
 
-@import Accelerate;
+#import "DVGNoiseFilter.h"
 
-#import "DVGAudioAnalyzer.h"
-#import "DVGAudioSource.h"
-#import "DVGAudioWriter.h"
-#import "DVGAudioToolboxUtilities.h"
-
-
-
-@interface DVGAudioAnalyzer ()
+@interface DVGNoiseFilter ()
 
 @property (nonatomic, strong) AVAsset *asset;
 
@@ -66,7 +59,7 @@
 @property (nonatomic) int* inputPos;//< input buffer position (overlap-add algorithm)
 @property (nonatomic) int* inSampleCount;//< amount of input samples to process
 @property (nonatomic) int* dataOffset;//< offset from the beginning of the data
-@property (nonatomic) int* cleanBytesOffset;//< 
+@property (nonatomic) int* cleanBytesOffset;//<
 @property (nonatomic) int* outSampleCount;//< amount of samples produced (cleaned)
 @property (nonatomic) int* dataLen;//< data length to process
 // Frequency processing internals (noise related)
@@ -79,4 +72,5 @@
 
 @end
 
-//#endif /* DVGAudioAnalyzer_protected_h */
+
+#endif /* DVGNoiseFilter_protected_h */

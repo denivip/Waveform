@@ -53,10 +53,8 @@
 		8BDC332E1C525BB9006C6F3C /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */; };
 		8BDC33521C56438D006C6F3C /* LogicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33511C56438D006C6F3C /* LogicProvider.swift */; };
 		8BDC33531C5643AB006C6F3C /* LogicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33511C56438D006C6F3C /* LogicProvider.swift */; };
-		8BDC335C1C56469E006C6F3C /* DVGAudioAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33571C56469E006C6F3C /* DVGAudioAnalyzer.m */; };
 		8BDC335D1C56469E006C6F3C /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33591C56469E006C6F3C /* DVGAudioSource.m */; };
 		8BDC335E1C56469E006C6F3C /* DVGNoiseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC335B1C56469E006C6F3C /* DVGNoiseFilter.m */; };
-		8BDC33621C56470B006C6F3C /* DVGAudioAnalyzer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33571C56469E006C6F3C /* DVGAudioAnalyzer.m */; };
 		8BDC33631C56470B006C6F3C /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33591C56469E006C6F3C /* DVGAudioSource.m */; };
 		8BDC33641C56470B006C6F3C /* DVGNoiseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC335B1C56469E006C6F3C /* DVGNoiseFilter.m */; };
 		8BDC33691C564792006C6F3C /* DVGAudioWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33661C564792006C6F3C /* DVGAudioWriter.m */; };
@@ -101,9 +99,6 @@
 		8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGWaveformView.swift; sourceTree = "<group>"; };
 		8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+extensions.swift"; sourceTree = "<group>"; };
 		8BDC33511C56438D006C6F3C /* LogicProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogicProvider.swift; sourceTree = "<group>"; };
-		8BDC33551C56469E006C6F3C /* DVGAudioAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioAnalyzer.h; sourceTree = "<group>"; };
-		8BDC33561C56469E006C6F3C /* DVGAudioAnalyzer_protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioAnalyzer_protected.h; sourceTree = "<group>"; };
-		8BDC33571C56469E006C6F3C /* DVGAudioAnalyzer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGAudioAnalyzer.m; sourceTree = "<group>"; };
 		8BDC33581C56469E006C6F3C /* DVGAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGAudioSource.h; sourceTree = "<group>"; };
 		8BDC33591C56469E006C6F3C /* DVGAudioSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGAudioSource.m; sourceTree = "<group>"; };
 		8BDC335A1C56469E006C6F3C /* DVGNoiseFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGNoiseFilter.h; sourceTree = "<group>"; };
@@ -118,6 +113,7 @@
 		8BDC33701C564825006C6F3C /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
 		8BDC33711C564825006C6F3C /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		8BDC33721C564825006C6F3C /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		8BDC33781C56509C006C6F3C /* DVGNoiseFilter_protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVGNoiseFilter_protected.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -260,12 +256,10 @@
 			isa = PBXGroup;
 			children = (
 				8BDC33611C5646FC006C6F3C /* PCMReaderProtocol.h */,
-				8BDC33551C56469E006C6F3C /* DVGAudioAnalyzer.h */,
-				8BDC33561C56469E006C6F3C /* DVGAudioAnalyzer_protected.h */,
-				8BDC33571C56469E006C6F3C /* DVGAudioAnalyzer.m */,
 				8BDC33581C56469E006C6F3C /* DVGAudioSource.h */,
 				8BDC33591C56469E006C6F3C /* DVGAudioSource.m */,
 				8BDC335A1C56469E006C6F3C /* DVGNoiseFilter.h */,
+				8BDC33781C56509C006C6F3C /* DVGNoiseFilter_protected.h */,
 				8BDC335B1C56469E006C6F3C /* DVGNoiseFilter.m */,
 				8BDC33651C564792006C6F3C /* DVGAudioWriter.h */,
 				8BDC33661C564792006C6F3C /* DVGAudioWriter.m */,
@@ -407,7 +401,6 @@
 				8BDC336C1C564796006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BDC33751C564913006C6F3C /* EXTScope.m in Sources */,
 				5B7003DE1C4FFCF300EA6313 /* AudioWaveformViewModel.swift in Sources */,
-				8BDC33621C56470B006C6F3C /* DVGAudioAnalyzer.m in Sources */,
 				5B7003DC1C4FFCF300EA6313 /* Protocols.swift in Sources */,
 				8BDC33741C564910006C6F3C /* DVGProgress.m in Sources */,
 				8BDC336B1C564796006C6F3C /* DVGAudioWriter.m in Sources */,
@@ -440,7 +433,6 @@
 				8BDC336A1C564792006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BDC33731C564825006C6F3C /* EXTScope.m in Sources */,
 				5BE379E61C47CB7A00163588 /* Channel.swift in Sources */,
-				8BDC335C1C56469E006C6F3C /* DVGAudioAnalyzer.m in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 				8BDC336F1C5647AF006C6F3C /* DVGProgress.m in Sources */,
 				8BDC33691C564792006C6F3C /* DVGAudioWriter.m in Sources */,

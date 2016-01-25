@@ -9,14 +9,12 @@
 @import Accelerate;
 @import Darwin.AssertMacros;
 
-
-#import "DVGAudioAnalyzer_protected.h"
-
 #import "DVGNoiseFilter.h"
 #import "DVGAudioSource.h"
 #import "DVGAudioWriter.h"
 #import "DVGAudioToolboxUtilities.h"
 #import "DVGProgress.h"
+#import "DVGNoiseFilter_protected.h"
 
 @interface DVGNoiseFilter ()
 
@@ -36,11 +34,21 @@
 @property (nonatomic) float** obtainedReal;
 @property (nonatomic) float** outOverlapBuffer;
 @property (atomic, assign) int filteringTokenSeq;
+@property (nonatomic, strong) dispatch_queue_t processingQueue;
 
 @end
 
 
 @implementation DVGNoiseFilter
+- (instancetype)initWithAsset:(AVAsset *)asset
+{
+    if (self = [super init]) {
+        self.asset = asset;
+        self.audioSource = [[DVGAudioSource alloc] initWithAsset:asset];
+    }
+    
+    return self;
+}
 
 /**
  *  Sets current audio format and initializes corresponding FFT structures
@@ -171,13 +179,14 @@
  */
 - (DVGProgress *) filterAnalyzedAudio {
     [self cancelPreviousFiltering];
-    NSLog(@"filterAnalyzedAudio: samples=%ld", self.samplesCountInChannel);
+    NSLog(@"filterAnalyzedAudio: samples=%ld", (long)self.samplesCountInChannel);
     DVGProgress* filterProgress = (DVGProgress *)[DVGProgress progressWithTotalUnitCount:self.samplesCountInChannel+1];
     filterProgress.userDescription = NSLocalizedString(@"Filtering sound", nil);
     filterProgress.cancellable = YES;
     filterProgress.pausable = NO;
     __block NSInteger cycle = 0;
     int activeFilteringTokenSeq = self.filteringTokenSeq;
+    
     [self runAsynchronouslyOnProcessingQueue:^{
         // Clear audio buffers and reset positions
         for(int i = 0; i < self.audioFormat.mChannelsPerFrame * self.historyLen; ++i) {
@@ -466,36 +475,115 @@
     }];
 }
 
-/**
- *  Saves video with processed cleaned audio into a file
- */
-- (void)saveVideoToURL:(NSURL *)videoURL completionHandler:(void (^)(BOOL completed, NSError *error))completionHandler
-{
-    //self.audioWriter = [[DVGAudioWriter alloc] initWithAudioSamples:self.processedAudioData ofFormat:self.audioFormat];
+#pragma mark - Internals
 
-    NSProgress* progress = [self.audioWriter writeAudioIntoVideoFile:videoURL
-                                                           fromAsset:self.asset
-                                                   completionHandler:^(BOOL completed, NSError *error)
-    {
-        // Pass state into the main queue
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (completionHandler) completionHandler(completed, error);
-        });
-    }];
-    
-    [progress addObserver:self
-               forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
-                  options:NSKeyValueObservingOptionNew
-                  context:NULL];
+- (dispatch_queue_t)processingQueue
+{
+    if (!_processingQueue) {
+        _processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL);
+    }
+    return _processingQueue;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-                      ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context
+- (void)runSynchronouslyOnProcessingQueue:(dispatch_block_t)block
 {
-    NSNumber *newValue = [change objectForKey:NSKeyValueChangeNewKey];
-    self.processedData = [newValue floatValue];
+    dispatch_queue_t pq = self.processingQueue;
+    if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(pq)){
+        @autoreleasepool {
+            block();
+        }
+    }else
+    {
+        dispatch_sync(pq, block);
+    }
+}
+
+- (void)runAsynchronouslyOnProcessingQueue:(dispatch_block_t)block
+{
+    dispatch_queue_t pq = self.processingQueue;
+    if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(pq)){
+        @autoreleasepool {
+            block();
+        }
+    }else
+    {
+        dispatch_async(pq, block);
+    }
+}
+
+#pragma mark -
+
+- (void)addProcessedSamplesDataWithSampleCount:(SInt16*)readySamples bytesLen:(NSInteger)len {
+    
+    AudioStreamBasicDescription audioFormat = self.audioFormat;
+    NSUInteger lastSample = self.processedSamples / audioFormat.mChannelsPerFrame;
+    if (self.processedAudioLastSample >= lastSample) {
+        return;
+    }
+    NSRange range = NSMakeRange(self.processedAudioLastSample, lastSample - self.processedAudioLastSample);
+    
+    NSUInteger channelsCount = audioFormat.mChannelsPerFrame;
+    NSUInteger sampleBlockLength = self.samplesCount / channelsCount / (self.aggregatedProcessedAverageWaveform.length/sizeof(SInt16));
+    const SInt16 *samples = readySamples;
+    
+    // Process the data range received
+    // Для вычисления среднего используем числа с плавающей точкой, чтобы
+    // избежать эффектов переполнения и округления до целого, затем
+    // переводим в стандартный формат SInt16.
+    
+    NSUInteger firstBlock = range.location / sampleBlockLength;
+    NSUInteger tillBlock = (range.location + range.length - 1) / sampleBlockLength + 1;
+    NSMutableData *blockAvgData = [[NSMutableData alloc] initWithLength:(tillBlock - firstBlock) * sizeof(CGFloat)];
+    NSMutableData *blockMaxData = [[NSMutableData alloc] initWithLength:(tillBlock - firstBlock) * sizeof(SInt16)];
+    CGFloat *blockAvg = blockAvgData.mutableBytes;
+    SInt16 *blockMax = blockMaxData.mutableBytes;
+    
+    for (NSUInteger idx = range.location; idx < range.location + range.length; ++idx) {
+        NSInteger block = idx / sampleBlockLength - firstBlock;
+        NSInteger samplePos = channelsCount * (idx - self.processedAudioLastSample);
+        if(samplePos >= len/sizeof(SInt16)){
+            NSLog(@"ERROR: read Buffer overflow!!!");
+        }
+        SInt16 sample = samples[samplePos]; // берем только канал 0
+        blockAvg[block] += (CGFloat)ABS(sample) / sampleBlockLength;
+        if (sample > blockMax[block]) {
+            blockMax[block] = sample;
+        }
+    }
+    
+    SInt16 *avgSamples = self.aggregatedProcessedAverageWaveform.mutableBytes;
+    SInt16 *maxSamples = self.aggregatedProcessedMaxWaveform.mutableBytes;
+    for (NSUInteger idx = firstBlock; idx < tillBlock; ++idx) {
+        avgSamples[idx] += (SInt16)blockAvg[idx - firstBlock];
+        if (maxSamples[idx] < blockMax[idx - firstBlock]){
+            maxSamples[idx] = blockMax[idx - firstBlock];
+        }
+    }
+    
+    self.processedAudioLastSample = range.location + range.length;
+}
+
+- (void) rotateHistoryWindows:(int)channelNum {
+    int last = _historyLen - 1 + channelNum*_historyLen;
+    // Remember the last window so we can reuse it
+    float *lastSpectrum = _mSpectrums[last];
+    float *lastGain = _mGains[last];
+    float *lastRealFFT = _mRealFFTs[last];
+    float *lastImagFFT = _mImagFFTs[last];
+    
+    // Rotate each history window forward
+    for(int i = last; i >= 1+channelNum*_historyLen; i--) {
+        _mSpectrums[i] = _mSpectrums[i-1];
+        _mGains[i] = _mGains[i-1];
+        _mRealFFTs[i] = _mRealFFTs[i-1];
+        _mImagFFTs[i] = _mImagFFTs[i-1];
+    }
+    
+    // Reuse the last buffers as the new first window
+    _mSpectrums[channelNum*_historyLen] = lastSpectrum;
+    _mGains[channelNum*_historyLen] = lastGain;
+    _mRealFFTs[channelNum*_historyLen] = lastRealFFT;
+    _mImagFFTs[channelNum*_historyLen] = lastImagFFT;
 }
 
 @end
