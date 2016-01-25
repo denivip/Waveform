@@ -51,6 +51,8 @@
 		8BDC332C1C525442006C6F3C /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */; };
 		8BDC332D1C525BB4006C6F3C /* DVGWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */; };
 		8BDC332E1C525BB9006C6F3C /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */; };
+		8BDC33521C56438D006C6F3C /* LogicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33511C56438D006C6F3C /* LogicProvider.swift */; };
+		8BDC33531C5643AB006C6F3C /* LogicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33511C56438D006C6F3C /* LogicProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +86,7 @@
 		8BDC33251C4FE6C1006C6F3C /* DVGDenivipAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGDenivipAppearance.m; sourceTree = "<group>"; };
 		8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGWaveformView.swift; sourceTree = "<group>"; };
 		8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+extensions.swift"; sourceTree = "<group>"; };
+		8BDC33511C56438D006C6F3C /* LogicProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogicProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,16 +152,10 @@
 			isa = PBXGroup;
 			children = (
 				8BDC33291C523EE9006C6F3C /* DVGWaveformView.swift */,
-				8B4CD0B91C29964400B88BAC /* Protocols.swift */,
-				8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */,
-				8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */,
-				8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */,
-				8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */,
-				8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */,
-				5BE379E51C47CB7A00163588 /* Channel.swift */,
-				5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */,
-				8B3F350C1C244398006A4B67 /* AudioSamplesSource.swift */,
-				8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */,
+				8BDC334D1C564235006C6F3C /* Utility */,
+				8BDC334E1C56424A006C6F3C /* View Model */,
+				8BDC334F1C564258006C6F3C /* View */,
+				8BDC33501C56425F006C6F3C /* Data Source */,
 			);
 			name = "Waveform Module";
 			sourceTree = "<group>";
@@ -178,6 +175,45 @@
 				8BDC33191C4FE51C006C6F3C /* DVGVideosCollectionViewController.m */,
 			);
 			name = "Denoise part";
+			sourceTree = "<group>";
+		};
+		8BDC334D1C564235006C6F3C /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				8B4CD0B91C29964400B88BAC /* Protocols.swift */,
+				8BDC332B1C525442006C6F3C /* UIKit+extensions.swift */,
+				5BE379E51C47CB7A00163588 /* Channel.swift */,
+				8BDC33511C56438D006C6F3C /* LogicProvider.swift */,
+				5B0A1EB71C4DFA1B003B1EE6 /* NumberTypes.swift */,
+			);
+			name = Utility;
+			sourceTree = "<group>";
+		};
+		8BDC334E1C56424A006C6F3C /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				8B4CD0C01C299E9700B88BAC /* AudioWaveformPlotModel.swift */,
+				8B4CD0C21C29A0E300B88BAC /* AudioWaveformViewModel.swift */,
+			);
+			name = "View Model";
+			sourceTree = "<group>";
+		};
+		8BDC334F1C564258006C6F3C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */,
+				8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		8BDC33501C56425F006C6F3C /* Data Source */ = {
+			isa = PBXGroup;
+			children = (
+				8B3F350C1C244398006A4B67 /* AudioSamplesSource.swift */,
+				8B4CD0C41C29B7F400B88BAC /* DVGAudioSource.swift */,
+			);
+			name = "Data Source";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -298,6 +334,7 @@
 				5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */,
 				5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */,
 				5B7003E01C4FFCF300EA6313 /* AudioWaveformView.swift in Sources */,
+				8BDC33531C5643AB006C6F3C /* LogicProvider.swift in Sources */,
 				5B7003DD1C4FFCF300EA6313 /* AudioWaveformPlotModel.swift in Sources */,
 				5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */,
 				5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */,
@@ -323,6 +360,7 @@
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
 				8B4CD0C31C29A0E300B88BAC /* AudioWaveformViewModel.swift in Sources */,
 				8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */,
+				8BDC33521C56438D006C6F3C /* LogicProvider.swift in Sources */,
 				8BDC33261C4FE6C1006C6F3C /* DVGDenivipAppearance.m in Sources */,
 				8BDC332C1C525442006C6F3C /* UIKit+extensions.swift in Sources */,
 				8BDC332A1C523EE9006C6F3C /* DVGWaveformView.swift in Sources */,
