@@ -20,10 +20,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         // Waveform Customization
-        let waveform1 = self.waveformView.maxValuesWaveform
+        let waveform1 = self.waveformView.maxValuesWaveform()
         waveform1?.lineColor = UIColor.redColor()
         
-        let waveform2 = self.waveformView.avgValuesWaveform
+        let waveform2 = self.waveformView.avgValuesWaveform()
         waveform2?.lineColor = UIColor.greenColor()
         
         // Get AVAsset from PHAsset

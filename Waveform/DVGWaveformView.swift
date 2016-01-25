@@ -64,14 +64,14 @@ class DVGWaveformView: UIView {
         return self.plotView.waveformWithIdentifier(identifier)
     }
 
-    var maxValuesWaveform: AudioWaveformView? {
+    func maxValuesWaveform() -> AudioWaveformView? {
         if let dataSource = self.waveformDataSource {
             return waveformWithIdentifier(dataSource.identifierForLogicProviderType(AudioMaxValueLogicProvider))
         }
         return nil
     }
     
-    var avgValuesWaveform: AudioWaveformView? {
+    func avgValuesWaveform() -> AudioWaveformView? {
         if let dataSource = self.waveformDataSource {
             return waveformWithIdentifier(dataSource.identifierForLogicProviderType(AudioAverageValueLogicProvider))
         }
