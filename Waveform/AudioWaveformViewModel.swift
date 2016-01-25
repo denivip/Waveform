@@ -14,7 +14,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     weak var plotModel: AudioWaveformPlotModel?
     var channel: AbstractChannel? {
         didSet{
-            self.identifier = channel?.identifier ?? ""
+            self._identifier = channel?.identifier ?? ""
         }
     }
     
@@ -26,8 +26,10 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
-    var identifier: String    = ""
+    override var identifier: String    { return _identifier }
     var onGeometryUpdate: () -> () = {}
+    
+    var _identifier: String = ""
     
     func pointAtIndex(index: Int) -> CGPoint {
         

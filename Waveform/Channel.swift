@@ -7,6 +7,7 @@
 //
 import UIKit
 
+@objc
 public
 protocol AbstractChannel: class {
     var totalCount: Int { get }
@@ -16,17 +17,6 @@ protocol AbstractChannel: class {
     var minValue: Double { get }
 
     subscript(index: Int) -> Double { get }
-    func values() -> [Int]
-}
-
-extension AbstractChannel {
-    public func values() -> [Int] {
-        var array = [Int]()
-        for index in 0..<self.count {
-            array.append(self[index].int)
-        }
-        return array
-    }
 }
 
 public
@@ -43,11 +33,11 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     public var blockSize = 1
-    public var count: Int = 0
-    public var totalCount: Int = 0
-    public var identifier = ""
-    public var maxValue: Double { return self._maxValue }
-    public var minValue: Double { return self._minValue }
+    @objc public var count: Int = 0
+    @objc public var totalCount: Int = 0
+    @objc public var identifier = ""
+    @objc public var maxValue: Double { return self._maxValue }
+    @objc public var minValue: Double { return self._minValue }
     
     private var currentBlockSize = 0
     private var space: Int = 0
@@ -55,7 +45,7 @@ class Channel<T: NumberType>: AbstractChannel {
     private var _maxValue = Double(CGFloat.min)
     private var _minValue = Double(CGFloat.max)
 
-    public subscript(index: Int) -> Double {
+    @objc public subscript(index: Int) -> Double {
         get { return self.buffer[index].double }
     }
 
@@ -94,7 +84,8 @@ class Channel<T: NumberType>: AbstractChannel {
         self.logicProvider.clear()
     }
     
-    public func finalize() {
+    public func complete() {
+
         self.totalCount = self.count
         print(self.space, self.count, self.totalCount)
         //TODO: Clear odd space

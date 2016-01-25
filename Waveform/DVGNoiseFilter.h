@@ -11,8 +11,10 @@
 @import AVFoundation;
 
 #import "DVGProgress.h"
+#import "Waveform-Swift.h"
 
 @interface DVGNoiseFilter : NSObject
+//<ChannelSource>// DVGAudioAnalyzer
 
 /**
  *  The noise profile calculated for original sound track.

@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-class AudioSamplesSource {
+class AudioSamplesSource: NSObject, ChannelSource {
 
     //MARK: - Initialization
     convenience init(asset: AVAsset) {
@@ -18,7 +18,8 @@ class AudioSamplesSource {
         self.audioSource = DVGAudioSource_(asset: asset)
     }
     
-    init() {
+    override init() {
+        super.init()
         self.createChannelsForDefaultLogicTypes()
     }
     
@@ -63,6 +64,10 @@ class AudioSamplesSource {
         self.avgValueChannels = avgValueChannels
     }
 
+    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
+        return self.identifier + "." + type.typeIdentifier
+    }
+    
     //MARK: - Reading
     //TODO: There's no need in such public methods (combine with read method)
     func prepareToRead(completion: (Bool) -> ()) {
@@ -151,11 +156,11 @@ class AudioSamplesSource {
                 try self?.audioSource?._readAudioSamplesData(sampleBlock: sampleBlock)
                 
                 for channel in self!.maxValueChannels {
-                    channel.finalize()
+                    channel.complete()
                 }
                 
                 for channel in self!.avgValueChannels {
-                    channel.finalize()
+                    channel.complete()
                 }
                 
                 completion()
@@ -187,17 +192,17 @@ class AudioSamplesSource {
     
     var state = AudioAnalizerState.Idle
     var channelPerLogicProviderType = 10
-    var onChannelsChanged: (ChannelSource) -> () = {_ in}
-}
-
-//MARK: -
-//MARK: - ChannelSource
-extension AudioSamplesSource: ChannelSource {
-    var channelsCount: Int {
+    @objc var onChannelsChanged: (ChannelSource) -> () = {_ in}
+//}
+//
+////MARK: -
+////MARK: - ChannelSource
+//extension AudioSamplesSource: ChannelSource {
+    @objc var channelsCount: Int {
         return 2
     }
     
-    func channelAtIndex(index: Int) -> AbstractChannel {
+    @objc func channelAtIndex(index: Int) -> AbstractChannel {
         if index == 0 {
             return self.maxValueChannels[scaleIndex]
         } else {

@@ -34,6 +34,7 @@ protocol AudioWaveformPlotViewModelDelegate: class {
     func plotMoved(scale: CGFloat, start: CGFloat)
 }
 
+@objc
 protocol ChannelSource: class, Identifiable {
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String
     var channelsCount: Int { get }
@@ -41,18 +42,18 @@ protocol ChannelSource: class, Identifiable {
     var onChannelsChanged: (ChannelSource) -> () { get set }
 }
 
-extension ChannelSource {
-    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return self.identifier + "." + type.typeIdentifier
-    }
-}
-
+@objc
 protocol Identifiable {
     static var typeIdentifier: String { get }
     var identifier: String { get }
 }
 
 extension Identifiable {
+    static var typeIdentifier: String { return "\(self)" }
+    var identifier: String { return "\(self.dynamicType)" }
+}
+
+extension NSObject: Identifiable {
     static var typeIdentifier: String { return "\(self)" }
     var identifier: String { return "\(self.dynamicType)" }
 }

@@ -23,7 +23,8 @@ class AudioWaveformView: UIView {
             self.pathLayer.strokeColor = lineColor.CGColor
         }
     }
-    var identifier: String { return self.dataSource?.identifier ?? ""}
+
+    override var identifier: String { return self.dataSource?.identifier ?? ""}
     
     private var pathLayer: CAShapeLayer!
     

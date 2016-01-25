@@ -15,10 +15,11 @@ internal protocol LogicUser: class {
 
 extension Channel: LogicUser {}
 
+@objc
 public
-class LogicProvider: Identifiable {
+class LogicProvider: NSObject {
     weak internal var channel: LogicUser?
-    public required init(){}
+    public override init(){}
     
     public func handleValue(value: Double) {}
     public func clear() {}
@@ -28,7 +29,7 @@ public
 final
 class MaxValueLogicProvider: LogicProvider {
     private var max: Double?
-    public required init(){}
+    public override init(){}
     
     public override func handleValue(value: Double) {
         if max == nil {
@@ -49,7 +50,7 @@ final
 class AverageValueLogicProvider: LogicProvider {
     private var summ = 0.0
     var count = 0
-    public required init(){}
+    public override init(){}
     
     public override func handleValue(value: Double) {
         summ = summ + value
@@ -68,7 +69,7 @@ public
 final
 class AudioMaxValueLogicProvider: LogicProvider {
     private var max = Double(Int16.min)//-40.0
-    public required init(){}
+    public override init(){}
     
     public override func handleValue(var value: Double) {
         value = abs(value)
@@ -88,7 +89,7 @@ final
 class AudioAverageValueLogicProvider: LogicProvider {
     private var summ = 0.0
     var count = 0
-    public required init(){}
+    public override init(){}
     
     public override func handleValue(value: Double) {
         summ = summ + abs(value)
