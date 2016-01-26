@@ -51,23 +51,18 @@ class AudioWaveformPlot: UIView {
     func addContainerView() {
         let containerView = UIView()
         self.addSubview(containerView)
-        let views = ["view": containerView]
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        let horizontalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("|[view]|", options: [], metrics: nil, views: views)
-        self.addConstraints(horizontalConstraints)
-        let verticalConstraints = NSLayoutConstraint.constraintsWithVisualFormat("V:|[view]|", options: [], metrics: nil, views: views)
-        self.addConstraints(verticalConstraints)
+        containerView.attachBoundsOfSuperview()
         self.containerView = containerView
     }
     
     func addGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: "pan:")
+        let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
         self.addGestureRecognizer(pan)
-        let pinch = UIPinchGestureRecognizer(target: self, action: "pinch:")
+        let pinch = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
         self.addGestureRecognizer(pinch)
     }
     
-    func pan(gesture: UIPanGestureRecognizer) {
+    func handlePan(gesture: UIPanGestureRecognizer) {
         
         if delegate == nil { return }
         
@@ -81,9 +76,7 @@ class AudioWaveformPlot: UIView {
         }
     }
     
-    var scale: CGFloat = 1.0
-    
-    func pinch(gesture: UIPinchGestureRecognizer) {
+    func handlePinch(gesture: UIPinchGestureRecognizer) {
         if gesture.numberOfTouches() < 2 {
             return
         }
