@@ -67,13 +67,10 @@ class AudioWaveformPlot: UIView {
     }
     
     func handlePan(gesture: UIPanGestureRecognizer) {
-        
-        if delegate == nil { return }
-        
         switch gesture.state {
         case .Changed:
-            let deltaX                      = gesture.translationInView(gesture.view).x
-            let relativeDeltaX              = deltaX/gesture.view!.bounds.width
+            let deltaX         = gesture.translationInView(gesture.view).x
+            let relativeDeltaX = deltaX/gesture.view!.bounds.width
             self.delegate?.moveByDistance(relativeDeltaX)
             gesture.setTranslation(.zero, inView: gesture.view)
         default:()
@@ -81,17 +78,15 @@ class AudioWaveformPlot: UIView {
     }
     
     func handlePinch(gesture: UIPinchGestureRecognizer) {
-        if gesture.numberOfTouches() < 2 {
-            return
-        }
-        
         switch gesture.state {
         case .Changed:
-            let scale            = gesture.scale
-            let locationX        = gesture.locationInView(gesture.view).x
+            let scale     = gesture.scale
+            let locationX = gesture.locationInView(gesture.view).x
             let relativeLocation = locationX/gesture.view!.bounds.width
             self.delegate?.zoomAt(relativeLocation, relativeScale: scale)
             gesture.scale = 1.0
+        case .Ended:
+            print(self.viewModel!.start, self.viewModel!.scale)
         default:()
         }
     }
