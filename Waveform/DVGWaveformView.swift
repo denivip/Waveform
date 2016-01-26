@@ -41,7 +41,7 @@ class DVGWaveformView: UIView {
     //MARK: - Configuration
     //MARK: - Internal configuration
     func addPlotView() {
-        self.plotView = AudioWaveformPlot()
+        self.plotView = DVGAudioWaveformPlot()
         self.plotView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.plotView)
         self.plotView.attachBoundsOfSuperview()
@@ -116,6 +116,7 @@ class DVGWaveformView: UIView {
 //MARK: - AudioWaveformPlotViewModelDelegate
 extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
     func plotMoved(scale: CGFloat, start: CGFloat) {
+        //TODO: Disable untill draw began
         self.waveformDataSource!.read(numberOfPointsOnThePlot, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
     }
 }
