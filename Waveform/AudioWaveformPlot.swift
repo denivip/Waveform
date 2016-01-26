@@ -51,6 +51,7 @@ class AudioWaveformPlot: UIView {
     func addContainerView() {
         let containerView = UIView()
         self.addSubview(containerView)
+        containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.attachBoundsOfSuperview()
         self.containerView = containerView
     }
