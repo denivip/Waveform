@@ -43,7 +43,7 @@ class AudioWaveformPlot: UIView {
         self.setup()
     }
     
-    func setup() {
+    private func setup() {
         self.addContainerView()
         self.addGestures()
     }
@@ -59,8 +59,11 @@ class AudioWaveformPlot: UIView {
     func addGestures() {
         let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
         self.addGestureRecognizer(pan)
+        self.pan = pan
+        
         let pinch = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
         self.addGestureRecognizer(pinch)
+        self.pinch = pinch
     }
     
     func handlePan(gesture: UIPanGestureRecognizer) {
