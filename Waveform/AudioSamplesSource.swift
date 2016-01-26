@@ -227,6 +227,12 @@ struct DataRange {
         self.location = location
         self.length   = length
     }
+
+    init(location: CGFloat, length: CGFloat) {
+        let _location = Double(location)
+        let _length   = Double(length)
+        self = DataRange(location: _location, length: _length)
+    }
     
     init() {
         self.location = 0.0
