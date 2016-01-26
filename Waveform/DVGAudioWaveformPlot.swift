@@ -30,8 +30,7 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
     }
     
     func setupGestures() {
-        self.pan.minimumNumberOfTouches = 2 //enabled = false
-        
+        // New gestures
         let pan                    = UIPanGestureRecognizer(target: self, action: "handlePanToSelect:")
         pan.delegate               = self
         self.addGestureRecognizer(pan)
@@ -45,7 +44,9 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         self.tapToSelect            = tap
         tap.numberOfTouchesRequired = 1
         
+        // Configuring old gestures
         self.pinch.delegate = self
+        self.pan.minimumNumberOfTouches = 2
     }
     
     func setupSelectionView() {
@@ -64,14 +65,11 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
             if self.panStartLocation == nil {
                 self.panStartLocation = pan.locationInView(self).x
             }
-            print("began", pan.locationInView(self).x)
         case .Ended:
             // notify delegate
-            print("ended", pan.locationInView(self).x)
             self.panStartLocation = nil
             break
         case .Changed:
-//            print("changed", pan.locationInView(self).x)
             self.configureSelectionFromPosition(panStartLocation!, toPosition: pan.locationInView(self).x)
         default:
             break
@@ -89,7 +87,6 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         
         switch tap.state {
         case .Began:
-            print("tap", tap.locationInView(self).x)
             self.panStartLocation = tap.locationInView(self).x
             self.configureSelectionFromPosition(tap.locationInView(self).x)
         default:()

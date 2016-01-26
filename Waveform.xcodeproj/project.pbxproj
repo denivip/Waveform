@@ -68,6 +68,7 @@
 		8BDC337A1C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33791C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift */; };
 		8BDC337B1C57B2A2006C6F3C /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33791C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift */; };
 		8BEE7A5B1C57E9400072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A5A1C57E9400072872A /* SelectionView.swift */; };
+		8BEE7A5C1C57E9A00072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A5A1C57E9400072872A /* SelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -409,6 +410,7 @@
 				8BDC336C1C564796006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BDC33751C564913006C6F3C /* EXTScope.m in Sources */,
 				5B7003DE1C4FFCF300EA6313 /* AudioWaveformViewModel.swift in Sources */,
+				8BEE7A5C1C57E9A00072872A /* SelectionView.swift in Sources */,
 				5B7003DC1C4FFCF300EA6313 /* Protocols.swift in Sources */,
 				8BDC33741C564910006C6F3C /* DVGProgress.m in Sources */,
 				8BDC336B1C564796006C6F3C /* DVGAudioWriter.m in Sources */,
