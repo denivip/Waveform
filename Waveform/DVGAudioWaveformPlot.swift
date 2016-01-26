@@ -153,15 +153,28 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         self.selectionView.selection = nil
     }
     
+    override func handlePan(gesture: UIPanGestureRecognizer) {
+        super.handlePan(gesture)
+        self.selectionView.selection = nil
+    }
+    
     var minSelectionWidth: CGFloat = 10.0
     
-    func configureSelectionFromPosition(_startPosition: CGFloat, toPosition _endPosition: CGFloat? = nil) {
+    func configureSelectionFromPosition(_startPosition: CGFloat) {
+        self.configureSelectionFromPosition(_startPosition, toPosition: _startPosition)
+    }
+    
+    func configureSelectionFromPosition(_startPosition: CGFloat, toPosition _endPosition: CGFloat) {
+
+        //TODO: move geometry logic to viewModel (create it first)
+        var startPosition = min(_endPosition, _startPosition)
+        var endPosition   = max(_endPosition, _startPosition)
         
-        let endPosition = _endPosition ?? _startPosition + minSelectionWidth
-
-        let startPosition = min(_startPosition, endPosition)
-        let width         = max(abs(endPosition - _startPosition), minSelectionWidth)
-
+        startPosition = max(0, min(startPosition, self.bounds.width - minSelectionWidth))
+        endPosition   = max(minSelectionWidth, min(endPosition, self.bounds.width))
+        
+        let width = max(endPosition - startPosition, minSelectionWidth)
+        
         let range = DataRange(
             location: startPosition / self.bounds.width,
             length:   width / self.bounds.width)
