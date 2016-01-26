@@ -67,6 +67,7 @@
 		8BDC33751C564913006C6F3C /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33711C564825006C6F3C /* EXTScope.m */; };
 		8BDC337A1C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33791C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift */; };
 		8BDC337B1C57B2A2006C6F3C /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33791C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift */; };
+		8BEE7A5B1C57E9400072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A5A1C57E9400072872A /* SelectionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -117,6 +118,7 @@
 		8BDC33721C564825006C6F3C /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		8BDC33781C56509C006C6F3C /* DVGNoiseFilter_protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVGNoiseFilter_protected.h; sourceTree = "<group>"; };
 		8BDC33791C57B2A0006C6F3C /* DVGAudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioWaveformPlot.swift; sourceTree = "<group>"; };
+		8BEE7A5A1C57E9400072872A /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +228,7 @@
 			children = (
 				8B4CD0BE1C299BEC00B88BAC /* AudioWaveformPlot.swift */,
 				8B3F35031C243BBF006A4B67 /* AudioWaveformView.swift */,
+				8BEE7A5A1C57E9400072872A /* SelectionView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -439,6 +442,7 @@
 				8BDC336A1C564792006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BDC33731C564825006C6F3C /* EXTScope.m in Sources */,
 				5BE379E61C47CB7A00163588 /* Channel.swift in Sources */,
+				8BEE7A5B1C57E9400072872A /* SelectionView.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 				8BDC336F1C5647AF006C6F3C /* DVGProgress.m in Sources */,
 				8BDC33691C564792006C6F3C /* DVGAudioWriter.m in Sources */,

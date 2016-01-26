@@ -8,58 +8,6 @@
 
 import UIKit
 
-class SelectionView: UIView {
-    var selectionLayer: CALayer!
-    init() {
-        super.init(frame: .zero)
-        self.setup()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.setup()
-    }
-    
-    func setup() {
-        self.setupSelectionLayer()
-    }
-    
-    func setupSelectionLayer() {
-        let layer             = CALayer()
-        layer.borderColor     = UIColor.blackColor().CGColor
-        layer.borderWidth     = 2.0
-        layer.backgroundColor = UIColor.clearColor().CGColor
-        self.layer.addSublayer(layer)
-        self.selectionLayer   = layer
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.layoutSelection(self.selection)
-    }
-    
-    var selection: DataRange? {
-        didSet{ self.layoutSelection(selection) }
-    }
-    
-    func layoutSelection(dataRange: DataRange?) {
-        guard let dataRange = dataRange else {
-            self.selectionLayer.borderColor = UIColor.clearColor().CGColor
-            return
-        }
-        self.selectionLayer.borderColor = UIColor.blackColor().CGColor
-        
-        let startLocation  = self.bounds.width * CGFloat(dataRange.location)
-        let selectionWidth = self.bounds.width * CGFloat(dataRange.length)
-        
-        let frame = CGRect(x: startLocation, y: 0, width: selectionWidth, height: self.bounds.height)
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        self.selectionLayer.frame = frame
-        CATransaction.commit()
-    }
-}
-
 class DVGAudioWaveformPlot: AudioWaveformPlot {
     
     var panToSelect: UIPanGestureRecognizer!
