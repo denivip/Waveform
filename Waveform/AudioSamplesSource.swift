@@ -131,18 +131,19 @@ class AudioSamplesSource: NSObject, ChannelSource {
         
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
-            if self == nil { return }
-           
-            self?.state = .Reading
             
-            let channelsCount  = Int(self!.audioFormat.mChannelsPerFrame)
+            guard let strong_self = self else { return }
+           
+            strong_self.state = .Reading
+            
+            let channelsCount  = Int(strong_self.audioFormat.mChannelsPerFrame)
 
             do{
                 let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
                     
-                    for index in 0..<self!.channelPerLogicProviderType {
-                        let maxValueChannel = self!.maxValueChannels[index]
-                        let avgValueChannel = self!.avgValueChannels[index]
+                    for index in 0..<strong_self.channelPerLogicProviderType {
+                        let maxValueChannel = strong_self.maxValueChannels[index]
+                        let avgValueChannel = strong_self.avgValueChannels[index]
                         for index in 0..<length {
                             let sample = dataSamples[channelsCount * index]
                             maxValueChannel.handleValue(Double(sample))
@@ -153,18 +154,18 @@ class AudioSamplesSource: NSObject, ChannelSource {
                     return false
                 }
                 
-                try self?.audioSource?._readAudioSamplesData(sampleBlock: sampleBlock)
+                try strong_self.audioSource?._readAudioSamplesData(sampleBlock: sampleBlock)
                 
-                for channel in self!.maxValueChannels {
+                for channel in strong_self.maxValueChannels {
                     channel.complete()
                 }
                 
-                for channel in self!.avgValueChannels {
+                for channel in strong_self.avgValueChannels {
                     channel.complete()
                 }
                 
                 completion()
-                self!.state = .Finished
+                strong_self.state = .Finished
             } catch {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }
