@@ -17,12 +17,7 @@ class AudioWaveformPlot: UIView {
     weak var delegate: AudioWaveformPlotDelegate?
     weak var dataSource: AudioWaveformPlotDataSource? {
         didSet{
-            if let newDataSource = dataSource {
-                for index in 0..<newDataSource.waveformDataSourcesCount {
-                    let dataSource = newDataSource.waveformDataSourceAtIndex(index)
-                    self.addWaveformViewWithDataSource(dataSource)
-                }
-            }
+            self.updateWaveforms()
         }
     }
     
@@ -30,6 +25,23 @@ class AudioWaveformPlot: UIView {
         didSet {
             self.delegate   = viewModel
             self.dataSource = viewModel
+            viewModel?.onPlotUpdate = self.updateWaveforms
+        }
+    }
+    
+    func updateWaveforms() {
+        if let newDataSource = dataSource {
+            for index in 0..<newDataSource.waveformDataSourcesCount {
+                let waveformDataSource = newDataSource.waveformDataSourceAtIndex(index)
+                
+                guard let view = self.waveformWithIdentifier(waveformDataSource.identifier) else  {
+                    let view = self.addWaveformViewWithDataSource(waveformDataSource)
+                    print("\(__LINE__)", waveformDataSource.identifier, waveformDataSource, view)
+                    continue
+                }
+                print("\(__LINE__)", waveformDataSource.identifier, waveformDataSource, view)
+                view.dataSource = waveformDataSource
+            }
         }
     }
     

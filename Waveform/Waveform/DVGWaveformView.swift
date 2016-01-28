@@ -41,7 +41,10 @@ class DVGWaveformView: UIView {
     //MARK: - Configuration
     //MARK: - Internal configuration
     func addPlotView() {
-        self.plotView = DVGAudioWaveformPlot()
+        let plotView = DVGAudioWaveformPlot()
+        plotView.selectionDelegate = self
+        
+        self.plotView = plotView
         self.plotView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.plotView)
         self.plotView.attachBoundsOfSuperview()
@@ -80,7 +83,7 @@ class DVGWaveformView: UIView {
 
     //MARK: -
     //MARK: - Reading
-    func readAndDrawSynchronously() {
+    func readAndDrawSynchronously(completion: () -> ()) {
         self.plotView.startSynchingWithDataSource()
         let date = NSDate()
         self.waveformDataSource?.prepareToRead {
@@ -88,10 +91,15 @@ class DVGWaveformView: UIView {
             if success {
                 self?.waveformDataSource?.read(self!.numberOfPointsOnThePlot) {
                     print("time: \(-date.timeIntervalSinceNow)")
-                    self?.plotView.stopSynchingWithDataSource()
+//                    self?.plotView.stopSynchingWithDataSource()
+                    completion()
                 }
             }
         }
+    }
+    
+    func addDataSource(dataSource: ChannelSource) {
+        self.plotViewModel.addChannelSource(dataSource)
     }
     
     //MARK: -
@@ -101,15 +109,19 @@ class DVGWaveformView: UIView {
     private var waveformDataSource: AudioSamplesSource!
     
     //MARK: - Public vars
+    weak var delegate: DVGWaveformViewDelegate?
     var asset: AVAsset? {
         didSet{
-            dispatch_async(dispatch_get_main_queue()) {
-                self.waveformDataSource.asset = self.asset
-            }
+            self.waveformDataSource.asset = self.asset
         }
     }
     
     var numberOfPointsOnThePlot = 512
+    var start: CGFloat = 0.0
+    var scale: CGFloat = 1.0
+    var progress: NSProgress {
+        return self.waveformDataSource.progress
+    }
     //MARK: -
 }
 
@@ -118,5 +130,20 @@ extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
     func plotMoved(scale: CGFloat, start: CGFloat) {
         //TODO: Disable untill draw began
         self.waveformDataSource!.read(numberOfPointsOnThePlot, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
+        self.delegate?.plotMoved(scale, start: start)
+        self.start = start
+        self.scale = scale
     }
+}
+
+extension DVGWaveformView: DVGAudioWaveformPlotDelegate {
+    func plotSelectedAreaWithRange(range: DataRange) {
+        let range = self.plotViewModel.absoluteRangeFromRelativeRange(range)
+        self.delegate?.plotSelectedAreaWithLocation(range.location, length: range.length)
+    }
+}
+
+@objc
+protocol DVGWaveformViewDelegate: AudioWaveformPlotViewModelDelegate {
+    func plotSelectedAreaWithLocation(location: Double, length: Double)
 }

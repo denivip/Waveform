@@ -8,12 +8,13 @@
 
 import UIKit
 
+@objc
 class DVGAudioWaveformPlot: AudioWaveformPlot {
     
     var panToSelect: UIPanGestureRecognizer!
     var tapToSelect: UILongPressGestureRecognizer!
     var selectionView: SelectionView!
-    
+    weak var selectionDelegate: DVGAudioWaveformPlotDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -38,8 +39,8 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         pan.maximumNumberOfTouches = 1
         
         let tap                     = UILongPressGestureRecognizer(target: self, action: "handleTapToSelect:")
-        tap.minimumPressDuration    = 0.05
         tap.delegate                = self
+        tap.minimumPressDuration    = 0.08
         self.addGestureRecognizer(tap)
         self.tapToSelect            = tap
         tap.numberOfTouchesRequired = 1
@@ -65,9 +66,15 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
             if self.panStartLocation == nil {
                 self.panStartLocation = pan.locationInView(self).x
             }
+            self.configureSelectionFromPosition(panStartLocation!, toPosition: pan.locationInView(self).x)
+        case .Failed:
+            print("pan failed")
         case .Ended:
             // notify delegate
             self.panStartLocation = nil
+            if let selection = self.selectionView.selection {
+                self.selectionDelegate?.plotSelectedAreaWithRange(selection)
+            }
             break
         case .Changed:
             self.configureSelectionFromPosition(panStartLocation!, toPosition: pan.locationInView(self).x)
@@ -87,8 +94,15 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         
         switch tap.state {
         case .Began:
-            self.panStartLocation = tap.locationInView(self).x
+            self.panStartLocation = pan.locationInView(self).x
             self.configureSelectionFromPosition(tap.locationInView(self).x)
+        case .Failed:
+            print("tap failed")
+        case .Ended:
+            self.configureSelectionFromPosition(tap.locationInView(self).x)
+            if let selection = self.selectionView.selection {
+                self.selectionDelegate?.plotSelectedAreaWithRange(selection)
+            }
         default:()
         }
     }
@@ -103,7 +117,7 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         self.selectionView.selection = nil
     }
     
-    var minSelectionWidth: CGFloat = 10.0
+    var minSelectionWidth: CGFloat = 40.0
     
     func configureSelectionFromPosition(_startPosition: CGFloat) {
         self.configureSelectionFromPosition(_startPosition, toPosition: _startPosition)
@@ -115,8 +129,11 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
         var startPosition = min(_endPosition, _startPosition)
         var endPosition   = max(_endPosition, _startPosition)
         
-        startPosition = max(0, min(startPosition, self.bounds.width - minSelectionWidth))
-        endPosition   = max(minSelectionWidth, min(endPosition, self.bounds.width))
+        startPosition = startPosition - minSelectionWidth/2
+        endPosition   = endPosition + minSelectionWidth/2
+        
+        startPosition = max(0, startPosition)
+        endPosition   = min(endPosition, self.bounds.width)
         
         let width = max(endPosition - startPosition, minSelectionWidth)
         
@@ -142,8 +159,14 @@ extension DVGAudioWaveformPlot: UIGestureRecognizerDelegate {
     }
     
     override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
-        print(gestureRecognizer.dynamicType, gestureRecognizer.numberOfTouches(), pinch.state.rawValue)
+        if gestureRecognizer == self.panToSelect {
+            self.tapToSelect.enabled = false
+            self.tapToSelect.enabled = true
+        }
         return true
     }
 }
 
+protocol DVGAudioWaveformPlotDelegate: class {
+    func plotSelectedAreaWithRange(range: DataRange)
+}

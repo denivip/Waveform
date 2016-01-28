@@ -26,7 +26,8 @@ class SelectionView: UIView {
     
     func setupSelectionLayer() {
         let layer             = CALayer()
-        layer.borderColor     = UIColor.blackColor().CGColor
+        layer.borderColor     = UIColor.grayColor().CGColor
+        layer.cornerRadius    = 5.0
         layer.borderWidth     = 2.0
         layer.backgroundColor = UIColor.clearColor().CGColor
         self.layer.addSublayer(layer)
@@ -47,7 +48,7 @@ class SelectionView: UIView {
             self.selectionLayer.borderColor = UIColor.clearColor().CGColor
             return
         }
-        self.selectionLayer.borderColor = UIColor.blackColor().CGColor
+        self.selectionLayer.borderColor = UIColor.grayColor().CGColor
         
         let startLocation  = self.bounds.width * CGFloat(dataRange.location)
         let selectionWidth = self.bounds.width * CGFloat(dataRange.length)

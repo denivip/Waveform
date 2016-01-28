@@ -83,11 +83,14 @@ class AudioWaveformView: UIView {
         
         CGPathMoveToPoint(mPath, nil, 0, self.bounds.midY)
         
+        let wProportion = self.bounds.size.width / sourceBounds.width
+        let hPropostion = self.bounds.size.height / sourceBounds.height
+        
         for index in 0..<currentCount {
             let point         = dataSource.pointAtIndex(index)
             let adjustedPoint = CGPoint(
-                x: point.x * self.bounds.size.width / sourceBounds.width,
-                y: point.y * self.bounds.size.height / sourceBounds.height / 2.0)
+                x: point.x * wProportion,
+                y: point.y * hPropostion / 2.0)
             
             CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
             CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY - adjustedPoint.y)

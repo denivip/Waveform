@@ -32,8 +32,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     var _identifier: String = ""
     
     func pointAtIndex(index: Int) -> CGPoint {
-        
-        if channel == nil {
+        guard let channel = self.channel else {
             return .zero
         }
         
@@ -41,8 +40,8 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
         let pointIndex = startIndex + index
         
         let pointY: CGFloat
-        if pointIndex < self.channel!.count {
-            pointY = CGFloat(self.channel![pointIndex])
+        if pointIndex < channel.count {
+            pointY = CGFloat(channel[pointIndex])
         } else {
             pointY = 0
         }

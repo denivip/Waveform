@@ -30,6 +30,7 @@ protocol AudioWaveformPlotDelegate: class {
     func moveByDistance(relativeDeltaX: CGFloat)
 }
 
+@objc
 protocol AudioWaveformPlotViewModelDelegate: class {
     func plotMoved(scale: CGFloat, start: CGFloat)
 }
@@ -55,5 +56,5 @@ extension Identifiable {
 
 extension NSObject: Identifiable {
     static var typeIdentifier: String { return "\(self)" }
-    var identifier: String { return "\(self.dynamicType)" }
+    public var identifier: String { return "\(self.dynamicType)" }
 }

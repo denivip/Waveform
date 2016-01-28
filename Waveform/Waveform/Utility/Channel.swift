@@ -5,7 +5,7 @@
 //  Created by qqqqq on 09/01/16.
 //  Copyright © 2016 qqqqq. All rights reserved.
 //
-import UIKit
+import Foundation
 
 @objc
 public
@@ -42,8 +42,8 @@ class Channel<T: NumberType>: AbstractChannel {
     private var currentBlockSize = 0
     private var space: Int = 0
     private var buffer: UnsafeMutablePointer<T>
-    private var _maxValue = Double(CGFloat.min)
-    private var _minValue = Double(CGFloat.max)
+    private var _maxValue = -Double.infinity
+    private var _minValue = Double.infinity
 
     @objc public subscript(index: Int) -> Double {
         get { return self.buffer[index].double }
@@ -60,7 +60,7 @@ class Channel<T: NumberType>: AbstractChannel {
     
     func appendValueToBuffer(value: Double) {
 
-        dispatch_async(dispatch_get_main_queue()) { 
+//        dispatch_async(dispatch_get_main_queue()) { 
             if self._maxValue < value { self._maxValue = value }
             if self._minValue > value { self._minValue = value }
 
@@ -77,7 +77,7 @@ class Channel<T: NumberType>: AbstractChannel {
             }
             (self.buffer + self.count).initialize(T(value))
             self.count++
-        }
+//        }
     }
 
     private func clear() {
@@ -87,7 +87,7 @@ class Channel<T: NumberType>: AbstractChannel {
     public func complete() {
 
         self.totalCount = self.count
-        print(self.space, self.count, self.totalCount)
+        print(self.blockSize, self.count, self.totalCount)
         //TODO: Clear odd space
         self.clear()
     }

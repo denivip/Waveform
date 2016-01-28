@@ -28,17 +28,26 @@ class AudioSamplesSource: NSObject, ChannelSource {
     func configureChannelsForSamplesCount(samplesCount: Int, timeRange: CMTimeRange) {
         
         let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
+        print("estimatedSampleCount ", estimatedSampleCount)
         
         for index in self.maxValueChannels.indices {
             let channel = self.maxValueChannels[index]
-            channel.totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
-            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
+            let totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
+            let blockSize  = Int(ceil(estimatedSampleCount/Double(totalCount)))
+            
+            channel.totalCount = Int(estimatedSampleCount/Double(blockSize))
+            channel.blockSize  = blockSize
         }
         
         for index in self.avgValueChannels.indices {
             let channel = self.avgValueChannels[index]
-            channel.totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
-            channel.blockSize  = Int(ceil(estimatedSampleCount/Double(channel.totalCount)))
+            
+            let totalCount = Int(Double(samplesCount) * pow(2.0, Double(index)))
+            let blockSize  = Int(ceil(estimatedSampleCount/Double(totalCount)))
+            
+            channel.totalCount = Int(estimatedSampleCount/Double(blockSize))
+            channel.blockSize  = blockSize
+            print(channel.blockSize, channel.totalCount)
         }
     }
     
@@ -76,12 +85,11 @@ class AudioSamplesSource: NSObject, ChannelSource {
         
         self.runAsynchronouslyOnProcessingQueue {
             [weak self] in
-            
-            if self == nil { return }
-            
-            self?.audioSource?.readAudioFormat{ audioFormat, _ in
+            guard let strong_self = self else { return }
 
-                if self == nil { return }
+            strong_self.audioSource.readAudioFormat{ audioFormat, _ in
+
+                guard let strong_self = self else { return }
 
                 guard let audioFormat = audioFormat else {
                     dispatch_async(dispatch_get_main_queue()) {
@@ -90,7 +98,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
                     return
                 }
                 
-                self!.audioFormat = audioFormat
+                strong_self.audioFormat = audioFormat
                 dispatch_async(dispatch_get_main_queue()) {
                     completion(true)
                 }
@@ -151,6 +159,11 @@ class AudioSamplesSource: NSObject, ChannelSource {
                         }
                     }
                     
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        let maxValueChannel = strong_self.maxValueChannels[0]
+                        strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
+                    })
+
                     return false
                 }
                 
@@ -159,6 +172,10 @@ class AudioSamplesSource: NSObject, ChannelSource {
                 for channel in strong_self.maxValueChannels {
                     channel.complete()
                 }
+                
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount
+                })
                 
                 for channel in strong_self.avgValueChannels {
                     channel.complete()
@@ -174,7 +191,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
     
     //MARK: -
     //MARK: - Private Variables
-    var audioSource: DVGAudioSource_?
+    var audioSource: DVGAudioSource_!
     var audioFormat = AudioStreamBasicDescription()
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     var maxValueChannels = [Channel<Int16>]()
@@ -210,6 +227,12 @@ class AudioSamplesSource: NSObject, ChannelSource {
             return self.avgValueChannels[scaleIndex]
         }
     }
+    
+    lazy var progress: NSProgress = {
+        let progress = NSProgress(parent: nil, userInfo: nil)
+        progress.totalUnitCount = 10_000
+        return progress
+    }()
 }
 
 //MARK: -

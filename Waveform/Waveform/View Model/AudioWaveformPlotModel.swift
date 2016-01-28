@@ -33,16 +33,19 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         
         self.dataSources.append(channelsSource)
         
-        for index in 0..<channelsSource.channelsCount {
-            
-            let channel         = channelsSource.channelAtIndex(index)
-            let viewModel       = AudioWaveformViewModel()
-            
-            viewModel.channel   = channel
-            viewModel.plotModel = self
-            
-            self.viewModels.append(viewModel)
-        }
+//        for index in 0..<channelsSource.channelsCount {
+//            
+//            let channel         = channelsSource.channelAtIndex(index)
+//            let viewModel       = AudioWaveformViewModel()
+//            
+//            viewModel.channel   = channel
+//            viewModel.plotModel = self
+//            
+//            self.viewModels.append(viewModel)
+//        }
+        
+        self.updateViewModelsForChannelsSource(channelsSource)
+        
         channelsSource.onChannelsChanged = {
             [weak self]
             channelsSource in
@@ -57,19 +60,27 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     }
     
     func updateViewModelsForChannelsSource(channelsSource: ChannelSource) {
+
         for index in 0..<channelsSource.channelsCount {
-            let channel = channelsSource.channelAtIndex(index)
+            
+            let channel    = channelsSource.channelAtIndex(index)
             let identifier = channel.identifier
+            
             if let viewModel = self.viewModelWithIdentifier(identifier) {
+               
                 viewModel.channel = channel
                 viewModel.updateGeometry()
+                
             } else {
+                
                 let viewModel       = AudioWaveformViewModel()
                 viewModel.channel   = channel
                 viewModel.plotModel = self
                 self.viewModels.append(viewModel)
+                
             }
         }
+        self.onPlotUpdate()
     }
     
     func viewModelWithIdentifier(identifier: String) -> AudioWaveformViewModel? {
@@ -92,6 +103,10 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
             }
         }
         return CGSize(width: 1.0, height: maxHeight)
+    }
+    
+    func absoluteRangeFromRelativeRange(range: DataRange) -> DataRange {
+        return DataRange(location: Double(self.start) + range.location/Double(self.scale), length: range.length/Double(self.scale))
     }
 }
 
