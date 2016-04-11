@@ -24,6 +24,12 @@
 		8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
 		8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
 		8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
+		8B8D5B461CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B441CBBDEE000B623EF /* AudioReaderSettings.swift */; };
+		8B8D5B471CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B441CBBDEE000B623EF /* AudioReaderSettings.swift */; };
+		8B8D5B481CBBDEE000B623EF /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B451CBBDEE000B623EF /* Error.swift */; };
+		8B8D5B491CBBDEE000B623EF /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B451CBBDEE000B623EF /* Error.swift */; };
+		8B8D5B4B1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B4A1CBBE62500B623EF /* AudioSamplesContainer.swift */; };
+		8B8D5B4C1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D5B4A1CBBE62500B623EF /* AudioSamplesContainer.swift */; };
 		8BDC331A1C4FE51C006C6F3C /* DVGVideosCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33191C4FE51C006C6F3C /* DVGVideosCollectionViewController.m */; };
 		8BDC331D1C4FE656006C6F3C /* DVCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331C1C4FE656006C6F3C /* DVCollectionViewController.m */; };
 		8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331F1C4FE681006C6F3C /* DenoiseCollectionViewCell.m */; };
@@ -43,8 +49,8 @@
 		8BDC33751C564913006C6F3C /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33711C564825006C6F3C /* EXTScope.m */; };
 		8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
 		8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
-		8BEE7A761C590B9B0072872A /* DVGAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* DVGAudioSource.swift */; };
-		8BEE7A771C590B9B0072872A /* DVGAudioSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* DVGAudioSource.swift */; };
+		8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */; };
+		8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */; };
 		8BEE7A781C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */; };
 		8BEE7A791C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */; };
 		8BEE7A7A1C590B9B0072872A /* DVGWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A661C590B9B0072872A /* DVGWaveformView.swift */; };
@@ -81,6 +87,9 @@
 		8B3F34FB1C243BA6006A4B67 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8B3F34FD1C243BA7006A4B67 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B3F35081C244370006A4B67 /* Waveform-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Waveform-Bridging-Header.h"; sourceTree = "<group>"; };
+		8B8D5B441CBBDEE000B623EF /* AudioReaderSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioReaderSettings.swift; sourceTree = "<group>"; };
+		8B8D5B451CBBDEE000B623EF /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		8B8D5B4A1CBBE62500B623EF /* AudioSamplesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesContainer.swift; sourceTree = "<group>"; };
 		8BDC33181C4FE51C006C6F3C /* DVGVideosCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVGVideosCollectionViewController.h; sourceTree = "<group>"; };
 		8BDC33191C4FE51C006C6F3C /* DVGVideosCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DVGVideosCollectionViewController.m; sourceTree = "<group>"; };
 		8BDC331B1C4FE656006C6F3C /* DVCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DVCollectionViewController.h; sourceTree = "<group>"; };
@@ -107,7 +116,7 @@
 		8BDC33721C564825006C6F3C /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		8BDC33781C56509C006C6F3C /* DVGNoiseFilter_protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVGNoiseFilter_protected.h; sourceTree = "<group>"; };
 		8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesSource.swift; sourceTree = "<group>"; };
-		8BEE7A641C590B9B0072872A /* DVGAudioSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioSource.swift; sourceTree = "<group>"; };
+		8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesReader.swift; sourceTree = "<group>"; };
 		8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioWaveformPlot.swift; sourceTree = "<group>"; };
 		8BEE7A661C590B9B0072872A /* DVGWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGWaveformView.swift; sourceTree = "<group>"; };
 		8BEE7A681C590B9B0072872A /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
@@ -247,7 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */,
-				8BEE7A641C590B9B0072872A /* DVGAudioSource.swift */,
+				8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */,
 			);
 			path = "Data Source";
 			sourceTree = "<group>";
@@ -255,11 +264,14 @@
 		8BEE7A671C590B9B0072872A /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				8B8D5B441CBBDEE000B623EF /* AudioReaderSettings.swift */,
+				8B8D5B451CBBDEE000B623EF /* Error.swift */,
 				8BEE7A681C590B9B0072872A /* Channel.swift */,
 				8BEE7A691C590B9B0072872A /* LogicProvider.swift */,
 				8BEE7A6A1C590B9B0072872A /* NumberTypes.swift */,
 				8BEE7A6B1C590B9B0072872A /* Protocols.swift */,
 				8BEE7A6C1C590B9B0072872A /* UIKit+extensions.swift */,
+				8B8D5B4A1CBBE62500B623EF /* AudioSamplesContainer.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -392,8 +404,10 @@
 				8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
 				8BEE7A811C590B9B0072872A /* NumberTypes.swift in Sources */,
 				8BDC33631C56470B006C6F3C /* DVGAudioSource.m in Sources */,
+				8B8D5B4C1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7B1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				5B7003DA1C4FFCF300EA6313 /* AppDelegate.swift in Sources */,
+				8B8D5B471CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */,
 				8BEE7A891C590B9B0072872A /* AudioWaveformView.swift in Sources */,
 				8BEE7A851C590B9B0072872A /* UIKit+extensions.swift in Sources */,
 				5B7003D91C4FFC5D00EA6313 /* DVGVideosCollectionViewController.m in Sources */,
@@ -408,7 +422,8 @@
 				5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */,
 				8BDC336C1C564796006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BEE7A7F1C590B9B0072872A /* LogicProvider.swift in Sources */,
-				8BEE7A771C590B9B0072872A /* DVGAudioSource.swift in Sources */,
+				8B8D5B491CBBDEE000B623EF /* Error.swift in Sources */,
+				8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8BDC33751C564913006C6F3C /* EXTScope.m in Sources */,
 				8BDC33741C564910006C6F3C /* DVGProgress.m in Sources */,
 				8BEE7A8F1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
@@ -426,8 +441,10 @@
 				8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
 				8BEE7A801C590B9B0072872A /* NumberTypes.swift in Sources */,
 				8BDC335D1C56469E006C6F3C /* DVGAudioSource.m in Sources */,
+				8B8D5B4B1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7A1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				8BDC33231C4FE69A006C6F3C /* DVGCollectionReusableView.m in Sources */,
+				8B8D5B461CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */,
 				8BEE7A881C590B9B0072872A /* AudioWaveformView.swift in Sources */,
 				8BEE7A841C590B9B0072872A /* UIKit+extensions.swift in Sources */,
 				8BDC331D1C4FE656006C6F3C /* DVCollectionViewController.m in Sources */,
@@ -442,7 +459,8 @@
 				8BDC336A1C564792006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BDC33731C564825006C6F3C /* EXTScope.m in Sources */,
 				8BEE7A7E1C590B9B0072872A /* LogicProvider.swift in Sources */,
-				8BEE7A761C590B9B0072872A /* DVGAudioSource.swift in Sources */,
+				8B8D5B481CBBDEE000B623EF /* Error.swift in Sources */,
+				8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 				8BDC336F1C5647AF006C6F3C /* DVGProgress.m in Sources */,
 				8BEE7A8E1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,

@@ -15,7 +15,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
     convenience init(asset: AVAsset) {
         self.init()
         self.asset       = asset
-        self.audioSource = DVGAudioSource_(asset: asset)
+        self.audioSource = AudioSamplesReader(asset: asset)
     }
     
     override init() {
@@ -27,7 +27,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
     //MARK: - Inner configuration
     func configureChannelsForSamplesCount(samplesCount: Int, timeRange: CMTimeRange) {
         
-        let estimatedSampleCount = timeRange.duration.seconds * self.audioFormat.mSampleRate
+        let estimatedSampleCount = timeRange.duration.seconds * Double(self.audioFormat.samplesRate)
         print("estimatedSampleCount ", estimatedSampleCount)
         
         for index in self.maxValueChannels.indices {
@@ -98,7 +98,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
                     return
                 }
                 
-                strong_self.audioFormat = audioFormat
+//                strong_self.audioFormat = audioFormat
                 dispatch_async(dispatch_get_main_queue()) {
                     completion(true)
                 }
@@ -133,6 +133,8 @@ class AudioSamplesSource: NSObject, ChannelSource {
         }
     }
     
+    var shouldStop = false
+
     func _read(count: Int, completion: () -> () = {}) {
         
         assert(self.audioSource != nil, "No audio source")
@@ -144,30 +146,33 @@ class AudioSamplesSource: NSObject, ChannelSource {
            
             strong_self.state = .Reading
             
-            let channelsCount  = Int(strong_self.audioFormat.mChannelsPerFrame)
-
-            do{
-                let sampleBlock = { (dataSamples: UnsafePointer<Int16>!, length: Int) -> Bool in
-                    
-                    for index in 0..<strong_self.channelPerLogicProviderType {
-                        let maxValueChannel = strong_self.maxValueChannels[index]
-                        let avgValueChannel = strong_self.avgValueChannels[index]
-                        for index in 0..<length {
-                            let sample = dataSamples[channelsCount * index]
-                            maxValueChannel.handleValue(Double(sample))
-                            avgValueChannel.handleValue(Double(sample))
-                        }
+            let channelIndex  = 0
+            
+            let samplesHandlingBlock = { [weak self] (samplesContainer: AudioSamplesContainer<Int16>) in
+                
+                for index in 0..<strong_self.channelPerLogicProviderType {
+                    let maxValueChannel = strong_self.maxValueChannels[index]
+                    let avgValueChannel = strong_self.avgValueChannels[index]
+                    for index in 0..<samplesContainer.samplesCount {
+                        let sample = samplesContainer.sample(sampleIndex: index)//dataSamples[index * numberOfChannels + channelIndex]
+                        maxValueChannel.handleValue(Double(sample))
+                        avgValueChannel.handleValue(Double(sample))
                     }
-                    
-                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        let maxValueChannel = strong_self.maxValueChannels[0]
-                        strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
-                    })
-
-                    return false
                 }
                 
-                try strong_self.audioSource?._readAudioSamplesData(sampleBlock: sampleBlock)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    let maxValueChannel = strong_self.maxValueChannels[0]
+                    strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
+                })
+                
+                if self == nil || self!.shouldStop {
+                    self!.audioSource.stop()
+                }
+            }
+            
+            do {
+                
+                try strong_self.audioSource?.readSamples(samplesHandlingBlock: samplesHandlingBlock)
                 
                 for channel in strong_self.maxValueChannels {
                     channel.complete()
@@ -191,8 +196,8 @@ class AudioSamplesSource: NSObject, ChannelSource {
     
     //MARK: -
     //MARK: - Private Variables
-    var audioSource: DVGAudioSource_!
-    var audioFormat = AudioStreamBasicDescription()
+    var audioSource: AudioSamplesReader!
+    var audioFormat = Constants.DefaultAudioFormat//AudioFormat(samplesRate: 0, bitsDepth: 0, numberOfChannels: 0)
     var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
     var maxValueChannels = [Channel<Int16>]()
     var avgValueChannels = [Channel<Float>]()
@@ -203,7 +208,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
     var asset: AVAsset? {
         didSet{
             if let asset = self.asset {
-                self.audioSource = DVGAudioSource_(asset: asset)
+                self.audioSource = AudioSamplesReader(asset: asset)
             }
         }
     }
@@ -241,11 +246,11 @@ struct DataRange {
     let location: Double
     let length: Double
     
-    init(var location: Double, length: Double) {
+    init(location: Double, length: Double) {
         assert(location >= 0.0)
         assert(length > 0.0)
         assert(length <= 1.0)
-        location = min(location, 1 - length)
+        let location = min(location, 1 - length)
         
         self.location = location
         self.length   = length
