@@ -13,7 +13,7 @@ struct Constants {
     static var DefaultAudioFormat = AudioFormat.init(samplesRate: 44100, bitsDepth: 16, numberOfChannels: 2)
 }
 
-final
+@objc final
 class AudioSamplesReader: NSObject {
     
     var asset: AVAsset
@@ -23,7 +23,7 @@ class AudioSamplesReader: NSObject {
     
     private var readingRoutine: ReadingRoutine?
     
-    var sampleHandlingBlock: (AudioSamplesContainer<Int16>) -> () = {_ in}
+    weak var samplesHandler: AudioSamplesHandler?
     
     var shouldStop = false
     
@@ -87,12 +87,13 @@ class AudioSamplesReader: NSObject {
         ]
     }
 
-    func readSamples(audioFormat: AudioFormat? = nil, samplesHandlingBlock: (samples: AudioSamplesContainer<Int16>) -> ()) throws {
+    func readSamples(audioFormat: AudioFormat? = nil, samplesHandler: AudioSamplesHandler) throws {
         
         if let format = audioFormat {
             samplesReadAudioFormat = format
         }
-        sampleHandlingBlock = samplesHandlingBlock
+
+        self.samplesHandler = samplesHandler
         try prepareForReading()
         try read()
     }
@@ -128,7 +129,7 @@ class AudioSamplesReader: NSObject {
         
         try readingRoutine.startReading()
         
-        readingRoutine.samplesHandler = self.sampleHandlingBlock
+        readingRoutine.samplesHandler = self.samplesHandler
         
         while readingRoutine.isReading {
             do {
@@ -153,7 +154,7 @@ private final class ReadingRoutine {
     let readerOutput: AVAssetReaderOutput
     let audioFormat: AudioFormat
     
-    var samplesHandler: (AudioSamplesContainer<Int16>) -> () = {_ in}
+    weak var samplesHandler: AudioSamplesHandler?
     
     init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat) {
         self.assetReader  = assetReader
@@ -201,10 +202,9 @@ private final class ReadingRoutine {
             
             CMBlockBufferAccessDataBytes(buffer, 0, length, tempBytes, &returnedPointer)
         
-            let samplesContainer = AudioSamplesContainer<Int16>(buffer: returnedPointer, length: length, numberOfChannels: audioFormat.numberOfChannels)
-            autoreleasepool {
-                samplesHandler(samplesContainer)
-            }
+            let samplesContainer = AudioSamplesContainer(buffer: returnedPointer, length: length, numberOfChannels: audioFormat.numberOfChannels)
+    
+            samplesHandler?.handleSamples(samplesContainer)
         }
         
         if error != nil {

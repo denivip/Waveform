@@ -7,18 +7,26 @@
 //
 
 import Foundation
-struct AudioSamplesContainer<T> {
-    let buffer: UnsafePointer<T>
+
+protocol _AudioSamplesContainer {
+    var buffer: UnsafePointer<Int16> { get }
+    var numberOfChannels: Int { get }
+    var samplesCount: Int { get }
+    func sample(channelIndex channelIndex: Int, sampleIndex: Int) -> Int16
+}
+
+struct AudioSamplesContainer: _AudioSamplesContainer {
+    let buffer: UnsafePointer<Int16>
     let samplesCount: Int
     let numberOfChannels: Int
     
-    init<U>(buffer: UnsafePointer<U>, length: Int, numberOfChannels: Int) {
-        self.buffer           = UnsafePointer<T>(buffer)
-        self.samplesCount     = length * sizeof(U)/sizeof(T) / numberOfChannels
+    init(buffer: UnsafePointer<Int8>, length: Int, numberOfChannels: Int) {
+        self.buffer           = UnsafePointer<Int16>(buffer)
+        self.samplesCount     = length * sizeof(Int8)/sizeof(Int16) / numberOfChannels
         self.numberOfChannels = numberOfChannels
     }
     
-    func sample(channelIndex channelIndex: Int = 0, sampleIndex: Int) -> T {
+    func sample(channelIndex channelIndex: Int, sampleIndex: Int) -> Int16 {
         assert(channelIndex < numberOfChannels)
         assert(sampleIndex < samplesCount)
         return buffer[numberOfChannels * sampleIndex + channelIndex]

@@ -7,7 +7,6 @@
 //
 import Foundation
 
-@objc
 public
 protocol AbstractChannel: class {
     var totalCount: Int { get }
@@ -17,6 +16,7 @@ protocol AbstractChannel: class {
     var minValue: Double { get }
 
     subscript(index: Int) -> Double { get }
+    func handleValue<U: NumberType>(value: U)
 }
 
 public
@@ -33,11 +33,11 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     public var blockSize = 1
-    @objc public var count: Int = 0
-    @objc public var totalCount: Int = 0
-    @objc public var identifier = ""
-    @objc public var maxValue: Double { return self._maxValue }
-    @objc public var minValue: Double { return self._minValue }
+    public var count: Int = 0
+    public var totalCount: Int = 0
+    public var identifier = ""
+    public var maxValue: Double { return self._maxValue }
+    public var minValue: Double { return self._minValue }
     
     private var currentBlockSize = 0
     private var space: Int = 0
@@ -45,17 +45,17 @@ class Channel<T: NumberType>: AbstractChannel {
     private var _maxValue = -Double.infinity
     private var _minValue = Double.infinity
 
-    @objc public subscript(index: Int) -> Double {
+    public subscript(index: Int) -> Double {
         get { return self.buffer[index].double }
     }
 
-    public func handleValue(value: Double) {
+    public func handleValue<U: NumberType>(value: U) {
         if currentBlockSize == blockSize {
             self.clear()
             currentBlockSize = 0
         }
         currentBlockSize++
-        self.logicProvider.handleValue(value)
+        self.logicProvider.handleValue(value.double)
     }
     
     func appendValueToBuffer(value: Double) {

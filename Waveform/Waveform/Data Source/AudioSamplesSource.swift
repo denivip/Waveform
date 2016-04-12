@@ -9,7 +9,12 @@
 import Foundation
 import AVFoundation
 
-class AudioSamplesSource: NSObject, ChannelSource {
+protocol AudioSamplesHandler: class {
+    func handleSamples(samplesContainer: _AudioSamplesContainer) -> Bool
+}
+
+final
+class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
 
     //MARK: - Initialization
     convenience init(asset: AVAsset) {
@@ -18,8 +23,9 @@ class AudioSamplesSource: NSObject, ChannelSource {
         self.audioSource = AudioSamplesReader(asset: asset)
     }
     
-    override init() {
-        super.init()
+//    override
+    init() {
+//        super.init()
         self.createChannelsForDefaultLogicTypes()
     }
     
@@ -74,7 +80,7 @@ class AudioSamplesSource: NSObject, ChannelSource {
     }
 
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return self.identifier + "." + type.typeIdentifier
+        return self.identifier + "." + "\(type.self)"
     }
     
     //MARK: - Reading
@@ -146,33 +152,9 @@ class AudioSamplesSource: NSObject, ChannelSource {
            
             strong_self.state = .Reading
             
-            let channelIndex  = 0
-            
-            let samplesHandlingBlock = { [weak self] (samplesContainer: AudioSamplesContainer<Int16>) in
-                
-                for index in 0..<strong_self.channelPerLogicProviderType {
-                    let maxValueChannel = strong_self.maxValueChannels[index]
-                    let avgValueChannel = strong_self.avgValueChannels[index]
-                    for index in 0..<samplesContainer.samplesCount {
-                        let sample = samplesContainer.sample(sampleIndex: index)//dataSamples[index * numberOfChannels + channelIndex]
-                        maxValueChannel.handleValue(Double(sample))
-                        avgValueChannel.handleValue(Double(sample))
-                    }
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    let maxValueChannel = strong_self.maxValueChannels[0]
-                    strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
-                })
-                
-                if self == nil || self!.shouldStop {
-                    self!.audioSource.stop()
-                }
-            }
-            
             do {
                 
-                try strong_self.audioSource?.readSamples(samplesHandlingBlock: samplesHandlingBlock)
+                try strong_self.audioSource?.readSamples(samplesHandler: strong_self)
                 
                 for channel in strong_self.maxValueChannels {
                     channel.complete()
@@ -192,6 +174,30 @@ class AudioSamplesSource: NSObject, ChannelSource {
                 print("\(__FUNCTION__) \(__LINE__), \(error)")
             }
         }
+    }
+    
+    func handleSamples(samplesContainer: _AudioSamplesContainer) -> Bool {
+
+        for channelIndex in 0..<self.channelPerLogicProviderType {
+            let maxValueChannel = self.maxValueChannels[channelIndex]
+            let avgValueChannel = self.avgValueChannels[channelIndex]
+           
+            for sampleIndex in 0..<samplesContainer.samplesCount {
+                let sample = samplesContainer.sample(channelIndex: 0, sampleIndex: sampleIndex)
+                maxValueChannel.handleValue(sample)
+                avgValueChannel.handleValue(sample)
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            let maxValueChannel = self.maxValueChannels[0]
+            self.progress.completedUnitCount = self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
+        })
+        
+        if self.shouldStop {
+            return true
+        }
+        return false
     }
     
     //MARK: -
@@ -215,17 +221,17 @@ class AudioSamplesSource: NSObject, ChannelSource {
     
     var state = AudioAnalizerState.Idle
     var channelPerLogicProviderType = 10
-    @objc var onChannelsChanged: (ChannelSource) -> () = {_ in}
+    var onChannelsChanged: (ChannelSource) -> () = {_ in}
 //}
 //
 ////MARK: -
 ////MARK: - ChannelSource
 //extension AudioSamplesSource: ChannelSource {
-    @objc var channelsCount: Int {
+    var channelsCount: Int {
         return 2
     }
     
-    @objc func channelAtIndex(index: Int) -> AbstractChannel {
+    func channelAtIndex(index: Int) -> AbstractChannel {
         if index == 0 {
             return self.maxValueChannels[scaleIndex]
         } else {

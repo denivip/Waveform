@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc
 class DVGAudioWaveformPlot: AudioWaveformPlot {
     
     var panToSelect: UIPanGestureRecognizer!

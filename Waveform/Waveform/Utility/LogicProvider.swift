@@ -15,11 +15,10 @@ internal protocol LogicUser: class {
 
 extension Channel: LogicUser {}
 
-@objc
 public
-class LogicProvider: NSObject {
+class LogicProvider {
     weak internal var channel: LogicUser?
-    public override init(){}
+//    public override init(){}
     
     public func handleValue(value: Double) {}
     public func clear() {}

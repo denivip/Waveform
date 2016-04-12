@@ -143,7 +143,6 @@ extension DVGWaveformView: DVGAudioWaveformPlotDelegate {
     }
 }
 
-@objc
 protocol DVGWaveformViewDelegate: AudioWaveformPlotViewModelDelegate {
     func plotSelectedAreaWithLocation(location: Double, length: Double)
 }
