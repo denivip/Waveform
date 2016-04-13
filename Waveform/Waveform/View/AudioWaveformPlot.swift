@@ -67,11 +67,11 @@ class AudioWaveformPlot: UIView {
     }
     
     func addGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: "handlePan:")
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(AudioWaveformPlot.handlePan(_:)))
         self.addGestureRecognizer(pan)
         self.pan = pan
         
-        let pinch = UIPinchGestureRecognizer(target: self, action: "handlePinch:")
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(AudioWaveformPlot.handlePinch(_:)))
         self.addGestureRecognizer(pinch)
         self.pinch = pinch
     }
@@ -142,7 +142,7 @@ extension AudioWaveformPlot {
             self.displayLink?.invalidate()
             self.displayLink = nil
         }
-        let displayLink = CADisplayLink.init(target: self, selector: "redraw")
+        let displayLink = CADisplayLink.init(target: self, selector: #selector(AudioWaveformPlot.redraw))
         displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink = displayLink
     }

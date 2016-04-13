@@ -54,7 +54,7 @@ class Channel<T: NumberType>: AbstractChannel {
             self.clear()
             currentBlockSize = 0
         }
-        currentBlockSize++
+        currentBlockSize += 1
         self.logicProvider.handleValue(value.double)
     }
     
@@ -76,7 +76,7 @@ class Channel<T: NumberType>: AbstractChannel {
                 self.space = newSpace
             }
             (self.buffer + self.count).initialize(T(value))
-            self.count++
+            self.count += 1
 //        }
     }
 

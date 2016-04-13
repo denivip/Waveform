@@ -53,7 +53,7 @@ class AverageValueLogicProvider: LogicProvider {
     
     public override func handleValue(value: Double) {
         summ = summ + value
-        count++
+        count += 1
     }
     
     public override func clear() {
@@ -70,8 +70,8 @@ class AudioMaxValueLogicProvider: LogicProvider {
     private var max = Double(Int16.min)//-40.0
     public override init(){}
     
-    public override func handleValue(var value: Double) {
-        value = abs(value)
+    public override func handleValue(value: Double) {
+        let value = abs(value)
         if value > max {
             max = value
         }
@@ -92,7 +92,7 @@ class AudioAverageValueLogicProvider: LogicProvider {
     
     public override func handleValue(value: Double) {
         summ = summ + abs(value)
-        count++
+        count += 1
     }
     
     public override func clear() {

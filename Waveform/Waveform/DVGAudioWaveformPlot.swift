@@ -31,13 +31,13 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
     
     func setupGestures() {
         // New gestures
-        let pan                    = UIPanGestureRecognizer(target: self, action: "handlePanToSelect:")
+        let pan                    = UIPanGestureRecognizer(target: self, action: #selector(DVGAudioWaveformPlot.handlePanToSelect(_:)))
         pan.delegate               = self
         self.addGestureRecognizer(pan)
         self.panToSelect           = pan
         pan.maximumNumberOfTouches = 1
         
-        let tap                     = UILongPressGestureRecognizer(target: self, action: "handleTapToSelect:")
+        let tap                     = UILongPressGestureRecognizer(target: self, action: #selector(DVGAudioWaveformPlot.handleTapToSelect(_:)))
         tap.delegate                = self
         tap.minimumPressDuration    = 0.08
         self.addGestureRecognizer(tap)
