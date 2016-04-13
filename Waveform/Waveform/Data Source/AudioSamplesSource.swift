@@ -173,7 +173,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
                 completion()
                 strong_self.state = .Finished
             } catch {
-                print("\(__FUNCTION__) \(__LINE__), \(error)")
+                print("\(#function) \(#line), \(error)")
             }
         }
     }
