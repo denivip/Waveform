@@ -16,10 +16,17 @@ struct Constants {
 @objc final
 class AudioSamplesReader: NSObject {
     
-    var asset: AVAsset
-    init(asset: AVAsset) {
+    var asset: AVAsset!
+    convenience init(asset: AVAsset) {
+        self.init()
         self.asset = asset
     }
+    
+    override init() {
+        super.init()
+    }
+    
+    var processingQueue: dispatch_queue_t!
     
     private var readingRoutine: SamplesReadingRoutine?
     
