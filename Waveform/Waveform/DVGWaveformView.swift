@@ -107,7 +107,7 @@ class DVGWaveformView: UIView {
     //MARK: -
     //MARK: - Private vars
     private var plotView: AudioWaveformPlot!
-    private var plotViewModel: AudioWaveformPlotModel! = AudioWaveformPlotModel()
+    private var plotViewModel = AudioWaveformPlotModel()
     
     private var samplesReader = AudioSamplesReader()
     private var waveformDataSource = AudioSamplesSource()

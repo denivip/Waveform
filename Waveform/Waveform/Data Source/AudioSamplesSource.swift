@@ -78,11 +78,8 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         return self.identifier + "." + "\(type.self)"
     }
     
-    //MARK: - Reading
-    //TODO: There's no need in such public methods (combine with read method)
-
-    //TODO: Method should return NSProgress, to trace it outside
-    func configure(estimatedSampleCount estimatedSampleCount: Int, neededSamplesCount: Int) {//, dataRange: DataRange = DataRange()) {
+    //TODO: - Rename
+    func configure(estimatedSampleCount estimatedSampleCount: Int, neededSamplesCount: Int) {
         self.configureChannelsForSamplesCount(neededSamplesCount, estimatedSampleCount: estimatedSampleCount)
     }
     
@@ -125,11 +122,6 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
                 avgValueChannel.handleValue(sample)
             }
         }
-        
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            let maxValueChannel = self.maxValueChannels[0]
-//            self.progress.completedUnitCount = self.progress.totalUnitCount * Int64(maxValueChannel.count) / Int64(maxValueChannel.totalCount)
-//        })
     }
     
     //MARK: -
@@ -159,12 +151,6 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
             return self.avgValueChannels[scaleIndex]
         }
     }
-//    
-//    lazy var progress: NSProgress = {
-//        let progress = NSProgress(parent: nil, userInfo: nil)
-//        progress.totalUnitCount = 10_000
-//        return progress
-//    }()
 }
 
 //MARK: -
