@@ -93,7 +93,6 @@ class AudioSamplesReader: NSObject {
             samplesReadAudioFormat = format
         }
 
-        self.samplesHandler = samplesHandler
         try prepareForReading()
         try read()
     }
@@ -118,7 +117,11 @@ class AudioSamplesReader: NSObject {
         assetReader.addOutput(readerOutput)
         assetReader.timeRange = timerange
         
-        self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat)
+        if samplesHandler == nil {
+            print("\(#function)[\(#line)] Caution!!! There is no samples handler")
+        }
+
+        self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat, samplesHandler: samplesHandler)
     }
     
     func read() throws {
@@ -128,8 +131,6 @@ class AudioSamplesReader: NSObject {
         }
         
         try readingRoutine.startReading()
-        
-        readingRoutine.samplesHandler = self.samplesHandler
         
         while readingRoutine.isReading {
             do {
@@ -156,10 +157,11 @@ private final class SamplesReadingRoutine {
     
     weak var samplesHandler: AudioSamplesHandler?
     
-    init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat) {
+    init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat, samplesHandler: AudioSamplesHandler?) {
         self.assetReader  = assetReader
         self.readerOutput = readerOutput
         self.audioFormat  = audioFormat
+        self.samplesHandler = samplesHandler
     }
     
     var isReading: Bool {
