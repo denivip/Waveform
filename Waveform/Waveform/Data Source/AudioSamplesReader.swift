@@ -130,9 +130,7 @@ class AudioSamplesReader: NSObject {
         guard let readingRoutine = readingRoutine else {
             throw SamplesReaderError.SampleReaderNotReady
         }
-        self.samplesHandler?.willStartReadSamples(estimatedSampleCount:Int(asset.duration.seconds) * samplesReadAudioFormat.samplesRate)
         try readingRoutine.readSamples()
-        self.samplesHandler?.didStopReadSamples(-1)
     }
 }
 
@@ -141,8 +139,17 @@ final class SamplesReadingRoutine {
     let assetReader: AVAssetReader
     let readerOutput: AVAssetReaderOutput
     let audioFormat: AudioFormat
-    
     weak var samplesHandler: AudioSamplesHandler?
+
+    lazy var progress: NSProgress = {
+        let progress = NSProgress(parent: nil, userInfo: nil)
+        progress.totalUnitCount = Int64(self.estimatedSamplesCount)
+        return progress
+    }()
+
+    lazy var estimatedSamplesCount: Int = {
+        return Int(self.assetReader.asset.duration.seconds * Double(self.audioFormat.samplesRate))
+    }()
     
     init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat, samplesHandler: AudioSamplesHandler?) {
         self.assetReader  = assetReader
@@ -166,6 +173,7 @@ final class SamplesReadingRoutine {
     }
     
     func readSamples() throws {
+        self.samplesHandler?.willStartReadSamples(estimatedSampleCount: estimatedSamplesCount)
         try startReading()
         while isReading {
             do {
@@ -178,6 +186,7 @@ final class SamplesReadingRoutine {
             }
         }
         try checkStatusOfAssetReaderOnComplete()
+        self.samplesHandler?.didStopReadSamples(Int(self.progress.completedUnitCount))
     }
     
     func readNextSamples() throws {
@@ -205,6 +214,7 @@ final class SamplesReadingRoutine {
     
         let samplesContainer = AudioSamplesContainer(buffer: returnedPointer, length: length, numberOfChannels: audioFormat.numberOfChannels)
         samplesHandler?.handleSamples(samplesContainer)
+        progress.completedUnitCount += samplesContainer.samplesCount
     }
     
     func checkStatusOfAssetReaderOnComplete() throws {
