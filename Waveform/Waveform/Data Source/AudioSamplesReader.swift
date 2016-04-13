@@ -21,7 +21,7 @@ class AudioSamplesReader: NSObject {
         self.asset = asset
     }
     
-    private var readingRoutine: ReadingRoutine?
+    private var readingRoutine: SamplesReadingRoutine?
     
     weak var samplesHandler: AudioSamplesHandler?
     
@@ -118,7 +118,7 @@ class AudioSamplesReader: NSObject {
         assetReader.addOutput(readerOutput)
         assetReader.timeRange = timerange
         
-        self.readingRoutine = ReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat)
+        self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat)
     }
     
     func read() throws {
@@ -148,7 +148,7 @@ class AudioSamplesReader: NSObject {
 
 private struct NoMoreSampleBuffersAvailable: ErrorType {}
 
-private final class ReadingRoutine {
+private final class SamplesReadingRoutine {
     
     let assetReader: AVAssetReader
     let readerOutput: AVAssetReaderOutput
