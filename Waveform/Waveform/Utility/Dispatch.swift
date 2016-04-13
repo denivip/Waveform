@@ -17,3 +17,19 @@ public func dispatch_asynch_on_global_processing_queue(block: dispatch_block_t) 
         dispatch_async(processingQueue, block);
     }
 }
+
+//
+public func dispatch_asynch_on_global_processing_queue(body: () throws -> ()) throws {
+    var _error: ErrorType?
+    dispatch_asynch_on_global_processing_queue {
+        do {
+            try body()
+        }
+        catch {
+            _error = error
+        }
+    }
+    if _error != nil {
+        throw(_error!)
+    }
+}
