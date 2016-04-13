@@ -14,8 +14,9 @@ protocol AudioSamplesHandler: class {
     func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int) -> Bool
 }
 
+@objc
 final
-class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
+class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
 
     //MARK: - Initialization
     convenience init(asset: AVAsset) {
@@ -24,9 +25,9 @@ class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
         self.audioSource = AudioSamplesReader(asset: asset)
     }
     
-//    override
+    override
     init() {
-//        super.init()
+        super.init()
         self.createChannelsForDefaultLogicTypes()
     }
     
