@@ -15,3 +15,6 @@ enum SamplesReaderError: ErrorType {
     case UnknownError(NSError?)
     case SampleReaderNotReady
 }
+
+struct NoMoreSampleBuffersAvailable: ErrorType {}
+struct NoEnoughData: ErrorType {}

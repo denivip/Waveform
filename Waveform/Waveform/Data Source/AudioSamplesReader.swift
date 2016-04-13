@@ -129,27 +129,11 @@ class AudioSamplesReader: NSObject {
         guard let readingRoutine = readingRoutine else {
             throw SamplesReaderError.SampleReaderNotReady
         }
-        
-        try readingRoutine.startReading()
-        
-        while readingRoutine.isReading {
-            do {
-                try readingRoutine.readNextSamples()
-            } catch (_ as NoMoreSampleBuffersAvailable) {
-                break
-            } catch {
-                readingRoutine.cancelReading()
-                throw error
-            }
-        }
-        
-        try readingRoutine.checkStatusOfAssetReaderOnComplete()
+        try readingRoutine.readSamples()
     }
 }
 
-private struct NoMoreSampleBuffersAvailable: ErrorType {}
-
-private final class SamplesReadingRoutine {
+final class SamplesReadingRoutine {
     
     let assetReader: AVAssetReader
     let readerOutput: AVAssetReaderOutput
@@ -178,42 +162,47 @@ private final class SamplesReadingRoutine {
         assetReader.cancelReading()
     }
     
-    let tempBytes = UnsafeMutablePointer<Void>.alloc(100_000)
-    var returnedPointer: UnsafeMutablePointer<Int8> = nil
+    func readSamples() throws {
+        try startReading()
+        while isReading {
+            do {
+                try readNextSamples()
+            } catch (_ as NoMoreSampleBuffersAvailable) {
+                break
+            } catch {
+                cancelReading()
+                throw error
+            }
+        }
+        try checkStatusOfAssetReaderOnComplete()
+    }
     
     func readNextSamples() throws {
-        
-        var error: ErrorType?
-        
-        autoreleasepool {
-    
-            guard let sampleBuffer = readerOutput.copyNextSampleBuffer() else {
-                error = NoMoreSampleBuffersAvailable() // continue while-loop (autorelease is closure in Swift)
-                return
-            }
-            
-            // Get buffer
-            guard let buffer = CMSampleBufferGetDataBuffer(sampleBuffer) else {
-                error = SamplesReaderError.UnknownError(nil)
-                return
-            }
-            
-            let length = CMBlockBufferGetDataLength(buffer)
-            
-            // Append new data
-            
-            CMBlockBufferAccessDataBytes(buffer, 0, length, tempBytes, &returnedPointer)
-        
-            let samplesContainer = AudioSamplesContainer(buffer: returnedPointer, length: length, numberOfChannels: audioFormat.numberOfChannels)
-    
-            samplesHandler?.handleSamples(samplesContainer)
+        guard let sampleBuffer = readerOutput.copyNextSampleBuffer() else {
+            throw NoMoreSampleBuffersAvailable()
         }
         
-        if error != nil {
-            throw(error!)
+        // Get buffer
+        guard let buffer = CMSampleBufferGetDataBuffer(sampleBuffer) else {
+            throw SamplesReaderError.UnknownError(nil)
         }
         
-        return
+        let length = CMBlockBufferGetDataLength(buffer)
+        
+        // Append new data
+        let tempBytes = UnsafeMutablePointer<Void>.alloc(length)
+        var returnedPointer: UnsafeMutablePointer<Int8> = nil
+    
+        if CMBlockBufferAccessDataBytes(buffer, 0, length, tempBytes, &returnedPointer) != kCMBlockBufferNoErr {
+            print("\(#function)[\(#line)] no enough data")
+            throw NoEnoughData()
+        }
+        
+        tempBytes.destroy(length)
+        tempBytes.dealloc(length)
+    
+        let samplesContainer = AudioSamplesContainer(buffer: returnedPointer, length: length, numberOfChannels: audioFormat.numberOfChannels)
+        samplesHandler?.handleSamples(samplesContainer)
     }
     
     func checkStatusOfAssetReaderOnComplete() throws {
@@ -223,10 +212,5 @@ private final class SamplesReadingRoutine {
         case .Cancelled, .Completed:
             return
         }
-    }
-    
-    deinit {
-        tempBytes.destroy()
-        tempBytes.dealloc(100_000)
     }
 }
