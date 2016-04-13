@@ -147,31 +147,28 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         
         assert(self.audioSource != nil, "No audio source")
         
-        self.runAsynchronouslyOnProcessingQueue {
-            [weak self] in
-            
-            guard let strong_self = self else { return }
+        runAsynchronouslyOnProcessingQueue {
            
-            strong_self.state = .Reading
+            self.state = .Reading
             
             do {
                 
-                try strong_self.audioSource?.readSamples()
+                try self.audioSource?.readSamples()
                 
-                for channel in strong_self.maxValueChannels {
+                for channel in self.maxValueChannels {
                     channel.complete()
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    strong_self.progress.completedUnitCount = strong_self.progress.totalUnitCount
+                    self.progress.completedUnitCount = self.progress.totalUnitCount
                 })
                 
-                for channel in strong_self.avgValueChannels {
+                for channel in self.avgValueChannels {
                     channel.complete()
                 }
                 
                 completion()
-                strong_self.state = .Finished
+                self.state = .Finished
             } catch {
                 print("\(#function) \(#line), \(error)")
             }
@@ -287,13 +284,6 @@ extension AudioSamplesSource {
         case Idle
         case Reading
         case Finished
-    }
-    func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
-        if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(self.processingQueue)) {
-            autoreleasepool(block)
-        } else {
-            dispatch_async(self.processingQueue, block);
-        }
     }
 }
 
