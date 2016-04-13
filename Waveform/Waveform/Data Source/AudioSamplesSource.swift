@@ -176,6 +176,10 @@ class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
         }
     }
     
+    @objc
+    func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int) -> Bool {
+        return self.handleSamples(AudioSamplesContainer.init(buffer: buffer, length: bufferLength, numberOfChannels: numberOfChannels))
+    }
     
     func handleSamples(samplesContainer: AudioSamplesContainer) -> Bool {
 
