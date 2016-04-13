@@ -52,14 +52,16 @@ class DVGWaveformView: UIView {
     
     func configure() {
         
-        self.waveformDataSource = AudioSamplesSource()
-        
+        waveformDataSource = AudioSamplesSource()
+        waveformDataSource.neededSamplesCount = 2000
+        samplesReader.samplesHandler = waveformDataSource
+
         // Prepare Plot Model with DataSource
-        self.plotViewModel.addChannelSource(self.waveformDataSource!)
-        self.plotViewModel.delegate = self
+        plotViewModel.addChannelSource(waveformDataSource)
+        plotViewModel.delegate = self
         
         // Set plot model to plot view
-        self.plotView.viewModel = self.plotViewModel
+        plotView.viewModel = plotViewModel
     }
     
     //MARK: - For external configuration
@@ -68,33 +70,33 @@ class DVGWaveformView: UIView {
     }
 
     func maxValuesWaveform() -> AudioWaveformView? {
-        if let dataSource = self.waveformDataSource {
-            return waveformWithIdentifier(dataSource.identifierForLogicProviderType(AudioMaxValueLogicProvider))
-        }
-        return nil
+        return waveformWithIdentifier(self.waveformDataSource.identifierForLogicProviderType(AudioMaxValueLogicProvider))
     }
     
     func avgValuesWaveform() -> AudioWaveformView? {
-        if let dataSource = self.waveformDataSource {
-            return waveformWithIdentifier(dataSource.identifierForLogicProviderType(AudioAverageValueLogicProvider))
-        }
-        return nil
+        return waveformWithIdentifier(self.waveformDataSource.identifierForLogicProviderType(AudioAverageValueLogicProvider))
     }
 
     //MARK: -
     //MARK: - Reading
-    func readAndDrawSynchronously(completion: () -> ()) {
-        self.plotView.startSynchingWithDataSource()
+    func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
+//        self.plotView.startSynchingWithDataSource()
         let date = NSDate()
-        self.waveformDataSource?.prepareToRead {
-            [weak self] (success) -> () in
-            if success {
-                self?.waveformDataSource?.read(self!.numberOfPointsOnThePlot) {
-                    print("time: \(-date.timeIntervalSinceNow)")
-//                    self?.plotView.stopSynchingWithDataSource()
-                    completion()
-                }
+        
+        self.samplesReader.readAudioFormat {
+            [weak self] (format, error) in
+        
+            guard let _ = format else {
+                completion(error)
+                self?.plotView.stopSynchingWithDataSource()
+                return
             }
+        
+            self?.samplesReader.readSamples(completion: { (error) in
+                completion(error)
+                print("time: \(-date.timeIntervalSinceNow)")
+//                self?.plotView.stopSynchingWithDataSource()
+            })
         }
     }
     
@@ -108,22 +110,22 @@ class DVGWaveformView: UIView {
     private var plotViewModel: AudioWaveformPlotModel! = AudioWaveformPlotModel()
     
     private var samplesReader = AudioSamplesReader()
-    private var waveformDataSource: AudioSamplesSource!
+    private var waveformDataSource = AudioSamplesSource()
     
     //MARK: - Public vars
     weak var delegate: DVGWaveformViewDelegate?
     var asset: AVAsset? {
         didSet{
-            self.waveformDataSource.asset = self.asset
+            self.samplesReader.asset = self.asset
         }
     }
     
     var numberOfPointsOnThePlot = 512
     var start: CGFloat = 0.0
     var scale: CGFloat = 1.0
-    var progress: NSProgress {
-        return self.waveformDataSource.progress
-    }
+//    var progress: NSProgress {
+//        return self.waveformDataSource.progress
+//    }
     //MARK: -
 }
 
@@ -131,7 +133,7 @@ class DVGWaveformView: UIView {
 extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
     func plotMoved(scale: CGFloat, start: CGFloat) {
         //TODO: Disable untill draw began
-        self.waveformDataSource!.read(numberOfPointsOnThePlot, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
+//        self.waveformDataSource!.read(numberOfPointsOnThePlot, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
         self.delegate?.plotMoved(scale, start: start)
         self.start = start
         self.scale = scale

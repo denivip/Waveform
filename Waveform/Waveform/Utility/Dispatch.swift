@@ -18,18 +18,14 @@ public func dispatch_asynch_on_global_processing_queue(block: dispatch_block_t) 
     }
 }
 
-//
-public func dispatch_asynch_on_global_processing_queue(body: () throws -> ()) throws {
-    var _error: ErrorType?
+public func dispatch_asynch_on_global_processing_queue(body: () throws -> (), onCatch: (ErrorType?) -> ()) {
     dispatch_asynch_on_global_processing_queue {
         do {
             try body()
+            onCatch(nil)
         }
         catch {
-            _error = error
+            onCatch(error)
         }
-    }
-    if _error != nil {
-        throw(_error!)
     }
 }

@@ -25,18 +25,10 @@ class AudioSamplesReader: NSObject {
     override init() {
         super.init()
     }
-    
-    var processingQueue: dispatch_queue_t!
-    
+        
     private var readingRoutine: SamplesReadingRoutine?
     
     weak var samplesHandler: AudioSamplesHandler?
-    
-    var shouldStop = false
-    
-    func stop() {
-        shouldStop = true
-    }
     
     var nativeAudioFormat: AudioFormat?
     var samplesReadAudioFormat = Constants.DefaultAudioFormat
@@ -58,6 +50,17 @@ class AudioSamplesReader: NSObject {
         }
     }
     
+    func readAudioFormat() throws -> AudioFormat {
+        
+        let formatDescription = try soundFormatDescription()
+        
+        print("DEBUG Audio format description => \(formatDescription)")
+        let asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription).memory
+        let format = AudioFormat(samplesRate: Int(asbd.mSampleRate), bitsDepth: Int(asbd.mBitsPerChannel), numberOfChannels: Int(asbd.mChannelsPerFrame))
+        nativeAudioFormat = format
+        return format
+    }
+    
     func assetAudioTrack() throws -> AVAssetTrack {
         guard let sound = asset.tracksWithMediaType(AVMediaTypeAudio).first else {
             throw SamplesReaderError.NoSound
@@ -72,18 +75,7 @@ class AudioSamplesReader: NSObject {
         return formatDescription as! CMAudioFormatDescription
     }
 
-    func readAudioFormat() throws -> AudioFormat {
-
-        let formatDescription = try soundFormatDescription()
-        
-        print("DEBUG Audio format description => \(formatDescription)")
-        let asbd = CMAudioFormatDescriptionGetStreamBasicDescription(formatDescription).memory
-        let format = AudioFormat(samplesRate: Int(asbd.mSampleRate), bitsDepth: Int(asbd.mBitsPerChannel), numberOfChannels: Int(asbd.mChannelsPerFrame))
-        nativeAudioFormat = format
-        return format
-    }
-
-    func audioReadingSettingsForFormat(audioFormat: AudioFormat) -> [String: AnyObject] {
+    private func audioReadingSettingsForFormat(audioFormat: AudioFormat) -> [String: AnyObject] {
         return [
             AVFormatIDKey           : NSNumber(unsignedInt: kAudioFormatLinearPCM),
             AVSampleRateKey         : audioFormat.samplesRate,
@@ -95,20 +87,20 @@ class AudioSamplesReader: NSObject {
         ]
     }
 
+    func readSamples(audioFormat: AudioFormat? = nil, completion: (ErrorType?) -> ()) {
+        dispatch_asynch_on_global_processing_queue({
+            try self.readSamples(audioFormat) }, onCatch: completion)
+    }
+    
     func readSamples(audioFormat: AudioFormat? = nil) throws {
         if let format = audioFormat {
             samplesReadAudioFormat = format
         }
-        
-        try dispatch_asynch_on_global_processing_queue {
-            try self.prepareForReading()
-            try self.read()
-        }
+        try self.prepareForReading()
+        try self.read()
     }
 
-    func prepareForReading() throws {
-        
-        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
+    private func prepareForReading() throws {
         
         let sound = try assetAudioTrack()
         
@@ -124,7 +116,7 @@ class AudioSamplesReader: NSObject {
         let readerOutput = AVAssetReaderTrackOutput(track: sound, outputSettings: settings)
         
         assetReader.addOutput(readerOutput)
-        assetReader.timeRange = timerange
+        assetReader.timeRange = CMTimeRange(start: kCMTimeZero, duration: asset.duration)
         
         if samplesHandler == nil {
             print("\(#function)[\(#line)] Caution!!! There is no samples handler")
@@ -133,12 +125,14 @@ class AudioSamplesReader: NSObject {
         self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat, samplesHandler: samplesHandler)
     }
     
-    func read() throws {
+    private func read() throws {
         
         guard let readingRoutine = readingRoutine else {
             throw SamplesReaderError.SampleReaderNotReady
         }
+        self.samplesHandler?.willStartReadSamples(estimatedSampleCount:Int(asset.duration.seconds) * samplesReadAudioFormat.samplesRate)
         try readingRoutine.readSamples()
+        self.samplesHandler?.didStopReadSamples(-1)
     }
 }
 

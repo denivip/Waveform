@@ -43,7 +43,11 @@ class ViewController: UIViewController {
     
     @IBAction func readAudioAndDrawWaveform() {
         self.waveformView.readAndDrawSynchronously({
-            print("waveform finished drawing")
+            if $0 != nil {
+                print("error:", $0!)
+            } else {
+                print("waveform finished drawing")
+            }
         })
     }
 }
