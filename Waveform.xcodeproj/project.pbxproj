@@ -35,18 +35,6 @@
 		8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331F1C4FE681006C6F3C /* DenoiseCollectionViewCell.m */; };
 		8BDC33231C4FE69A006C6F3C /* DVGCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33221C4FE69A006C6F3C /* DVGCollectionReusableView.m */; };
 		8BDC33261C4FE6C1006C6F3C /* DVGDenivipAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33251C4FE6C1006C6F3C /* DVGDenivipAppearance.m */; };
-		8BDC335D1C56469E006C6F3C /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33591C56469E006C6F3C /* DVGAudioSource.m */; };
-		8BDC335E1C56469E006C6F3C /* DVGNoiseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC335B1C56469E006C6F3C /* DVGNoiseFilter.m */; };
-		8BDC33631C56470B006C6F3C /* DVGAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33591C56469E006C6F3C /* DVGAudioSource.m */; };
-		8BDC33641C56470B006C6F3C /* DVGNoiseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC335B1C56469E006C6F3C /* DVGNoiseFilter.m */; };
-		8BDC33691C564792006C6F3C /* DVGAudioWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33661C564792006C6F3C /* DVGAudioWriter.m */; };
-		8BDC336A1C564792006C6F3C /* DVGAudioToolboxUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33681C564792006C6F3C /* DVGAudioToolboxUtilities.m */; };
-		8BDC336B1C564796006C6F3C /* DVGAudioWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33661C564792006C6F3C /* DVGAudioWriter.m */; };
-		8BDC336C1C564796006C6F3C /* DVGAudioToolboxUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33681C564792006C6F3C /* DVGAudioToolboxUtilities.m */; };
-		8BDC336F1C5647AF006C6F3C /* DVGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC336E1C5647AF006C6F3C /* DVGProgress.m */; };
-		8BDC33731C564825006C6F3C /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33711C564825006C6F3C /* EXTScope.m */; };
-		8BDC33741C564910006C6F3C /* DVGProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC336E1C5647AF006C6F3C /* DVGProgress.m */; };
-		8BDC33751C564913006C6F3C /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33711C564825006C6F3C /* EXTScope.m */; };
 		8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
 		8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
 		8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */; };
@@ -400,10 +388,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BDC33641C56470B006C6F3C /* DVGNoiseFilter.m in Sources */,
 				8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
 				8BEE7A811C590B9B0072872A /* NumberTypes.swift in Sources */,
-				8BDC33631C56470B006C6F3C /* DVGAudioSource.m in Sources */,
 				8B8D5B4C1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7B1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				5B7003DA1C4FFCF300EA6313 /* AppDelegate.swift in Sources */,
@@ -420,15 +406,11 @@
 				5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */,
 				8BEE7A8D1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */,
 				5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */,
-				8BDC336C1C564796006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
 				8BEE7A7F1C590B9B0072872A /* LogicProvider.swift in Sources */,
 				8B8D5B491CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
-				8BDC33751C564913006C6F3C /* EXTScope.m in Sources */,
-				8BDC33741C564910006C6F3C /* DVGProgress.m in Sources */,
 				8BEE7A8F1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
 				8BEE7A791C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,
-				8BDC336B1C564796006C6F3C /* DVGAudioWriter.m in Sources */,
 				8BEE7A8B1C590B9B0072872A /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,10 +419,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BDC335E1C56469E006C6F3C /* DVGNoiseFilter.m in Sources */,
 				8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
 				8BEE7A801C590B9B0072872A /* NumberTypes.swift in Sources */,
-				8BDC335D1C56469E006C6F3C /* DVGAudioSource.m in Sources */,
 				8B8D5B4B1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7A1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				8BDC33231C4FE69A006C6F3C /* DVGCollectionReusableView.m in Sources */,
@@ -456,16 +436,12 @@
 				8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */,
 				8BDC33261C4FE6C1006C6F3C /* DVGDenivipAppearance.m in Sources */,
 				8BEE7A8C1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */,
-				8BDC336A1C564792006C6F3C /* DVGAudioToolboxUtilities.m in Sources */,
-				8BDC33731C564825006C6F3C /* EXTScope.m in Sources */,
 				8BEE7A7E1C590B9B0072872A /* LogicProvider.swift in Sources */,
 				8B8D5B481CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
-				8BDC336F1C5647AF006C6F3C /* DVGProgress.m in Sources */,
 				8BEE7A8E1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
 				8BEE7A781C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,
-				8BDC33691C564792006C6F3C /* DVGAudioWriter.m in Sources */,
 				8BEE7A8A1C590B9B0072872A /* SelectionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -612,6 +588,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -626,6 +603,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
