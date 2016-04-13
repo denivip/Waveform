@@ -93,8 +93,7 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     deinit {
-        //TODO: clear space not count
-        buffer.destroy(count)
-        buffer.dealloc(count)
+        buffer.destroy(space)
+        buffer.dealloc(space)
     }
 }
