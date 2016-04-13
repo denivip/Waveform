@@ -35,18 +35,19 @@ class AudioSamplesReader: NSObject {
     var samplesReadAudioFormat = Constants.DefaultAudioFormat
     
     func readAudioFormat(completionBlock: (AudioFormat?, SamplesReaderError?) -> ()) {
-        
-        do {
-            self.nativeAudioFormat = try self.readAudioFormat()
-            completionBlock(nativeAudioFormat, nil)
-            
-        } catch let error as SamplesReaderError {
-            
-            completionBlock(nil, error)
-        
-        } catch let error {
-
-            fatalError("unknown error:\(error)")
+        dispatch_asynch_on_global_processing_queue {
+            do {
+                self.nativeAudioFormat = try self.readAudioFormat()
+                completionBlock(self.nativeAudioFormat, nil)
+                
+            } catch let error as SamplesReaderError {
+                
+                completionBlock(nil, error)
+                
+            } catch let error {
+                
+                fatalError("unknown error:\(error)")
+            }
         }
     }
     
@@ -88,13 +89,14 @@ class AudioSamplesReader: NSObject {
     }
 
     func readSamples(audioFormat: AudioFormat? = nil) throws {
-        
         if let format = audioFormat {
             samplesReadAudioFormat = format
         }
-
-        try prepareForReading()
-        try read()
+        
+        try dispatch_asynch_on_global_processing_queue {
+            try self.prepareForReading()
+            try self.read()
+        }
     }
 
     func prepareForReading() throws {

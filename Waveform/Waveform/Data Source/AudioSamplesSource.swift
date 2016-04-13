@@ -91,7 +91,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         
         assert(self.audioSource != nil, "No audio source")
         
-        self.runAsynchronouslyOnProcessingQueue {
+        dispatch_asynch_on_global_processing_queue {
             [weak self] in
             guard let strong_self = self else { return }
 
@@ -147,7 +147,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         
         assert(self.audioSource != nil, "No audio source")
         
-        runAsynchronouslyOnProcessingQueue {
+        dispatch_asynch_on_global_processing_queue {
            
             self.state = .Reading
             
