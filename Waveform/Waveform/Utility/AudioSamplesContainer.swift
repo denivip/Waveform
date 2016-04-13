@@ -20,9 +20,9 @@ struct AudioSamplesContainer: _AudioSamplesContainer {
     let samplesCount: Int
     let numberOfChannels: Int
     
-    init(buffer: UnsafePointer<Int8>, length: Int, numberOfChannels: Int) {
+    init<T>(buffer: UnsafePointer<T>, length: Int, numberOfChannels: Int) {
         self.buffer           = UnsafePointer<Int16>(buffer)
-        self.samplesCount     = length * sizeof(Int8)/sizeof(Int16) / numberOfChannels
+        self.samplesCount     = length * sizeof(T)/sizeof(Int16) / numberOfChannels
         self.numberOfChannels = numberOfChannels
     }
     
