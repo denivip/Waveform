@@ -38,7 +38,7 @@ class AudioSamplesReader: NSObject {
         
         do {
             self.nativeAudioFormat = try self.readAudioFormat()
-            completionBlock(self.nativeAudioFormat, nil)
+            completionBlock(nativeAudioFormat, nil)
             
         } catch let error as SamplesReaderError {
             
@@ -51,7 +51,7 @@ class AudioSamplesReader: NSObject {
     }
     
     func assetAudioTrack() throws -> AVAssetTrack {
-        guard let sound = self.asset.tracksWithMediaType(AVMediaTypeAudio).first else {
+        guard let sound = asset.tracksWithMediaType(AVMediaTypeAudio).first else {
             throw SamplesReaderError.NoSound
         }
         return sound
@@ -99,18 +99,18 @@ class AudioSamplesReader: NSObject {
 
     func prepareForReading() throws {
         
-        let timerange = CMTimeRangeMake(kCMTimeZero, self.asset.duration)
+        let timerange = CMTimeRangeMake(kCMTimeZero, asset.duration)
         
-        let sound = try self.assetAudioTrack()
+        let sound = try assetAudioTrack()
         
         let assetReader: AVAssetReader
         do {
-            assetReader = try AVAssetReader(asset: self.asset)
+            assetReader = try AVAssetReader(asset: asset)
         } catch let error as NSError {
             throw SamplesReaderError.UnknownError(error)
         }
     
-        let settings = self.audioReadingSettingsForFormat(samplesReadAudioFormat)
+        let settings = audioReadingSettingsForFormat(samplesReadAudioFormat)
         
         let readerOutput = AVAssetReaderTrackOutput(track: sound, outputSettings: settings)
         
@@ -126,7 +126,7 @@ class AudioSamplesReader: NSObject {
     
     func read() throws {
         
-        guard let readingRoutine = self.readingRoutine else {
+        guard let readingRoutine = readingRoutine else {
             throw SamplesReaderError.SampleReaderNotReady
         }
         
@@ -165,7 +165,7 @@ private final class SamplesReadingRoutine {
     }
     
     var isReading: Bool {
-        return self.assetReader.status == .Reading
+        return assetReader.status == .Reading
     }
     
     func startReading() throws  {
@@ -175,7 +175,7 @@ private final class SamplesReadingRoutine {
     }
 
     func cancelReading() {
-        self.assetReader.cancelReading()
+        assetReader.cancelReading()
     }
     
     let tempBytes = UnsafeMutablePointer<Void>.alloc(100_000)
