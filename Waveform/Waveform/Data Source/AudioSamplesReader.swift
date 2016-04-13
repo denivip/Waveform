@@ -194,7 +194,6 @@ final class SamplesReadingRoutine {
         var returnedPointer: UnsafeMutablePointer<Int8> = nil
     
         if CMBlockBufferAccessDataBytes(buffer, 0, length, tempBytes, &returnedPointer) != kCMBlockBufferNoErr {
-            print("\(#function)[\(#line)] no enough data")
             throw NoEnoughData()
         }
         
