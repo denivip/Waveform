@@ -80,7 +80,7 @@ class DVGWaveformView: UIView {
     //MARK: -
     //MARK: - Reading
     func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
-//        self.plotView.startSynchingWithDataSource()
+        self.plotView.startSynchingWithDataSource()
         let date = NSDate()
         
         self.samplesReader.readAudioFormat {
@@ -95,7 +95,7 @@ class DVGWaveformView: UIView {
             self?.samplesReader.readSamples(completion: { (error) in
                 completion(error)
                 print("time: \(-date.timeIntervalSinceNow)")
-//                self?.plotView.stopSynchingWithDataSource()
+                self?.plotView.stopSynchingWithDataSource()
             })
         }
     }
