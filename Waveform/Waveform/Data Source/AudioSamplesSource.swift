@@ -10,7 +10,7 @@ import Foundation
 import AVFoundation
 
 protocol AudioSamplesHandler: class {
-    func handleSamples(samplesContainer: _AudioSamplesContainer) -> Bool
+    func handleSamples(samplesContainer: AudioSamplesContainer) -> Bool
 }
 
 final
@@ -176,7 +176,8 @@ class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
         }
     }
     
-    func handleSamples(samplesContainer: _AudioSamplesContainer) -> Bool {
+    
+    func handleSamples(samplesContainer: AudioSamplesContainer) -> Bool {
 
         for channelIndex in 0..<self.channelPerLogicProviderType {
             let maxValueChannel = self.maxValueChannels[channelIndex]
