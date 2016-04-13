@@ -207,8 +207,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
     //MARK: -
     //MARK: - Private Variables
     var audioSource: AudioSamplesReader!
-    var audioFormat = Constants.DefaultAudioFormat//AudioFormat(samplesRate: 0, bitsDepth: 0, numberOfChannels: 0)
-    var processingQueue = dispatch_queue_create("ru.denivip.denoise.processing", DISPATCH_QUEUE_SERIAL)
+    var audioFormat = Constants.DefaultAudioFormat
     var maxValueChannels = [Channel<Int16>]()
     var avgValueChannels = [Channel<Float>]()
     
