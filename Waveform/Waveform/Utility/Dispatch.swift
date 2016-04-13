@@ -10,7 +10,7 @@ import Foundation
 
 let processingQueue = dispatch_queue_create("ru.denivip.waveform.processing", DISPATCH_QUEUE_SERIAL)
 
-public func runAsynchronouslyOnProcessingQueue(block: dispatch_block_t) {
+public func dispatch_asynch_on_global_processing_queue(block: dispatch_block_t) {
     if (dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL) == dispatch_queue_get_label(processingQueue)) {
         autoreleasepool(block)
     } else {
