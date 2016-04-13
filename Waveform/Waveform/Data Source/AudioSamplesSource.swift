@@ -154,7 +154,7 @@ class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
             
             do {
                 
-                try strong_self.audioSource?.readSamples(samplesHandler: strong_self)
+                try strong_self.audioSource?.readSamples()
                 
                 for channel in strong_self.maxValueChannels {
                     channel.complete()
@@ -220,6 +220,7 @@ class AudioSamplesSource: ChannelSource, AudioSamplesHandler {
         didSet{
             if let asset = self.asset {
                 self.audioSource = AudioSamplesReader(asset: asset)
+                self.audioSource.samplesHandler = self
             }
         }
     }

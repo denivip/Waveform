@@ -87,7 +87,7 @@ class AudioSamplesReader: NSObject {
         ]
     }
 
-    func readSamples(audioFormat: AudioFormat? = nil, samplesHandler: AudioSamplesHandler) throws {
+    func readSamples(audioFormat: AudioFormat? = nil) throws {
         
         if let format = audioFormat {
             samplesReadAudioFormat = format
