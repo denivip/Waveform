@@ -11,6 +11,7 @@ import AVFoundation
 
 protocol AudioSamplesHandler: class {
     func handleSamples(samplesContainer: AudioSamplesContainer) -> Bool
+    func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int) -> Bool
 }
 
 final
