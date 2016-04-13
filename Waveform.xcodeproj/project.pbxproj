@@ -10,8 +10,6 @@
 		5B7003CF1C4FFC2C00EA6313 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
 		5B7003D11C4FFC3500EA6313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
 		5B7003D21C4FFC3900EA6313 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
-		5B7003D31C4FFC3D00EA6313 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FD1C243BA7006A4B67 /* Info.plist */; };
-		5B7003D41C4FFC3D00EA6313 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FD1C243BA7006A4B67 /* Info.plist */; };
 		5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33251C4FE6C1006C6F3C /* DVGDenivipAppearance.m */; };
 		5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331F1C4FE681006C6F3C /* DenoiseCollectionViewCell.m */; };
 		5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33221C4FE69A006C6F3C /* DVGCollectionReusableView.m */; };
@@ -327,7 +325,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = developer;
 				TargetAttributes = {
 					5B7003BC1C4FFB7B00EA6313 = {
@@ -363,7 +361,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B7003D41C4FFC3D00EA6313 /* Info.plist in Resources */,
 				5B7003D21C4FFC3900EA6313 /* LaunchScreen.storyboard in Resources */,
 				5B7003D11C4FFC3500EA6313 /* Assets.xcassets in Resources */,
 				5B7003CF1C4FFC2C00EA6313 /* Main.storyboard in Resources */,
@@ -374,7 +371,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5B7003D31C4FFC3D00EA6313 /* Info.plist in Resources */,
 				8B3F34FC1C243BA6006A4B67 /* LaunchScreen.storyboard in Resources */,
 				8B3F34F91C243BA6006A4B67 /* Assets.xcassets in Resources */,
 				8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */,
