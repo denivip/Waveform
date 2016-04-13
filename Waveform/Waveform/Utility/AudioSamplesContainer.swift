@@ -8,14 +8,7 @@
 
 import Foundation
 
-protocol _AudioSamplesContainer {
-    var buffer: UnsafePointer<Int16> { get }
-    var numberOfChannels: Int { get }
-    var samplesCount: Int { get }
-    func sample(channelIndex channelIndex: Int, sampleIndex: Int) -> Int16
-}
-
-struct AudioSamplesContainer: _AudioSamplesContainer {
+struct AudioSamplesContainer {
     let buffer: UnsafePointer<Int16>
     let samplesCount: Int
     let numberOfChannels: Int
