@@ -16,13 +16,9 @@ struct Constants {
 @objc final
 class AudioSamplesReader: NSObject {
     
-    var asset: AVAsset!
-    convenience init(asset: AVAsset) {
-        self.init()
+    var asset: AVAsset
+    init(asset: AVAsset) {
         self.asset = asset
-    }
-    
-    override init() {
         super.init()
     }
         

@@ -52,9 +52,7 @@ class DVGWaveformView: UIView {
     
     func configure() {
         
-        waveformDataSource = AudioSamplesSource()
         waveformDataSource.neededSamplesCount = 2000
-        samplesReader.samplesHandler = waveformDataSource
 
         // Prepare Plot Model with DataSource
         plotViewModel.addChannelSource(waveformDataSource)
@@ -108,15 +106,17 @@ class DVGWaveformView: UIView {
     //MARK: - Private vars
     private var plotView: AudioWaveformPlot!
     private var plotViewModel = AudioWaveformPlotModel()
-    
-    private var samplesReader = AudioSamplesReader()
+    private var samplesReader: AudioSamplesReader!
     private var waveformDataSource = AudioSamplesSource()
     
     //MARK: - Public vars
     weak var delegate: DVGWaveformViewDelegate?
     var asset: AVAsset? {
-        didSet{
-            self.samplesReader.asset = self.asset
+        didSet {
+            if asset != nil {
+                samplesReader = AudioSamplesReader(asset: asset!)
+                samplesReader.samplesHandler = waveformDataSource
+            }
         }
     }
     
