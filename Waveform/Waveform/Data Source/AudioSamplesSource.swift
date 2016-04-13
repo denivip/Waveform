@@ -95,11 +95,11 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
             [weak self] in
             guard let strong_self = self else { return }
 
-            strong_self.audioSource.readAudioFormat{ audioFormat, _ in
+            strong_self.audioSource.readAudioFormat{ [weak strong_self] audioFormat, _ in
 
-                guard let strong_self = self else { return }
+                guard let _ = strong_self else { return }
 
-                guard let audioFormat = audioFormat else {
+                guard let _ = audioFormat else {
                     dispatch_async(dispatch_get_main_queue()) {
                         completion(false)
                     }

@@ -35,7 +35,7 @@ class AudioWaveformPlot: UIView {
                 let waveformDataSource = newDataSource.waveformDataSourceAtIndex(index)
                 
                 guard let view = self.waveformWithIdentifier(waveformDataSource.identifier) else  {
-                    let view = self.addWaveformViewWithDataSource(waveformDataSource)
+                    self.addWaveformViewWithDataSource(waveformDataSource)
                     continue
                 }
                 view.dataSource = waveformDataSource
