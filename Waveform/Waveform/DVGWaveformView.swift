@@ -133,7 +133,7 @@ class DVGWaveformView: UIView {
 extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
     func plotMoved(scale: CGFloat, start: CGFloat) {
         //TODO: Disable untill draw began
-//        self.waveformDataSource!.read(numberOfPointsOnThePlot, dataRange: DataRange(location: Double(start), length: 1.0/Double(scale)))
+        self.waveformDataSource.configure(DataRange(location: Double(start), length: 1.0/Double(scale)))
         self.delegate?.plotMoved(scale, start: start)
         self.start = start
         self.scale = scale
