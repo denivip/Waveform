@@ -9,13 +9,6 @@
 import Foundation
 import AVFoundation
 
-protocol AudioSamplesHandler: class {
-    func willStartReadSamples(estimatedSampleCount estimatedSampleCount: Int)
-    func didStopReadSamples(count: Int)
-    func handleSamples(samplesContainer: AudioSamplesContainer)
-    func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int)
-}
-
 @objc
 final
 class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {

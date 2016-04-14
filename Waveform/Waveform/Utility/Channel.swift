@@ -8,18 +8,6 @@
 import Foundation
 
 public
-protocol AbstractChannel: class {
-    var totalCount: Int { get }
-    var count: Int { get }
-    var identifier: String { get }
-    var maxValue: Double { get }
-    var minValue: Double { get }
-
-    subscript(index: Int) -> Double { get }
-    func handleValue<U: NumberType>(value: U)
-}
-
-public
 final
 class Channel<T: NumberType>: AbstractChannel {
     

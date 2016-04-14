@@ -41,6 +41,24 @@ protocol ChannelSource: class, Identifiable {
     var onChannelsChanged: (ChannelSource) -> () { get set }
 }
 
+protocol AbstractChannel: class, Identifiable {
+    var totalCount: Int { get }
+    var count: Int { get }
+    var identifier: String { get }
+    var maxValue: Double { get }
+    var minValue: Double { get }
+    
+    subscript(index: Int) -> Double { get }
+    func handleValue<U: NumberType>(value: U)
+}
+
+protocol AudioSamplesHandler: class {
+    func willStartReadSamples(estimatedSampleCount estimatedSampleCount: Int)
+    func didStopReadSamples(count: Int)
+    func handleSamples(samplesContainer: AudioSamplesContainer)
+    func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int)
+}
+
 protocol Identifiable {
     var identifier: String { get }
 }
