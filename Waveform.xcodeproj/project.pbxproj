@@ -35,8 +35,8 @@
 		8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC331F1C4FE681006C6F3C /* DenoiseCollectionViewCell.m */; };
 		8BDC33231C4FE69A006C6F3C /* DVGCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33221C4FE69A006C6F3C /* DVGCollectionReusableView.m */; };
 		8BDC33261C4FE6C1006C6F3C /* DVGDenivipAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BDC33251C4FE6C1006C6F3C /* DVGDenivipAppearance.m */; };
-		8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
-		8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */; };
+		8BEE7A741C590B9B0072872A /* ScalableChannelsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* ScalableChannelsContainer.swift */; };
+		8BEE7A751C590B9B0072872A /* ScalableChannelsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A631C590B9B0072872A /* ScalableChannelsContainer.swift */; };
 		8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */; };
 		8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */; };
 		8BEE7A781C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */; };
@@ -104,7 +104,7 @@
 		8BDC33711C564825006C6F3C /* EXTScope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EXTScope.m; sourceTree = "<group>"; };
 		8BDC33721C564825006C6F3C /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 		8BDC33781C56509C006C6F3C /* DVGNoiseFilter_protected.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DVGNoiseFilter_protected.h; sourceTree = "<group>"; };
-		8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesSource.swift; sourceTree = "<group>"; };
+		8BEE7A631C590B9B0072872A /* ScalableChannelsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScalableChannelsContainer.swift; sourceTree = "<group>"; };
 		8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesReader.swift; sourceTree = "<group>"; };
 		8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioWaveformPlot.swift; sourceTree = "<group>"; };
 		8BEE7A661C590B9B0072872A /* DVGWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGWaveformView.swift; sourceTree = "<group>"; };
@@ -244,7 +244,7 @@
 		8BEE7A621C590B9B0072872A /* Data Source */ = {
 			isa = PBXGroup;
 			children = (
-				8BEE7A631C590B9B0072872A /* AudioSamplesSource.swift */,
+				8BEE7A631C590B9B0072872A /* ScalableChannelsContainer.swift */,
 				8BEE7A641C590B9B0072872A /* AudioSamplesReader.swift */,
 			);
 			path = "Data Source";
@@ -388,7 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BEE7A751C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
+				8BEE7A751C590B9B0072872A /* ScalableChannelsContainer.swift in Sources */,
 				8BEE7A811C590B9B0072872A /* NumberTypes.swift in Sources */,
 				8B8D5B4C1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7B1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
@@ -420,7 +420,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BEE7A741C590B9B0072872A /* AudioSamplesSource.swift in Sources */,
+				8BEE7A741C590B9B0072872A /* ScalableChannelsContainer.swift in Sources */,
 				8BEE7A801C590B9B0072872A /* NumberTypes.swift in Sources */,
 				8B8D5B4B1CBBE62500B623EF /* AudioSamplesContainer.swift in Sources */,
 				8BEE7A7A1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
