@@ -97,12 +97,7 @@ class ChannelSource: NSObject, AbstractChannelSource, AudioSamplesHandler {
             channel.complete()
         }
     }
-    
-    @objc
-    func handleSamples(buffer: UnsafePointer<Int16>, bufferLength: Int, numberOfChannels: Int) {
-        return self.handleSamples(AudioSamplesContainer.init(buffer: buffer, length: bufferLength, numberOfChannels: numberOfChannels))
-    }
-    
+        
     func handleSamples(samplesContainer: AudioSamplesContainer) {
 
         for channelIndex in 0..<self.channelPerLogicProviderType {
