@@ -66,10 +66,6 @@ class ChannelSource: NSObject, AbstractChannelSource, AudioSamplesHandler {
         }
         self.avgValueChannels = avgValueChannels
     }
-
-    func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return self.identifier + "." + "\(type.dynamicType)"
-    }
     
     //TODO: - Rename
     func configure(estimatedSampleCount estimatedSampleCount: Int, neededSamplesCount: Int) {
