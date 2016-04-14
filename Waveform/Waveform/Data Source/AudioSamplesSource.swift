@@ -11,7 +11,7 @@ import AVFoundation
 
 @objc
 final
-class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
+class AudioSamplesSource: NSObject, AbstractChannelSource, AudioSamplesHandler {
     
     override init() {
         super.init()
@@ -127,7 +127,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
     private var avgValueChannels = [Channel<Float>]()
     
     var channelPerLogicProviderType = 10
-    var onChannelsChanged: (ChannelSource) -> () = {_ in}
+    var onChannelsChanged: (AbstractChannelSource) -> () = {_ in}
 //}
 //
 ////MARK: -

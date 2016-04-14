@@ -34,11 +34,11 @@ protocol AudioWaveformPlotViewModelDelegate: class {
     func plotMoved(scale: CGFloat, start: CGFloat)
 }
 
-protocol ChannelSource: class, Identifiable {
+protocol AbstractChannelSource: class, Identifiable {
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String
     var channelsCount: Int { get }
     func channelAtIndex(index: Int) -> AbstractChannel
-    var onChannelsChanged: (ChannelSource) -> () { get set }
+    var onChannelsChanged: (AbstractChannelSource) -> () { get set }
 }
 
 protocol AbstractChannel: class, Identifiable {

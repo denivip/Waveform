@@ -98,7 +98,7 @@ class DVGWaveformView: UIView {
         }
     }
     
-    func addDataSource(dataSource: ChannelSource) {
+    func addDataSource(dataSource: AbstractChannelSource) {
         self.plotViewModel.addChannelSource(dataSource)
     }
     
