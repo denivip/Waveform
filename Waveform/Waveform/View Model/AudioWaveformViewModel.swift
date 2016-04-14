@@ -26,7 +26,7 @@ class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
-    override var identifier: String    { return _identifier }
+    var identifier: String    { return _identifier }
     var onGeometryUpdate: () -> () = {}
     
     var _identifier: String = ""

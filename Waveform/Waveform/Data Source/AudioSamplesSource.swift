@@ -126,7 +126,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
     
     //MARK: -
     //MARK: - Private Variables
-    
+    internal var identifier = "default_channels_source"
     var neededSamplesCount: Int = 2000
     
     private var scaleIndex = 0

@@ -24,7 +24,7 @@ class AudioWaveformView: UIView {
         }
     }
 
-    override var identifier: String { return self.dataSource?.identifier ?? ""}
+    var identifier: String = ""//{ return self.dataSource?.identifier ?? ""}
     
     private var pathLayer: CAShapeLayer!
     

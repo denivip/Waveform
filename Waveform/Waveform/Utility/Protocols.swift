@@ -42,16 +42,5 @@ protocol ChannelSource: class, Identifiable {
 }
 
 protocol Identifiable {
-    static var typeIdentifier: String { get }
     var identifier: String { get }
-}
-
-extension Identifiable {
-    static var typeIdentifier: String { return "\(self)" }
-    var identifier: String { return "\(self.dynamicType)" }
-}
-
-extension NSObject: Identifiable {
-    static var typeIdentifier: String { return "\(self)" }
-    public var identifier: String { return "\(self.dynamicType)" }
 }

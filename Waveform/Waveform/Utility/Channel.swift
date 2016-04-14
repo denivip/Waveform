@@ -35,7 +35,7 @@ class Channel<T: NumberType>: AbstractChannel {
     public var blockSize = 1
     public var count: Int = 0
     public var totalCount: Int = 0
-    public var identifier = ""
+    lazy public var identifier: String = { return "" }()
     public var maxValue: Double { return self._maxValue }
     public var minValue: Double { return self._minValue }
     
