@@ -107,7 +107,7 @@ class DVGWaveformView: UIView {
     private var plotView: AudioWaveformPlot!
     private var plotViewModel = AudioWaveformPlotModel()
     private var samplesReader: AudioSamplesReader!
-    private var waveformDataSource = ChannelSource()
+    private var waveformDataSource = ScalableChannelsContainer()
     
     //MARK: - Public vars
     weak var delegate: DVGWaveformViewDelegate?

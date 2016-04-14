@@ -11,7 +11,7 @@ import AVFoundation
 
 @objc
 final
-class ChannelSource: NSObject, AbstractChannelSource, AudioSamplesHandler {
+class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHandler {
     
     override init() {
         super.init()
