@@ -180,12 +180,3 @@ struct DataRange {
         self.length   = 1.0
     }
 }
-
-extension AudioSamplesSource {
-    enum AudioAnalizerState {
-        case Idle
-        case Reading
-        case Finished
-    }
-}
-
