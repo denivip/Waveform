@@ -12,6 +12,7 @@ class AudioWaveformView: UIView {
     
     weak var dataSource: AudioWaveformViewDataSource? {
         didSet {
+            identifier = dataSource?.identifier ?? ""
             dataSource?.onGeometryUpdate = {
                 self.appendNewPathToPathLayer()
             }

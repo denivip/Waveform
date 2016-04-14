@@ -23,7 +23,7 @@ class Channel<T: NumberType>: AbstractChannel {
     public var blockSize = 1
     public var count: Int = 0
     public var totalCount: Int = 0
-    lazy public var identifier: String = { return "" }()
+    lazy public var identifier: String = { return "\(self.logicProvider.dynamicType)" }()
     public var maxValue: Double { return self._maxValue }
     public var minValue: Double { return self._minValue }
     

@@ -51,7 +51,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         
         for _ in 0..<channelPerLogicProviderType {
             let channel        = Channel<Int16>(logicProvider: AudioMaxValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(AudioMaxValueLogicProvider)
+            channel.identifier = self.identifier + "." + channel.identifier
             maxValueChannels.append(channel)
         }
         
@@ -61,14 +61,14 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
         
         for _ in 0..<channelPerLogicProviderType {
             let channel        = Channel<Float>(logicProvider: AudioAverageValueLogicProvider())
-            channel.identifier = self.identifierForLogicProviderType(AudioAverageValueLogicProvider)
+            channel.identifier = self.identifier + "." + channel.identifier
             avgValueChannels.append(channel)
         }
         self.avgValueChannels = avgValueChannels
     }
 
     func identifierForLogicProviderType(type: LogicProvider.Type) -> String {
-        return self.identifier + "." + "\(type.self)"
+        return self.identifier + "." + "\(type.dynamicType)"
     }
     
     //TODO: - Rename
@@ -119,7 +119,7 @@ class AudioSamplesSource: NSObject, ChannelSource, AudioSamplesHandler {
     
     //MARK: -
     //MARK: - Private Variables
-    internal var identifier = "default_channels_source"
+    internal var identifier = "SourceAudioSamples"
     var neededSamplesCount: Int = 2000
     
     private var scaleIndex = 0
