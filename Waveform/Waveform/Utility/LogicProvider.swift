@@ -87,7 +87,7 @@ class AudioAverageValueLogicProvider: LogicProvider {
     }
     
     public override func clear() {
-        self.channel?.appendValueToBuffer(summ/Double(count))
+        self.channel?.appendValueToBuffer(min(summ/Double(count), Double(Int16.max)))
         summ = 0.0
         count = 0
     }
