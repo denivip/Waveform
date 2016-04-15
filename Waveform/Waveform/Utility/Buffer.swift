@@ -27,7 +27,7 @@ class Buffer {
             self.moveSpaceTo(newSpace)
             _buffer = UnsafeMutablePointer<DefaultNumberType>(buffer)
         }
-        (_buffer + count).initialize(value)
+        (UnsafeMutablePointer<DefaultNumberType>(buffer) + count).initialize(value)
         count += 1
     }
     private
@@ -58,7 +58,6 @@ class GenericBuffer<T: NumberType>: Buffer {
         if space == count {
             let newSpace = max(space * 2, 16)
             self.moveSpaceTo(newSpace)
-            __buffer = UnsafeMutablePointer<T>(buffer)
         }
         (__buffer + count).initialize(T(value))
         count += 1
@@ -67,18 +66,18 @@ class GenericBuffer<T: NumberType>: Buffer {
     override final func moveSpaceTo(newSpace: Int) {
         let newPtr = UnsafeMutablePointer<T>.alloc(newSpace)
         
-        newPtr.moveInitializeFrom(UnsafeMutablePointer<T>(buffer), count: count)
+        newPtr.moveInitializeFrom(__buffer, count: count)
         
-        buffer.dealloc(count)
+        __buffer.dealloc(count)
         
-        buffer = UnsafeMutablePointer<Void>(newPtr)
+        __buffer = newPtr
         space = newSpace
     }
     override final func valueAtIndex(index: Int) -> Double {
         return __buffer[index].double
     }
     deinit {
-        UnsafeMutablePointer<T>(buffer).destroy(space)
-        UnsafeMutablePointer<T>(buffer).dealloc(space)
+        __buffer.destroy(space)
+        __buffer.dealloc(space)
     }
 }
