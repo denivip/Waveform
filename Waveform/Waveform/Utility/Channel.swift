@@ -12,8 +12,8 @@ final
 class Channel {
     
     let logicProvider: LogicProvider
-    var buffer: Buffer //= GenericBuffer<Double>()
-    public init(logicProvider: LogicProvider, buffer: Buffer = GenericBuffer<Double>()) {
+    let buffer: Buffer
+    public init(logicProvider: LogicProvider, buffer: Buffer = GenericBuffer<Int>()) {
         self.logicProvider = logicProvider
         self.buffer = buffer
         self.logicProvider.channel = self
