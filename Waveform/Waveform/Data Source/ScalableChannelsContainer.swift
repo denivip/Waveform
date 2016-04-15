@@ -24,47 +24,40 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
         
         print("estimatedSampleCount ", estimatedSampleCount)
         
-        for index in self.maxValueChannels.indices {
-            let channel = self.maxValueChannels[index]
-            let totalCount = Int(Double(samplesCount) * pow(Double(scaleInterLevelFactor), Double(index)))
+        for index in 0..<numberOfScaleLevels {
+            
+            var totalCount = Int(Double(samplesCount) * pow(Double(scaleInterLevelFactor), Double(index)))
             let blockSize  = Int(ceil(Double(estimatedSampleCount)/Double(totalCount)))
+            totalCount = Int(Double(estimatedSampleCount)/Double(blockSize))
+
+            let channel = channels[index * channelsCount]
+            let channel_ = channels[index * channelsCount + 1]
             
-            channel.totalCount = Int(Double(estimatedSampleCount)/Double(blockSize))
+            channel.totalCount = totalCount
             channel.blockSize  = blockSize
-        }
-        
-        for index in self.avgValueChannels.indices {
-            let channel = self.avgValueChannels[index]
             
-            let totalCount = Int(Double(samplesCount) * pow(Double(scaleInterLevelFactor), Double(index)))
-            let blockSize  = Int(ceil(Double(estimatedSampleCount)/Double(totalCount)))
-            
-            channel.totalCount = Int(Double(estimatedSampleCount)/Double(blockSize))
-            channel.blockSize  = blockSize
-            print(channel.blockSize, channel.totalCount)
+            channel_.totalCount = totalCount
+            channel_.blockSize  = blockSize
+            print(channel_.blockSize, channel_.totalCount)
         }
     }
     
     func createChannelsForDefaultLogicTypes() {
         
-        var maxValueChannels = [Channel]()
+        var channels = [Channel]()
         
         for _ in 0..<numberOfScaleLevels {
             let channel        = Channel(logicProvider: AudioMaxValueLogicProvider(), buffer: GenericBuffer<Int16>())
             channel.identifier = self.identifier + "." + channel.identifier
-            maxValueChannels.append(channel)
+            channels.append(channel)
+        
+            //???: Is there any reason to store Float?
+            let channel_        = Channel(logicProvider: AudioAverageValueLogicProvider(), buffer: GenericBuffer<Float>())
+            channel_.identifier = self.identifier + "." + channel_.identifier
+            channels.append(channel_)
         }
         
-        self.maxValueChannels = maxValueChannels
-        //???: Is there any reason to store Float?
-        var avgValueChannels = [Channel]()
-        
-        for _ in 0..<numberOfScaleLevels {
-            let channel        = Channel(logicProvider: AudioAverageValueLogicProvider(), buffer: GenericBuffer<Float>())
-            channel.identifier = self.identifier + "." + channel.identifier
-            avgValueChannels.append(channel)
-        }
-        self.avgValueChannels = avgValueChannels
+        self.channels = channels
     }
     
     //TODO: - Rename
@@ -89,24 +82,22 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     }
     
     func didStopReadSamples(count: Int) {
-        for channel in self.maxValueChannels {
-            channel.complete()
-        }
-        for channel in self.avgValueChannels {
+        for channel in channels {
             channel.complete()
         }
     }
         
     func handleSamples(samplesContainer: AudioSamplesContainer) {
 
-        for channelIndex in 0..<self.numberOfScaleLevels {
-            let maxValueChannel = self.maxValueChannels[channelIndex]
-            let avgValueChannel = self.avgValueChannels[channelIndex]
-           
+        for channelIndex in 0..<numberOfScaleLevels {
+            
+            let channel = channels[channelIndex * channelsCount]
+            let channel_ = channels[channelIndex * channelsCount + 1]
+            
             for sampleIndex in 0..<samplesContainer.samplesCount {
                 let sample = samplesContainer.sample(channelIndex: 0, sampleIndex: sampleIndex)
-                maxValueChannel.handleValue(sample)
-                avgValueChannel.handleValue(sample)
+                channel.handleValue(sample)
+                channel_.handleValue(sample)
             }
         }
     }
@@ -121,23 +112,15 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     var scaleIndex = 0
     private var maxValueChannels = [Channel]()
     private var avgValueChannels = [Channel]()
+    private var channels = [Channel]()
+    
     
     var onChannelsChanged: (AbstractChannelSource) -> () = {_ in}
-//}
-//
-////MARK: -
-////MARK: - ChannelSource
-//extension AudioSamplesSource: ChannelSource {
-    var channelsCount: Int {
-        return 2
-    }
+
+    var channelsCount: Int = 2
     
     func channelAtIndex(index: Int) -> Channel {
-        if index == 0 {
-            return self.maxValueChannels[scaleIndex]
-        } else {
-            return self.avgValueChannels[scaleIndex]
-        }
+        return channels[index + scaleIndex * channelsCount]
     }
 }
 
