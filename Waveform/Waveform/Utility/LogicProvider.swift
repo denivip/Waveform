@@ -8,18 +8,9 @@
 
 import Foundation
 
-internal protocol LogicUser: class {
-    func appendValueToBuffer(value: Double)
-    var blockSize: Int { get }
-}
-
-extension Channel: LogicUser {}
-
 public
 class LogicProvider {
-    weak internal var channel: LogicUser?
-//    public override init(){}
-    
+    weak internal var channel: Channel?
     public func handleValue(value: Double) {}
     public func clear() {}
 }

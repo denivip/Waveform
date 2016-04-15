@@ -19,6 +19,8 @@
 		5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F31C243BA6006A4B67 /* ViewController.swift */; };
 		8B3239891CBE7A0C0057600B /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3239881CBE7A0C0057600B /* Dispatch.swift */; };
 		8B32398A1CBE7A980057600B /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3239881CBE7A0C0057600B /* Dispatch.swift */; };
+		8B323A311CC138370057600B /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B323A301CC138370057600B /* Buffer.swift */; };
+		8B323A321CC138370057600B /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B323A301CC138370057600B /* Buffer.swift */; };
 		8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */; };
 		8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3F34F31C243BA6006A4B67 /* ViewController.swift */; };
 		8B3F34F71C243BA6006A4B67 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
@@ -68,6 +70,7 @@
 /* Begin PBXFileReference section */
 		5B7003BD1C4FFB7B00EA6313 /* Waveform WMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Waveform WMO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3239881CBE7A0C0057600B /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
+		8B323A301CC138370057600B /* Buffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
 		8B3F34EE1C243BA6006A4B67 /* Waveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3F34F11C243BA6006A4B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8B3F34F31C243BA6006A4B67 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -257,6 +260,7 @@
 				8B3239881CBE7A0C0057600B /* Dispatch.swift */,
 				8B8D5B451CBBDEE000B623EF /* Error.swift */,
 				8BEE7A681C590B9B0072872A /* Channel.swift */,
+				8B323A301CC138370057600B /* Buffer.swift */,
 				8BEE7A691C590B9B0072872A /* LogicProvider.swift */,
 				8BEE7A6A1C590B9B0072872A /* NumberTypes.swift */,
 				8BEE7A6B1C590B9B0072872A /* Protocols.swift */,
@@ -409,6 +413,7 @@
 				8BEE7A7F1C590B9B0072872A /* LogicProvider.swift in Sources */,
 				8B8D5B491CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
+				8B323A321CC138370057600B /* Buffer.swift in Sources */,
 				8BEE7A8F1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
 				8B32398A1CBE7A980057600B /* Dispatch.swift in Sources */,
 				8BEE7A791C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,
@@ -441,6 +446,7 @@
 				8B8D5B481CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
+				8B323A311CC138370057600B /* Buffer.swift in Sources */,
 				8BEE7A8E1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
 				8B3239891CBE7A0C0057600B /* Dispatch.swift in Sources */,
 				8BEE7A781C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,

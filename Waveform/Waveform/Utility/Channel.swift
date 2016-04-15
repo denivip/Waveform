@@ -9,34 +9,31 @@ import Foundation
 
 public
 final
-class Channel<T: NumberType>: AbstractChannel {
+class Channel {
     
     let logicProvider: LogicProvider
-    public init(logicProvider: LogicProvider) {
+    var buffer: Buffer //= GenericBuffer<Double>()
+    public init(logicProvider: LogicProvider, buffer: Buffer = GenericBuffer<Double>()) {
         self.logicProvider = logicProvider
-        self.space = 0
-        self.buffer = UnsafeMutablePointer<T>.alloc(0)
-        self.buffer.initializeFrom(nil, count: 0)
+        self.buffer = buffer
         self.logicProvider.channel = self
     }
     
     public var blockSize = 1
-    public var count: Int = 0
+    public var count: Int { return buffer.count }
     public var totalCount: Int = 0
     lazy public var identifier: String = { return "\(self.logicProvider.dynamicType)" }()
-    public var maxValue: Double { return self._maxValue }
-    public var minValue: Double { return self._minValue }
     
     private var currentBlockSize = 0
-    private var space: Int = 0
-    private var buffer: UnsafeMutablePointer<T>
-    private var _maxValue = -Double.infinity
-    private var _minValue = Double.infinity
-
+    public var maxValue: Double { return buffer.maxValue }
+    public var minValue: Double { return buffer.minValue }
+    
     public subscript(index: Int) -> Double {
-        get { return self.buffer[index].double }
+        get {
+            return buffer.valueAtIndex(index)
+        }
     }
-
+    
     public func handleValue<U: NumberType>(value: U) {
         if currentBlockSize == blockSize {
             self.clear()
@@ -47,41 +44,18 @@ class Channel<T: NumberType>: AbstractChannel {
     }
     
     func appendValueToBuffer(value: Double) {
-
-//        dispatch_async(dispatch_get_main_queue()) { 
-            if self._maxValue < value { self._maxValue = value }
-            if self._minValue > value { self._minValue = value }
-
-            if self.space == self.count {
-                let newSpace = max(self.space * 2, 16)
-                let newPtr = UnsafeMutablePointer<T>.alloc(newSpace)
-                
-                newPtr.moveInitializeFrom(self.buffer, count: self.count)
-                
-                self.buffer.dealloc(self.count)
-                
-                self.buffer = newPtr
-                self.space = newSpace
-            }
-            (self.buffer + self.count).initialize(T(value))
-            self.count += 1
-//        }
+        buffer.appendValue(value)
     }
-
+    
     private func clear() {
         self.logicProvider.clear()
     }
     
     public func complete() {
-
+        
         self.totalCount = self.count
         print(self.blockSize, self.count, self.totalCount)
         //TODO: Clear odd space
         self.clear()
-    }
-    
-    deinit {
-        buffer.destroy(space)
-        buffer.dealloc(space)
     }
 }

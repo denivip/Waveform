@@ -36,7 +36,7 @@ protocol AudioWaveformPlotViewModelDelegate: class {
 
 protocol AbstractChannelSource: class, Identifiable {
     var channelsCount: Int { get }
-    func channelAtIndex(index: Int) -> AbstractChannel
+    func channelAtIndex(index: Int) -> Channel
     var onChannelsChanged: (AbstractChannelSource) -> () { get set }
 }
 

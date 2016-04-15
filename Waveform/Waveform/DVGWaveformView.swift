@@ -52,8 +52,6 @@ class DVGWaveformView: UIView {
     
     func configure() {
         
-        waveformDataSource.neededSamplesCount = 2000
-
         // Prepare Plot Model with DataSource
         plotViewModel.addChannelSource(waveformDataSource)
         plotViewModel.delegate = self

@@ -12,7 +12,7 @@ import Foundation
 class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
     
     weak var plotModel: AudioWaveformPlotModel?
-    var channel: AbstractChannel? {
+    var channel: Channel? {
         didSet{
             self.identifier = channel?.identifier ?? ""
         }
