@@ -1,5 +1,5 @@
 //
-//  AudioWaveformPlotView.swift
+//  DiagramView.swift
 //  Waveform
 //
 //  Created by developer on 22/12/15.
@@ -8,7 +8,7 @@
 
 import UIKit.UIView
 
-protocol AudioWaveformViewDataSource: class {
+protocol PlotDataSource: class {
     var identifier: String { get }
     var bounds: CGSize { get }
     var pointsCount: Int { get }
@@ -17,20 +17,20 @@ protocol AudioWaveformViewDataSource: class {
     func pointAtIndex(index: Int) -> CGPoint
 }
 
-protocol AudioWaveformPlotDataSource: class {
+protocol DiagramDataSource: class {
     var onPlotUpdate: () -> () { get set }
-    var waveformDataSourcesCount: Int { get }
-    func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource
+    var plotDataSourcesCount: Int { get }
+    func plotDataSourceAtIndex(index: Int) -> PlotDataSource
 }
 
-protocol AudioWaveformPlotDelegate: class {
+protocol DiagramDelegate: class {
     var scale: CGFloat { get }
     var start: CGFloat { get }
     func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat)
     func moveByDistance(relativeDeltaX: CGFloat)
 }
 
-protocol AudioWaveformPlotViewModelDelegate: class {
+protocol DiagramViewModelDelegate: class {
     func plotMoved(scale: CGFloat, start: CGFloat)
 }
 

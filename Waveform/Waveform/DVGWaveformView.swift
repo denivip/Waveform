@@ -41,7 +41,7 @@ class DVGWaveformView: UIView {
     //MARK: - Configuration
     //MARK: - Internal configuration
     func addPlotView() {
-        let plotView = DVGAudioWaveformPlot()
+        let plotView = DVGDiagram()
         plotView.selectionDelegate = self
         
         self.plotView = plotView
@@ -61,15 +61,15 @@ class DVGWaveformView: UIView {
     }
     
     //MARK: - For external configuration
-    func waveformWithIdentifier(identifier: String) -> AudioWaveformView? {
-        return self.plotView.waveformWithIdentifier(identifier)
+    func waveformWithIdentifier(identifier: String) -> Plot? {
+        return self.plotView.plotWithIdentifier(identifier)
     }
 
-    func maxValuesWaveform() -> AudioWaveformView? {
+    func maxValuesWaveform() -> Plot? {
         return waveformWithIdentifier(waveformDataSource.identifier + "." + "AudioMaxValueLogicProvider")
     }
     
-    func avgValuesWaveform() -> AudioWaveformView? {
+    func avgValuesWaveform() -> Plot? {
         return waveformWithIdentifier(waveformDataSource.identifier + "." + "AudioAverageValueLogicProvider")
     }
 
@@ -102,8 +102,8 @@ class DVGWaveformView: UIView {
     
     //MARK: -
     //MARK: - Private vars
-    private var plotView: AudioWaveformPlot!
-    private var plotViewModel = AudioWaveformPlotModel()
+    private var plotView: Diagram!
+    private var plotViewModel = DiagramModel()
     private var samplesReader: AudioSamplesReader!
     private var waveformDataSource = ScalableChannelsContainer()
     
@@ -127,8 +127,8 @@ class DVGWaveformView: UIView {
     //MARK: -
 }
 
-//MARK: - AudioWaveformPlotViewModelDelegate
-extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
+//MARK: - DiagramViewModelDelegate
+extension DVGWaveformView: DiagramViewModelDelegate {
     func plotMoved(scale: CGFloat, start: CGFloat) {
         //TODO: Disable untill draw began
         self.waveformDataSource.reset(DataRange(location: Double(start), length: 1.0/Double(scale)))
@@ -138,13 +138,13 @@ extension DVGWaveformView: AudioWaveformPlotViewModelDelegate {
     }
 }
 
-extension DVGWaveformView: DVGAudioWaveformPlotDelegate {
+extension DVGWaveformView: DVGDiagramDelegate {
     func plotSelectedAreaWithRange(range: DataRange) {
         let range = self.plotViewModel.absoluteRangeFromRelativeRange(range)
         self.delegate?.plotSelectedAreaWithLocation(range.location, length: range.length)
     }
 }
 
-protocol DVGWaveformViewDelegate: AudioWaveformPlotViewModelDelegate {
+protocol DVGWaveformViewDelegate: DiagramViewModelDelegate {
     func plotSelectedAreaWithLocation(location: Double, length: Double)
 }

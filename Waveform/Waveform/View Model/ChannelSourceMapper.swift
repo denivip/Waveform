@@ -9,7 +9,7 @@
 import Foundation
 
 class ChannelSourceMapper: ChannelSource {
-    var identifier: String = ""
+
     var channelSources: [ChannelSource] = []
     func addChannelSource(channelSource: ChannelSource) {
         channelSources.append(channelSource)

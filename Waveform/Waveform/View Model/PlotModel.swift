@@ -1,5 +1,5 @@
 //
-//  AudioWaveformViewModel.swift
+//  PlotModel.swift
 //  Waveform
 //
 //  Created by developer on 22/12/15.
@@ -9,9 +9,9 @@
 import UIKit
 import Foundation
 
-class AudioWaveformViewModel: NSObject, AudioWaveformViewDataSource {
+class PlotModel: NSObject, PlotDataSource {
     
-    weak var plotModel: AudioWaveformPlotModel?
+    weak var plotModel: DiagramModel?
     var channel: Channel? {
         didSet{
             self.identifier = channel?.identifier ?? ""

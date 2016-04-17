@@ -8,7 +8,7 @@
 
 #import "DVGVideosCollectionViewController.h"
 #import "DenoiseCollectionViewCell.h"
-//#import "AudioWaveformView.h"
+//#import "Plot.h"
 //#import "PhotoEditingViewController.h"
 #import "DVGCollectionReusableView.h"
 //#import "DVGLaunchViewController.h"

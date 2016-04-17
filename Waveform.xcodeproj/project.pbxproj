@@ -63,10 +63,10 @@
 		8BEE7A891C590B9B0072872A /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */; };
 		8BEE7A8A1C590B9B0072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A701C590B9B0072872A /* SelectionView.swift */; };
 		8BEE7A8B1C590B9B0072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A701C590B9B0072872A /* SelectionView.swift */; };
-		8BEE7A8C1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A721C590B9B0072872A /* AudioWaveformPlotModel.swift */; };
-		8BEE7A8D1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A721C590B9B0072872A /* AudioWaveformPlotModel.swift */; };
-		8BEE7A8E1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A731C590B9B0072872A /* AudioWaveformViewModel.swift */; };
-		8BEE7A8F1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A731C590B9B0072872A /* AudioWaveformViewModel.swift */; };
+		8BEE7A8C1C590B9B0072872A /* DiagramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A721C590B9B0072872A /* DiagramModel.swift */; };
+		8BEE7A8D1C590B9B0072872A /* DiagramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A721C590B9B0072872A /* DiagramModel.swift */; };
+		8BEE7A8E1C590B9B0072872A /* PlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A731C590B9B0072872A /* PlotModel.swift */; };
+		8BEE7A8F1C590B9B0072872A /* PlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A731C590B9B0072872A /* PlotModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -122,8 +122,8 @@
 		8BEE7A6E1C590B9B0072872A /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
 		8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformView.swift; sourceTree = "<group>"; };
 		8BEE7A701C590B9B0072872A /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
-		8BEE7A721C590B9B0072872A /* AudioWaveformPlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlotModel.swift; sourceTree = "<group>"; };
-		8BEE7A731C590B9B0072872A /* AudioWaveformViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformViewModel.swift; sourceTree = "<group>"; };
+		8BEE7A721C590B9B0072872A /* DiagramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagramModel.swift; sourceTree = "<group>"; };
+		8BEE7A731C590B9B0072872A /* PlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlotModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,8 +286,8 @@
 		8BEE7A711C590B9B0072872A /* View Model */ = {
 			isa = PBXGroup;
 			children = (
-				8BEE7A721C590B9B0072872A /* AudioWaveformPlotModel.swift */,
-				8BEE7A731C590B9B0072872A /* AudioWaveformViewModel.swift */,
+				8BEE7A721C590B9B0072872A /* DiagramModel.swift */,
+				8BEE7A731C590B9B0072872A /* PlotModel.swift */,
 				5B397E491CC4110D0060819D /* ChannelSourceMapper.swift */,
 			);
 			path = "View Model";
@@ -413,13 +413,13 @@
 				5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */,
 				5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */,
 				5B7003D61C4FFC5D00EA6313 /* DenoiseCollectionViewCell.m in Sources */,
-				8BEE7A8D1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */,
+				8BEE7A8D1C590B9B0072872A /* DiagramModel.swift in Sources */,
 				5B7003D51C4FFC5D00EA6313 /* DVGDenivipAppearance.m in Sources */,
 				8BEE7A7F1C590B9B0072872A /* LogicProvider.swift in Sources */,
 				8B8D5B491CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A771C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8B323A321CC138370057600B /* Buffer.swift in Sources */,
-				8BEE7A8F1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
+				8BEE7A8F1C590B9B0072872A /* PlotModel.swift in Sources */,
 				8B32398A1CBE7A980057600B /* Dispatch.swift in Sources */,
 				8BEE7A791C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,
 				8BEE7A8B1C590B9B0072872A /* SelectionView.swift in Sources */,
@@ -447,13 +447,13 @@
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
 				8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */,
 				8BDC33261C4FE6C1006C6F3C /* DVGDenivipAppearance.m in Sources */,
-				8BEE7A8C1C590B9B0072872A /* AudioWaveformPlotModel.swift in Sources */,
+				8BEE7A8C1C590B9B0072872A /* DiagramModel.swift in Sources */,
 				8BEE7A7E1C590B9B0072872A /* LogicProvider.swift in Sources */,
 				8B8D5B481CBBDEE000B623EF /* Error.swift in Sources */,
 				8BEE7A761C590B9B0072872A /* AudioSamplesReader.swift in Sources */,
 				8B3F34F21C243BA6006A4B67 /* AppDelegate.swift in Sources */,
 				8B323A311CC138370057600B /* Buffer.swift in Sources */,
-				8BEE7A8E1C590B9B0072872A /* AudioWaveformViewModel.swift in Sources */,
+				8BEE7A8E1C590B9B0072872A /* PlotModel.swift in Sources */,
 				8B3239891CBE7A0C0057600B /* Dispatch.swift in Sources */,
 				8BEE7A781C590B9B0072872A /* DVGAudioWaveformPlot.swift in Sources */,
 				8BEE7A8A1C590B9B0072872A /* SelectionView.swift in Sources */,

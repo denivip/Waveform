@@ -1,5 +1,5 @@
 //
-//  AudioWaveformPlot.swift
+//  Diagram.swift
 //  Waveform
 //
 //  Created by developer on 22/12/15.
@@ -8,20 +8,20 @@
 
 import UIKit
 
-class AudioWaveformPlot: UIView {
+class Diagram: UIView {
     
     var containerView: UIView!
     var pan: UIPanGestureRecognizer!
     var pinch: UIPinchGestureRecognizer!
     
-    weak var delegate: AudioWaveformPlotDelegate?
-    weak var dataSource: AudioWaveformPlotDataSource? {
+    weak var delegate: DiagramDelegate?
+    weak var dataSource: DiagramDataSource? {
         didSet{
             self.updateWaveforms()
         }
     }
     
-    weak var viewModel: protocol<AudioWaveformPlotDelegate, AudioWaveformPlotDataSource>? {
+    weak var viewModel: protocol<DiagramDelegate, DiagramDataSource>? {
         didSet {
             self.delegate   = viewModel
             self.dataSource = viewModel
@@ -31,14 +31,14 @@ class AudioWaveformPlot: UIView {
     
     func updateWaveforms() {
         if let newDataSource = dataSource {
-            for index in 0..<newDataSource.waveformDataSourcesCount {
-                let waveformDataSource = newDataSource.waveformDataSourceAtIndex(index)
+            for index in 0..<newDataSource.plotDataSourcesCount {
+                let plotDataSource = newDataSource.plotDataSourceAtIndex(index)
                 
-                guard let view = self.waveformWithIdentifier(waveformDataSource.identifier) else  {
-                    self.addWaveformViewWithDataSource(waveformDataSource)
+                guard let view = self.plotWithIdentifier(plotDataSource.identifier) else  {
+                    self.addPlotWithDataSource(plotDataSource)
                     continue
                 }
-                view.dataSource = waveformDataSource
+                view.dataSource = plotDataSource
             }
         }
     }
@@ -67,11 +67,11 @@ class AudioWaveformPlot: UIView {
     }
     
     func addGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(AudioWaveformPlot.handlePan(_:)))
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(Diagram.handlePan(_:)))
         self.addGestureRecognizer(pan)
         self.pan = pan
         
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(AudioWaveformPlot.handlePinch(_:)))
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(Diagram.handlePinch(_:)))
         self.addGestureRecognizer(pinch)
         self.pinch = pinch
     }
@@ -101,39 +101,39 @@ class AudioWaveformPlot: UIView {
         }
     }
     
-    var waveformViews = [AudioWaveformView]()
+    var plots = [Plot]()
     var displayLink: CADisplayLink?
 }
 
-extension AudioWaveformPlot {
+extension Diagram {
     
-    func addWaveformViewWithDataSource(dataSource: AudioWaveformViewDataSource) -> AudioWaveformView {
+    func addPlotWithDataSource(dataSource: PlotDataSource) -> Plot {
         
-        let audioWaveformView = AudioWaveformView(frame: self.bounds)
-        audioWaveformView.dataSource = dataSource
+        let plot = Plot(frame: self.bounds)
+        plot.dataSource = dataSource
         
-        self.waveformViews.append(audioWaveformView)
+        self.plots.append(plot)
         
-        self.containerView.addSubview(audioWaveformView)
+        self.containerView.addSubview(plot)
         
-        audioWaveformView.translatesAutoresizingMaskIntoConstraints = false
-        audioWaveformView.attachBoundsOfSuperview()
+        plot.translatesAutoresizingMaskIntoConstraints = false
+        plot.attachBoundsOfSuperview()
         
-        return audioWaveformView
+        return plot
     }
     
-    func waveformWithIdentifier(identifier: String) -> AudioWaveformView? {
-        for waveform in self.waveformViews {
-            if waveform.identifier == identifier {
-                return waveform
+    func plotWithIdentifier(identifier: String) -> Plot? {
+        for plot in self.plots {
+            if plot.identifier == identifier {
+                return plot
             }
         }
         return nil
     }
     
     func redraw() {
-        for waveformView in self.waveformViews {
-            waveformView.dataSource?.updateGeometry()//redraw()
+        for plot in self.plots {
+            plot.dataSource?.updateGeometry()//redraw()
         }
     }
     
@@ -142,7 +142,7 @@ extension AudioWaveformPlot {
             self.displayLink?.invalidate()
             self.displayLink = nil
         }
-        let displayLink = CADisplayLink.init(target: self, selector: #selector(AudioWaveformPlot.redraw))
+        let displayLink = CADisplayLink.init(target: self, selector: #selector(Diagram.redraw))
         displayLink.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink = displayLink
     }

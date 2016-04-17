@@ -1,5 +1,5 @@
 //
-//  AudioWaveformView.swift
+//  Plot.swift
 //  Waveform
 //
 //  Created by developer on 18/12/15.
@@ -8,9 +8,9 @@
 
 import UIKit.UIControl
 
-class AudioWaveformView: UIView {
+class Plot: UIView {
     
-    weak var dataSource: AudioWaveformViewDataSource? {
+    weak var dataSource: PlotDataSource? {
         didSet {
             identifier = dataSource?.identifier ?? ""
             dataSource?.onGeometryUpdate = {

@@ -1,5 +1,5 @@
 //
-//  AudioWaveformPlotModel.swift
+//  DiagramModel.swift
 //  Waveform
 //
 //  Created by developer on 22/12/15.
@@ -9,11 +9,11 @@
 import Foundation
 import UIKit.UIColor
 
-class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
+class DiagramModel: NSObject, DiagramDataSource {
     
-    weak var delegate: AudioWaveformPlotViewModelDelegate?
+    weak var delegate: DiagramViewModelDelegate?
     
-    private var viewModels = [AudioWaveformViewModel]()
+    private var viewModels = [PlotModel]()
     
     override init() {
         super.init()
@@ -24,8 +24,8 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     var onPlotUpdate: () -> () = {}
     var dataSources = [ChannelSource]()
 
-    var waveformDataSourcesCount: Int { return self.viewModels.count }
-    func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource {
+    var plotDataSourcesCount: Int { return self.viewModels.count }
+    func plotDataSourceAtIndex(index: Int) -> PlotDataSource {
         return self.viewModels[index]
     }
     
@@ -36,7 +36,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
 //        for index in 0..<channelsSource.channelsCount {
 //            
 //            let channel         = channelsSource.channelAtIndex(index)
-//            let viewModel       = AudioWaveformViewModel()
+//            let viewModel       = PlotModel()
 //            
 //            viewModel.channel   = channel
 //            viewModel.plotModel = self
@@ -74,7 +74,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
                 
             } else {
                 
-                let viewModel       = AudioWaveformViewModel()
+                let viewModel       = PlotModel()
                 viewModel.channel   = channel
                 viewModel.plotModel = self
                 self.viewModels.append(viewModel)
@@ -84,7 +84,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         self.onPlotUpdate()
     }
     
-    func viewModelWithIdentifier(identifier: String) -> AudioWaveformViewModel? {
+    func viewModelWithIdentifier(identifier: String) -> PlotModel? {
         for viewModel in self.viewModels {
             if viewModel.identifier == identifier {
                 return viewModel
@@ -111,7 +111,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     }
 }
 
-extension AudioWaveformPlotModel: AudioWaveformPlotDelegate {
+extension DiagramModel: DiagramDelegate {
     func zoom(start start: CGFloat, scale: CGFloat) {
         self.scale = scale
         self.start = start

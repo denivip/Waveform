@@ -1,5 +1,5 @@
 //
-//  DVGAudioWaveformPlot.swift
+//  DVGDiagram.swift
 //  Waveform
 //
 //  Created by developer on 26/01/16.
@@ -8,12 +8,12 @@
 
 import UIKit
 
-class DVGAudioWaveformPlot: AudioWaveformPlot {
+class DVGDiagram: Diagram {
     
     var panToSelect: UIPanGestureRecognizer!
     var tapToSelect: UILongPressGestureRecognizer!
     var selectionView: SelectionView!
-    weak var selectionDelegate: DVGAudioWaveformPlotDelegate?
+    weak var selectionDelegate: DVGDiagramDelegate?
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -31,13 +31,13 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
     
     func setupGestures() {
         // New gestures
-        let pan                    = UIPanGestureRecognizer(target: self, action: #selector(DVGAudioWaveformPlot.handlePanToSelect(_:)))
+        let pan                    = UIPanGestureRecognizer(target: self, action: #selector(DVGDiagram.handlePanToSelect(_:)))
         pan.delegate               = self
         self.addGestureRecognizer(pan)
         self.panToSelect           = pan
         pan.maximumNumberOfTouches = 1
         
-        let tap                     = UILongPressGestureRecognizer(target: self, action: #selector(DVGAudioWaveformPlot.handleTapToSelect(_:)))
+        let tap                     = UILongPressGestureRecognizer(target: self, action: #selector(DVGDiagram.handleTapToSelect(_:)))
         tap.delegate                = self
         tap.minimumPressDuration    = 0.08
         self.addGestureRecognizer(tap)
@@ -145,7 +145,7 @@ class DVGAudioWaveformPlot: AudioWaveformPlot {
     
 }
 
-extension DVGAudioWaveformPlot: UIGestureRecognizerDelegate {
+extension DVGDiagram: UIGestureRecognizerDelegate {
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         switch (gestureRecognizer, otherGestureRecognizer) {
         case (panToSelect, tapToSelect):
@@ -166,6 +166,6 @@ extension DVGAudioWaveformPlot: UIGestureRecognizerDelegate {
     }
 }
 
-protocol DVGAudioWaveformPlotDelegate: class {
+protocol DVGDiagramDelegate: class {
     func plotSelectedAreaWithRange(range: DataRange)
 }
