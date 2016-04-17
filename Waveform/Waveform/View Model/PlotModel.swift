@@ -20,8 +20,8 @@ class PlotModel: NSObject, PlotDataSource {
     
     var pointsCount = 0
     var bounds      = CGSize(width: 1.0, height: 1.0)
-    var scale: CGFloat { return self.plotModel?.scale ?? 1.0 }
-    var start: CGFloat { return self.plotModel?.start ?? 0.0 }
+    var scale: CGFloat { return CGFloat(self.plotModel?.geometry.scale ?? 1.0) }
+    var start: CGFloat { return CGFloat(self.plotModel?.geometry.start ?? 0.0) }
     
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0

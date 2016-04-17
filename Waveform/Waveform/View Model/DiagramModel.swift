@@ -29,8 +29,7 @@ class DiagramModel: NSObject, DiagramDataSource {
     
     private var viewModels = [PlotModel]()
     
-    var scale: CGFloat = 1.0
-    var start: CGFloat = 0.0
+    var geometry = DiagramGeometry()
     var onPlotUpdate: () -> () = {}
 
     var plotDataSourcesCount: Int { return self.viewModels.count }
@@ -89,14 +88,14 @@ class DiagramModel: NSObject, DiagramDataSource {
     }
     
     func absoluteRangeFromRelativeRange(range: DataRange) -> DataRange {
-        return DataRange(location: Double(self.start) + range.location/Double(self.scale), length: range.length/Double(self.scale))
+        return DataRange(location: range.location.convertFromGeometry(self.geometry), length: range.length/self.geometry.scale)
     }
 }
 
 extension DiagramModel: DiagramDelegate {
     func zoom(start start: CGFloat, scale: CGFloat) {
-        self.scale = scale
-        self.start = start
+        self.geometry.scale = Double(scale)
+        self.geometry.start = Double(start)
         self.delegate?.plotMoved(scale, start: start)
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
@@ -104,22 +103,22 @@ extension DiagramModel: DiagramDelegate {
     }
     
     func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat) {
-        let newScale = max(1.0, relativeScale * self.scale)
-        var start    = self.start + zoomAreaCenter * (1/self.scale - 1/newScale)
+        let newScale = max(1.0, relativeScale * CGFloat(self.geometry.scale))
+        var start    = CGFloat(self.geometry.start) + zoomAreaCenter * (1/CGFloat(self.geometry.scale) - 1/newScale)
         start        = max(0, min(start, 1 - 1/newScale))
         self.zoom(start: start, scale: newScale)
     }
     
     func moveToPosition(start: CGFloat) {
-        self.start = max(0, min(start, 1 - 1/self.scale))
-        self.delegate?.plotMoved(self.scale, start: self.start)
+        self.geometry.start = max(0, min(Double(start), 1 - 1/self.geometry.scale))
+        self.delegate?.plotMoved(CGFloat(self.geometry.scale), start: CGFloat(self.geometry.start))
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }
     }
     
     func moveByDistance(relativeDeltaX: CGFloat) {
-        let relativeStart = self.start - relativeDeltaX / self.scale
+        let relativeStart = CGFloat(self.geometry.start) - relativeDeltaX / CGFloat(self.geometry.scale)
         self.moveToPosition(relativeStart)
     }
 }

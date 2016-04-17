@@ -24,8 +24,7 @@ protocol DiagramDataSource: class {
 }
 
 protocol DiagramDelegate: class {
-    var scale: CGFloat { get }
-    var start: CGFloat { get }
+    var geometry: DiagramGeometry { get }
     func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat)
     func moveByDistance(relativeDeltaX: CGFloat)
 }

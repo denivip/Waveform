@@ -96,7 +96,7 @@ class Diagram: UIView {
             self.delegate?.zoomAt(relativeLocation, relativeScale: scale)
             gesture.scale = 1.0
         case .Ended:
-            print(self.viewModel!.start, self.viewModel!.scale)
+            print(self.viewModel?.geometry )
         default:()
         }
     }
