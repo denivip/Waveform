@@ -101,10 +101,10 @@ class ScalableChannelsContainer: NSObject, ChannelSource, AudioSamplesHandler {
     //MARK: -
     //MARK: - Private Variables
     struct Defaults {
-        static var identifier = "SourceAudioSamples"
-        static var numberOfScaleLevels = 0
-        static var scaleInterLevelFactor = 0
-        static var neededSamplesCount = 0
+        static var identifier            = "SourceAudioSamples"
+        static var numberOfScaleLevels   = 10
+        static var scaleInterLevelFactor = 2
+        static var neededSamplesCount    = 500
     }
     var identifier            = Defaults.identifier
     var numberOfScaleLevels   = Defaults.numberOfScaleLevels
