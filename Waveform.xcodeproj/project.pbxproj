@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B397E4A1CC4110D0060819D /* ChannelSourceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B397E491CC4110D0060819D /* ChannelSourceMapper.swift */; };
+		5B397E4B1CC413840060819D /* ChannelSourceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B397E491CC4110D0060819D /* ChannelSourceMapper.swift */; };
 		5B7003CF1C4FFC2C00EA6313 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F51C243BA6006A4B67 /* Main.storyboard */; };
 		5B7003D11C4FFC3500EA6313 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34F81C243BA6006A4B67 /* Assets.xcassets */; };
 		5B7003D21C4FFC3900EA6313 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B3F34FA1C243BA6006A4B67 /* LaunchScreen.storyboard */; };
@@ -68,6 +70,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B397E491CC4110D0060819D /* ChannelSourceMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSourceMapper.swift; sourceTree = "<group>"; };
 		5B7003BD1C4FFB7B00EA6313 /* Waveform WMO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Waveform WMO.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B3239881CBE7A0C0057600B /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
 		8B323A301CC138370057600B /* Buffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
@@ -285,6 +288,7 @@
 			children = (
 				8BEE7A721C590B9B0072872A /* AudioWaveformPlotModel.swift */,
 				8BEE7A731C590B9B0072872A /* AudioWaveformViewModel.swift */,
+				5B397E491CC4110D0060819D /* ChannelSourceMapper.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -404,6 +408,7 @@
 				5B7003D81C4FFC5D00EA6313 /* DVCollectionViewController.m in Sources */,
 				8BEE7A871C590B9B0072872A /* AudioWaveformPlot.swift in Sources */,
 				8BEE7A7D1C590B9B0072872A /* Channel.swift in Sources */,
+				5B397E4B1CC413840060819D /* ChannelSourceMapper.swift in Sources */,
 				8BEE7A831C590B9B0072872A /* Protocols.swift in Sources */,
 				5B7003D71C4FFC5D00EA6313 /* DVGCollectionReusableView.m in Sources */,
 				5B7003DB1C4FFCF300EA6313 /* ViewController.swift in Sources */,
@@ -437,6 +442,7 @@
 				8BDC331A1C4FE51C006C6F3C /* DVGVideosCollectionViewController.m in Sources */,
 				8BEE7A861C590B9B0072872A /* AudioWaveformPlot.swift in Sources */,
 				8BEE7A7C1C590B9B0072872A /* Channel.swift in Sources */,
+				5B397E4A1CC4110D0060819D /* ChannelSourceMapper.swift in Sources */,
 				8BEE7A821C590B9B0072872A /* Protocols.swift in Sources */,
 				8B3F34F41C243BA6006A4B67 /* ViewController.swift in Sources */,
 				8BDC33201C4FE681006C6F3C /* DenoiseCollectionViewCell.m in Sources */,
