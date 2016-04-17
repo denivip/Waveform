@@ -21,7 +21,6 @@ class DVGWaveformController: NSObject {
     convenience init(containerView: UIView) {
         self.init()
         self.addPlotViewToContainerView(containerView)
-        self.configure()
     }
     override init() {
         super.init()
@@ -49,6 +48,7 @@ class DVGWaveformController: NSObject {
         diagram.dataSource = diagramViewModel
         
         diagramViewModel.movementsDelegate = self
+        self.samplesReader.samplesHandler = waveformDataSource
     }
     
     //MARK: - For external configuration
@@ -105,13 +105,13 @@ class DVGWaveformController: NSObject {
         didSet {
             if let asset = asset {
                 self.samplesReader = AudioSamplesReader(asset: asset)
+                self.configure()
             }
         }
     }
     var numberOfPointsOnThePlot = 512 {
         didSet {
             waveformDataSource.neededSamplesCount = numberOfPointsOnThePlot
-            self.samplesReader.samplesHandler = waveformDataSource
         }
     }
     var start: CGFloat = 0.0
