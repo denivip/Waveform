@@ -52,7 +52,7 @@ class ScalableChannelsContainer: NSObject, ChannelSource, AudioSamplesHandler {
             channels.append(channel)
         
             //???: Is there any reason to store Float?
-            let channel_        = Channel(logicProvider: AudioMaxValueLogicProvider(), buffer: GenericBuffer<Float>())
+            let channel_        = Channel(logicProvider: AudioAverageValueLogicProvider(), buffer: GenericBuffer<Float>())
             channel_.identifier = self.identifier + "." + channel_.identifier
             channels.append(channel_)
         }
