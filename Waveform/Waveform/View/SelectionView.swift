@@ -14,11 +14,13 @@ class SelectionView: UIView {
     init() {
         super.init(frame: .zero)
         self.setup()
+        self.clipsToBounds = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
+        self.clipsToBounds = true
     }
     
     func setup() {
