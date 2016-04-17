@@ -22,14 +22,14 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
     var scale: CGFloat = 1.0
     var start: CGFloat = 0.0
     var onPlotUpdate: () -> () = {}
-    var dataSources = [AbstractChannelSource]()
+    var dataSources = [ChannelSource]()
 
     var waveformDataSourcesCount: Int { return self.viewModels.count }
     func waveformDataSourceAtIndex(index: Int) -> AudioWaveformViewDataSource {
         return self.viewModels[index]
     }
     
-    func addChannelSource(channelsSource: AbstractChannelSource) {
+    func addChannelSource(channelsSource: ChannelSource) {
         
         self.dataSources.append(channelsSource)
         
@@ -59,7 +59,7 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         }
     }
     
-    func updateViewModelsForChannelsSource(channelsSource: AbstractChannelSource) {
+    func updateViewModelsForChannelsSource(channelsSource: ChannelSource) {
 
         for index in 0..<channelsSource.channelsCount {
             

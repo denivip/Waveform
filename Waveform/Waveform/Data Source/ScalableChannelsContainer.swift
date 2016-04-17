@@ -11,7 +11,7 @@ import AVFoundation
 
 @objc
 final
-class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHandler {
+class ScalableChannelsContainer: NSObject, ChannelSource, AudioSamplesHandler {
     
     override init() {
         super.init()
@@ -115,7 +115,7 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     private var channels = [Channel]()
     
     
-    var onChannelsChanged: (AbstractChannelSource) -> () = {_ in}
+    var onChannelsChanged: (ChannelSource) -> () = {_ in}
 
     var channelsCount: Int = 2
     
