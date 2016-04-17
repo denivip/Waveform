@@ -9,6 +9,7 @@
 import UIKit
 
 class SelectionView: UIView {
+    
     var selectionLayer: CALayer!
     init() {
         super.init(frame: .zero)
@@ -22,6 +23,7 @@ class SelectionView: UIView {
     
     func setup() {
         self.setupSelectionLayer()
+        self.backgroundColor = .clearColor()
     }
     
     func setupSelectionLayer() {

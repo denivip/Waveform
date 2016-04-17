@@ -29,6 +29,8 @@ class AudioSamplesReader: NSObject {
     var nativeAudioFormat: AudioFormat?
     var samplesReadAudioFormat = Constants.DefaultAudioFormat
     
+    var progress = NSProgress()
+    
     func readAudioFormat(completionBlock: (AudioFormat?, SamplesReaderError?) -> ()) {
         dispatch_asynch_on_global_processing_queue {
             do {
@@ -118,7 +120,7 @@ class AudioSamplesReader: NSObject {
             print("\(#function)[\(#line)] Caution!!! There is no samples handler")
         }
 
-        self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat, samplesHandler: samplesHandler)
+        self.readingRoutine = SamplesReadingRoutine(assetReader: assetReader, readerOutput: readerOutput, audioFormat: samplesReadAudioFormat, samplesHandler: samplesHandler, progress: self.progress)
     }
     
     private func read() throws {
@@ -137,21 +139,19 @@ final class SamplesReadingRoutine {
     let audioFormat: AudioFormat
     weak var samplesHandler: AudioSamplesHandler?
 
-    lazy var progress: NSProgress = {
-        let progress = NSProgress(parent: nil, userInfo: nil)
-        progress.totalUnitCount = Int64(self.estimatedSamplesCount)
-        return progress
-    }()
+    let progress: NSProgress
 
     lazy var estimatedSamplesCount: Int = {
         return Int(self.assetReader.asset.duration.seconds * Double(self.audioFormat.samplesRate))
     }()
     
-    init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat, samplesHandler: AudioSamplesHandler?) {
+    init(assetReader: AVAssetReader, readerOutput: AVAssetReaderOutput, audioFormat: AudioFormat, samplesHandler: AudioSamplesHandler?, progress: NSProgress) {
         self.assetReader  = assetReader
         self.readerOutput = readerOutput
         self.audioFormat  = audioFormat
         self.samplesHandler = samplesHandler
+        self.progress = progress
+        progress.totalUnitCount = Int64(self.estimatedSamplesCount)
     }
     
     var isReading: Bool {

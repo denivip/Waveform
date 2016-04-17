@@ -11,36 +11,31 @@ import UIKit
 class Diagram: UIView {
     
     var containerView: UIView!
-    var pan: UIPanGestureRecognizer!
-    var pinch: UIPinchGestureRecognizer!
     
     weak var delegate: DiagramDelegate?
     weak var dataSource: DiagramDataSource? {
         didSet{
-            self.updateWaveforms()
+            self.resetWaveforms()
+            dataSource?.onPlotUpdate = { [weak self] in self?.resetWaveforms() }
         }
     }
     
-    weak var viewModel: protocol<DiagramDelegate, DiagramDataSource>? {
-        didSet {
-            self.delegate   = viewModel
-            self.dataSource = viewModel
-            viewModel?.onPlotUpdate = self.updateWaveforms
+    func resetWaveforms() {
+        
+        guard let dataSource = self.dataSource else {
+            self.plots.forEach{ $0.removeFromSuperview() }
+            self.plots.removeAll()
+            return
         }
-    }
-    
-    func updateWaveforms() {
-        if let newDataSource = dataSource {
-            for index in 0..<newDataSource.plotDataSourcesCount {
-                let plotDataSource = newDataSource.plotDataSourceAtIndex(index)
-                
-                guard let view = self.plotWithIdentifier(plotDataSource.identifier) else  {
-                    self.addPlotWithDataSource(plotDataSource)
-                    continue
-                }
-                view.dataSource = plotDataSource
-            }
+        
+        adjustPlotsNumberWithCount(dataSource.plotDataSourcesCount)
+        
+        for index in 0..<dataSource.plotDataSourcesCount {
+            let plot = plots[index]
+            let vm = dataSource.plotDataSourceAtIndex(index)
+            plot.dataSource = vm
         }
+        redraw()
     }
     
     override init(frame: CGRect) {
@@ -55,7 +50,6 @@ class Diagram: UIView {
     
     private func setup() {
         self.addContainerView()
-        self.addGestures()
     }
     
     func addContainerView() {
@@ -65,39 +59,25 @@ class Diagram: UIView {
         containerView.attachBoundsOfSuperview()
         self.containerView = containerView
     }
-    
-    func addGestures() {
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(Diagram.handlePan(_:)))
-        self.addGestureRecognizer(pan)
-        self.pan = pan
-        
-        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(Diagram.handlePinch(_:)))
-        self.addGestureRecognizer(pinch)
-        self.pinch = pinch
-    }
-    
-    func handlePan(gesture: UIPanGestureRecognizer) {
-        switch gesture.state {
-        case .Changed:
-            let deltaX         = gesture.translationInView(gesture.view).x
-            let relativeDeltaX = deltaX/gesture.view!.bounds.width
-            self.delegate?.moveByDistance(relativeDeltaX)
-            gesture.setTranslation(.zero, inView: gesture.view)
-        default:()
+
+    func adjustPlotsNumberWithCount(count: Int) {
+        if plots.count == count {
+            return
         }
-    }
-    
-    func handlePinch(gesture: UIPinchGestureRecognizer) {
-        switch gesture.state {
-        case .Changed:
-            let scale     = gesture.scale
-            let locationX = gesture.locationInView(gesture.view).x
-            let relativeLocation = locationX/gesture.view!.bounds.width
-            self.delegate?.zoomAt(relativeLocation, relativeScale: scale)
-            gesture.scale = 1.0
-        case .Ended:
-            print(self.viewModel?.geometry )
-        default:()
+        if plots.count < count {
+            for _ in plots.count..<count {
+                let plot = Plot(frame: self.bounds)
+                self.containerView.addSubview(plot)
+                plot.translatesAutoresizingMaskIntoConstraints = false
+                plot.attachBoundsOfSuperview()
+                plots.append(plot)
+            }
+            return
+        }
+        for index in count..<plots.count {
+            let plot = plots[index]
+            plot.removeFromSuperview()
+            plots.removeAtIndex(index)
         }
     }
     
@@ -133,7 +113,7 @@ extension Diagram {
     
     func redraw() {
         for plot in self.plots {
-            plot.dataSource?.updateGeometry()//redraw()
+            plot.dataSource?.updateGeometry()
         }
     }
     

@@ -22,7 +22,7 @@ class PlaybackPositionView: UIView {
 
     override func drawRect(rect: CGRect) {
         super.drawRect(rect)
-        guard let relativePosition = self.relativePosition else {
+        guard let relativePosition = self.position else {
             return
         }
         
@@ -53,7 +53,7 @@ class PlaybackPositionView: UIView {
     /// Value from 0 to 1
     /// Setting value causes setNeedsDisplay method call
     /// Setting nil causes removing cursor
-    var relativePosition: CGFloat? {
+    var position: CGFloat? {
         didSet { self.setNeedsDisplay() }
     }
     var lineColor = UIColor.whiteColor()

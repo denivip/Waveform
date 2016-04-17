@@ -18,19 +18,19 @@ protocol PlotDataSource: class {
 }
 
 protocol DiagramDataSource: class {
+    var geometry: DiagramGeometry { get }
     var onPlotUpdate: () -> () { get set }
     var plotDataSourcesCount: Int { get }
     func plotDataSourceAtIndex(index: Int) -> PlotDataSource
 }
 
 protocol DiagramDelegate: class {
-    var geometry: DiagramGeometry { get }
     func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat)
     func moveByDistance(relativeDeltaX: CGFloat)
 }
 
-protocol DiagramViewModelDelegate: class {
-    func plotMoved(scale: CGFloat, start: CGFloat)
+protocol DVGDiagramDelegate: class, DiagramDelegate {
+    func diagramDidSelect(dataRange: DataRange)
 }
 
 protocol ChannelSource: class {

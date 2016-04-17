@@ -9,22 +9,19 @@
 import UIKit
 import Photos
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, DVGDiagramMovementsDelegate {
 
     var phAsset: PHAsset?
-    
-    @IBOutlet weak var waveformView: DVGWaveformView!
+    @IBOutlet weak var waveformContainerView: UIView!
+    var waveform: DVGWaveformController!
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         // Waveform Customization
-        let waveform1 = self.waveformView.maxValuesWaveform()
-        waveform1?.lineColor = UIColor.redColor()
-        
-        let waveform2 = self.waveformView.avgValuesWaveform()
-        waveform2?.lineColor = UIColor.greenColor()
+        self.waveform = DVGWaveformController(containerView: self.waveformContainerView)
+
         
         // Get AVAsset from PHAsset
         if let phAsset = self.phAsset {
@@ -34,15 +31,29 @@ class ViewController: UIViewController {
             phAsset.requestContentEditingInputWithOptions(options) { contentEditingInput, info in
                 dispatch_async(dispatch_get_main_queue()) { 
                     if let asset = contentEditingInput?.avAsset {
-                        self.waveformView.asset = asset
+                        self.waveform.asset = asset
+                        self.waveform.movementDelegate = self
+                        let waveform1 = self.waveform.maxValuesWaveform()
+                        waveform1?.lineColor = UIColor.redColor()
+                        
+                        let waveform2 = self.waveform.avgValuesWaveform()
+                        waveform2?.lineColor = UIColor.greenColor()
                     }
                 }
             }
         }
     }
     
+    func diagramDidSelect(dataRange: DataRange) {
+        
+    }
+    
+    func diagramMoved(scale scale: Double, start: Double) {
+    
+    }
+    
     @IBAction func readAudioAndDrawWaveform() {
-        self.waveformView.readAndDrawSynchronously({
+        self.waveform.readAndDrawSynchronously({
             if $0 != nil {
                 print("error:", $0!)
             } else {

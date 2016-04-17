@@ -13,31 +13,29 @@ class DiagramModel: NSObject, DiagramDataSource {
     
     weak var channelsSource: ChannelSource? {
         didSet{
-            guard let channelsSource = channelsSource else {
-                return
+            channelsSource?.onChannelsChanged = {
+                [weak self] in
+                self?.resetChannelsFromDataSources()
             }
-            channelsSource.onChannelsChanged = {
-                [weak self, weak channelsSource] in
-                if let channelsSource = channelsSource {
-                    self?.resetChannelsFromDataSources(channelsSource)
-                }
-            }
-            self.resetChannelsFromDataSources(channelsSource)
+            self.resetChannelsFromDataSources()
         }
     }
-    weak var delegate: DiagramViewModelDelegate?
     
     private var viewModels = [PlotModel]()
     
     var geometry = DiagramGeometry()
     var onPlotUpdate: () -> () = {}
-
+    var onGeometryUpdate: () -> () = {}
     var plotDataSourcesCount: Int { return self.viewModels.count }
     func plotDataSourceAtIndex(index: Int) -> PlotDataSource {
         return self.viewModels[index]
     }
     
-    func resetChannelsFromDataSources(channelsSource: ChannelSource) {
+    func resetChannelsFromDataSources() {
+        guard let channelsSource = channelsSource else {
+            onPlotUpdate()
+            return
+        }
         self.adjustViewModelsCountWithCount(channelsSource.channelsCount)
         for index in 0..<channelsSource.channelsCount {
             let channel = channelsSource.channelAtIndex(index)
@@ -45,6 +43,7 @@ class DiagramModel: NSObject, DiagramDataSource {
             viewModel.plotModel = self
             viewModel.channel = channel
         }
+        onPlotUpdate()
     }
     
     func adjustViewModelsCountWithCount(count: Int) {
@@ -94,9 +93,7 @@ class DiagramModel: NSObject, DiagramDataSource {
 
 extension DiagramModel: DiagramDelegate {
     func zoom(start start: CGFloat, scale: CGFloat) {
-        self.geometry.scale = Double(scale)
-        self.geometry.start = Double(start)
-        self.delegate?.plotMoved(scale, start: start)
+        self.geometry = DiagramGeometry(start: Double(start), scale: Double(scale))
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }
@@ -111,7 +108,6 @@ extension DiagramModel: DiagramDelegate {
     
     func moveToPosition(start: CGFloat) {
         self.geometry.start = max(0, min(Double(start), 1 - 1/self.geometry.scale))
-        self.delegate?.plotMoved(CGFloat(self.geometry.scale), start: CGFloat(self.geometry.start))
         for viewModel in self.viewModels {
             viewModel.updateGeometry()
         }

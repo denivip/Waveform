@@ -14,56 +14,46 @@ import AVFoundation
 /// Creates all needed data sources, view models and views and sets needed dependencies between them
 /// By default draws waveforms for max values and average values (see. LogicProvider class)
 
-class DVGWaveformView: UIView {
+class DVGWaveformController: NSObject {
 
     //MARK: - Initialization
 
-    convenience init(asset: AVAsset) {
+    convenience init(containerView: UIView) {
         self.init()
-        self.asset = asset
-    }
-    
-    convenience init(){
-        self.init(frame: .zero)
-    }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.addPlotView()
+        self.addPlotViewToContainerView(containerView)
         self.configure()
     }
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.addPlotView()
-        self.configure()
+    override init() {
+        super.init()
     }
 
     //MARK: -
     //MARK: - Configuration
     //MARK: - Internal configuration
-    func addPlotView() {
-        let plotView = DVGDiagram()
-        plotView.selectionDelegate = self
-        
-        self.diagram = plotView
+    func addPlotViewToContainerView(containerView: UIView) {
+        let diagram = DVGAudioWaveformDiagram()
+        self.diagram = diagram
         self.diagram.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.diagram)
+        containerView.addSubview(self.diagram)
         self.diagram.attachBoundsOfSuperview()
     }
     
     func configure() {
-        
+        waveformDataSource.neededSamplesCount = numberOfPointsOnThePlot
         // Prepare Plot Model with DataSource
         self.addDataSource(waveformDataSource)
         self.diagramViewModel.channelsSource = channelSourceMapper
-        diagramViewModel.delegate = self
         
         // Set plot model to plot view
-        diagram.viewModel = diagramViewModel
+        diagram.delegate = diagramViewModel
+        diagram.dataSource = diagramViewModel
+        
+        diagramViewModel.movementsDelegate = self
     }
     
     //MARK: - For external configuration
     func waveformWithIdentifier(identifier: String) -> Plot? {
-        return self.diagram.plotWithIdentifier(identifier)
+        return self.diagram.waveformDiagramView.plotWithIdentifier(identifier)
     }
 
     func maxValuesWaveform() -> Plot? {
@@ -77,7 +67,7 @@ class DVGWaveformView: UIView {
     //MARK: -
     //MARK: - Reading
     func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
-        self.diagram.startSynchingWithDataSource()
+        self.diagram.waveformDiagramView.startSynchingWithDataSource()
         let date = NSDate()
         
         self.samplesReader.readAudioFormat {
@@ -85,14 +75,14 @@ class DVGWaveformView: UIView {
         
             guard let _ = format else {
                 completion(error)
-                self?.diagram.stopSynchingWithDataSource()
+                self?.diagram.waveformDiagramView.stopSynchingWithDataSource()
                 return
             }
         
             self?.samplesReader.readSamples(completion: { (error) in
                 completion(error)
                 print("time: \(-date.timeIntervalSinceNow)")
-                self?.diagram.stopSynchingWithDataSource()
+                self?.diagram.waveformDiagramView.stopSynchingWithDataSource()
             })
         }
     }
@@ -103,49 +93,52 @@ class DVGWaveformView: UIView {
     
     //MARK: -
     //MARK: - Private vars
-    private var diagram: Diagram!
-    private var diagramViewModel = DiagramModel()
+    private var diagram: DVGAudioWaveformDiagram!
+    private var diagramViewModel = DVGAudioWaveformDiagramModel()
     private var samplesReader: AudioSamplesReader!
     private var waveformDataSource = ScalableChannelsContainer()
     private var channelSourceMapper = ChannelSourceMapper()
+    
     //MARK: - Public vars
-    weak var delegate: DVGWaveformViewDelegate?
+    weak var movementDelegate: DVGDiagramMovementsDelegate?
     var asset: AVAsset? {
         didSet {
-            if asset != nil {
-                samplesReader = AudioSamplesReader(asset: asset!)
-                samplesReader.samplesHandler = waveformDataSource
+            if let asset = asset {
+                self.samplesReader = AudioSamplesReader(asset: asset)
             }
         }
     }
-    
-    var numberOfPointsOnThePlot = 512
+    var numberOfPointsOnThePlot = 512 {
+        didSet {
+            waveformDataSource.neededSamplesCount = numberOfPointsOnThePlot
+            self.samplesReader.samplesHandler = waveformDataSource
+        }
+    }
     var start: CGFloat = 0.0
     var scale: CGFloat = 1.0
-//    var progress: NSProgress {
-//        return self.waveformDataSource.progress
-//    }
-    //MARK: -
-}
-
-//MARK: - DiagramViewModelDelegate
-extension DVGWaveformView: DiagramViewModelDelegate {
-    func plotMoved(scale: CGFloat, start: CGFloat) {
-        //TODO: Disable untill draw began
-        self.waveformDataSource.reset(DataRange(location: Double(start), length: 1.0/Double(scale)))
-        self.delegate?.plotMoved(scale, start: start)
-        self.start = start
-        self.scale = scale
+    
+    @objc var playbackRelativePosition: NSNumber? {
+        get { return self._playbackRelativePosition }
+        set { self._playbackRelativePosition = newValue == nil ? nil : CGFloat(newValue!) }
+    }
+    
+    var _playbackRelativePosition: CGFloat? {
+        get { return self.diagram.playbackRelativePosition }
+        set { self.diagram.playbackRelativePosition = newValue }
+    }
+    
+    var progress: NSProgress {
+        return self.samplesReader.progress
     }
 }
 
-extension DVGWaveformView: DVGDiagramDelegate {
-    func plotSelectedAreaWithRange(range: DataRange) {
-        let range = self.diagramViewModel.absoluteRangeFromRelativeRange(range)
-        self.delegate?.plotSelectedAreaWithLocation(range.location, length: range.length)
+////MARK: - DiagramViewModelDelegate
+extension DVGWaveformController: DVGDiagramMovementsDelegate {
+    func diagramDidSelect(dataRange: DataRange) {
+        self.movementDelegate?.diagramDidSelect(dataRange)
     }
-}
-
-protocol DVGWaveformViewDelegate: DiagramViewModelDelegate {
-    func plotSelectedAreaWithLocation(location: Double, length: Double)
+    func diagramMoved(scale scale: Double, start: Double) {
+        self.waveformDataSource.reset(DataRange(location: start, length: 1/scale))
+        self.movementDelegate?.diagramMoved(scale: scale, start: start)
+    }
 }

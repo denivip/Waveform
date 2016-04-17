@@ -30,3 +30,16 @@ extension CGFloat {
         return CGFloat(Double(self)/geometry.scale + geometry.start)
     }
 }
+
+extension DataRange {
+    func convertToGeometry(geometry: DiagramGeometry) -> DataRange {
+        let location = self.location.convertToGeometry(geometry)
+        let length = self.length * geometry.scale
+        return DataRange(location: location, length: length)
+    }
+    func convertFromGeometry(geometry: DiagramGeometry) -> DataRange {
+        let location = self.location.convertFromGeometry(geometry)
+        let length = self.length / geometry.scale
+        return DataRange(location: location, length: length)
+    }
+}

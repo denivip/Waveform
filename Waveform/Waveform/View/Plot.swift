@@ -25,7 +25,7 @@ class Plot: UIView {
         }
     }
 
-    var identifier: String = ""//{ return self.dataSource?.identifier ?? ""}
+    var identifier: String = ""
     
     private var pathLayer: CAShapeLayer!
     
@@ -51,9 +51,7 @@ class Plot: UIView {
         self.pathLayer.lineWidth       = 1.0
         self.layer.addSublayer(self.pathLayer)
         
-        //        self.pathLayer.shouldRasterize     = true
         self.pathLayer.drawsAsynchronously = true
-        //        self.pathLayer.rasterizationScale  = UIScreen.mainScreen().scale
     }
     
     override func layoutSubviews() {
@@ -67,7 +65,6 @@ class Plot: UIView {
     }
     
     private func appendNewPathToPathLayer() {
-//        self.dataSource?.updateGeometry()        
         self.pathLayer.path = self.newPathPart()
     }
     
