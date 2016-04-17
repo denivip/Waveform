@@ -233,9 +233,9 @@
 		8BEE7A611C590B9B0072872A /* Waveform Module */ = {
 			isa = PBXGroup;
 			children = (
-				8BEE7A621C590B9B0072872A /* Data Source */,
 				8BEE7A651C590B9B0072872A /* DVGAudioWaveformPlot.swift */,
 				8BEE7A661C590B9B0072872A /* DVGWaveformView.swift */,
+				8BEE7A621C590B9B0072872A /* Data Source */,
 				8BEE7A671C590B9B0072872A /* Utility */,
 				8BEE7A6D1C590B9B0072872A /* View */,
 				8BEE7A711C590B9B0072872A /* View Model */,
