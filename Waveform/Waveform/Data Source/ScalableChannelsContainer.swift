@@ -20,13 +20,13 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     
     //MARK: -
     //MARK: - Inner configuration
-    func configureChannelsForSamplesCount(samplesCount: Int, estimatedSampleCount: Int) {
+    func configure(neededSamplesCount neededSamplesCount: Int, estimatedSampleCount: Int) {
         
         print("estimatedSampleCount ", estimatedSampleCount)
         
         for index in 0..<numberOfScaleLevels {
             
-            var totalCount = Int(Double(samplesCount) * pow(Double(scaleInterLevelFactor), Double(index)))
+            var totalCount = Int(Double(neededSamplesCount) * pow(Double(scaleInterLevelFactor), Double(index)))
             let blockSize  = Int(ceil(Double(estimatedSampleCount)/Double(totalCount)))
             totalCount = Int(Double(estimatedSampleCount)/Double(blockSize))
 
@@ -52,7 +52,7 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
             channels.append(channel)
         
             //???: Is there any reason to store Float?
-            let channel_        = Channel(logicProvider: AudioAverageValueLogicProvider(), buffer: GenericBuffer<Float>())
+            let channel_        = Channel(logicProvider: AudioMaxValueLogicProvider(), buffer: GenericBuffer<Float>())
             channel_.identifier = self.identifier + "." + channel_.identifier
             channels.append(channel_)
         }
@@ -60,13 +60,9 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
         self.channels = channels
     }
     
-    //TODO: - Rename
-    func configure(estimatedSampleCount estimatedSampleCount: Int, neededSamplesCount: Int) {
-        self.configureChannelsForSamplesCount(neededSamplesCount, estimatedSampleCount: estimatedSampleCount)
-    }
     
-    func configure(dataRange: DataRange) {
-        assert(self.avgValueChannels.count > 0, "you should configure channels first. see method above")
+    func reset(dataRange: DataRange) {
+        assert(self.channels.count > 0, "you should configure channels first. see method above")
         
         let scale      = 1.0 / dataRange.length
         var scaleIndex = Int(floor(log(scale)/log(Double(scaleInterLevelFactor))))
@@ -78,7 +74,7 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     }
     
     func willStartReadSamples(estimatedSampleCount estimatedSampleCount: Int) {
-        configure(estimatedSampleCount: estimatedSampleCount, neededSamplesCount: neededSamplesCount)
+        configure(neededSamplesCount: neededSamplesCount, estimatedSampleCount: estimatedSampleCount)
     }
     
     func didStopReadSamples(count: Int) {
@@ -105,13 +101,11 @@ class ScalableChannelsContainer: NSObject, AbstractChannelSource, AudioSamplesHa
     //MARK: -
     //MARK: - Private Variables
     internal var identifier = "SourceAudioSamples"
-    var numberOfScaleLevels: Int = 5
-    var scaleInterLevelFactor: Int = 4
-    var neededSamplesCount: Int = Int(300 * 1.5 * 4/2)
+    var numberOfScaleLevels: Int = 0
+    var scaleInterLevelFactor: Int = 0
+    var neededSamplesCount: Int = 0
     
     var scaleIndex = 0
-    private var maxValueChannels = [Channel]()
-    private var avgValueChannels = [Channel]()
     private var channels = [Channel]()
     
     
