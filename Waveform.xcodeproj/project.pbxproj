@@ -60,10 +60,10 @@
 		8BEE7A831C590B9B0072872A /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6B1C590B9B0072872A /* Protocols.swift */; };
 		8BEE7A841C590B9B0072872A /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6C1C590B9B0072872A /* UIKit+extensions.swift */; };
 		8BEE7A851C590B9B0072872A /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6C1C590B9B0072872A /* UIKit+extensions.swift */; };
-		8BEE7A861C590B9B0072872A /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6E1C590B9B0072872A /* AudioWaveformPlot.swift */; };
-		8BEE7A871C590B9B0072872A /* AudioWaveformPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6E1C590B9B0072872A /* AudioWaveformPlot.swift */; };
-		8BEE7A881C590B9B0072872A /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */; };
-		8BEE7A891C590B9B0072872A /* AudioWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */; };
+		8BEE7A861C590B9B0072872A /* Diagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6E1C590B9B0072872A /* Diagram.swift */; };
+		8BEE7A871C590B9B0072872A /* Diagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6E1C590B9B0072872A /* Diagram.swift */; };
+		8BEE7A881C590B9B0072872A /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6F1C590B9B0072872A /* Plot.swift */; };
+		8BEE7A891C590B9B0072872A /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A6F1C590B9B0072872A /* Plot.swift */; };
 		8BEE7A8A1C590B9B0072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A701C590B9B0072872A /* SelectionView.swift */; };
 		8BEE7A8B1C590B9B0072872A /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A701C590B9B0072872A /* SelectionView.swift */; };
 		8BEE7A8C1C590B9B0072872A /* DiagramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BEE7A721C590B9B0072872A /* DiagramModel.swift */; };
@@ -124,8 +124,8 @@
 		8BEE7A6A1C590B9B0072872A /* NumberTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberTypes.swift; sourceTree = "<group>"; };
 		8BEE7A6B1C590B9B0072872A /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		8BEE7A6C1C590B9B0072872A /* UIKit+extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+extensions.swift"; sourceTree = "<group>"; };
-		8BEE7A6E1C590B9B0072872A /* AudioWaveformPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformPlot.swift; sourceTree = "<group>"; };
-		8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioWaveformView.swift; sourceTree = "<group>"; };
+		8BEE7A6E1C590B9B0072872A /* Diagram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diagram.swift; sourceTree = "<group>"; };
+		8BEE7A6F1C590B9B0072872A /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
 		8BEE7A701C590B9B0072872A /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
 		8BEE7A721C590B9B0072872A /* DiagramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagramModel.swift; sourceTree = "<group>"; };
 		8BEE7A731C590B9B0072872A /* PlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlotModel.swift; sourceTree = "<group>"; };
@@ -282,8 +282,8 @@
 		8BEE7A6D1C590B9B0072872A /* View */ = {
 			isa = PBXGroup;
 			children = (
-				8BEE7A6E1C590B9B0072872A /* AudioWaveformPlot.swift */,
-				8BEE7A6F1C590B9B0072872A /* AudioWaveformView.swift */,
+				8BEE7A6E1C590B9B0072872A /* Diagram.swift */,
+				8BEE7A6F1C590B9B0072872A /* Plot.swift */,
 				8BEE7A701C590B9B0072872A /* SelectionView.swift */,
 				5B397E4E1CC4273F0060819D /* PlaybackPositionView.swift */,
 			);
@@ -410,11 +410,11 @@
 				8BEE7A7B1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				5B7003DA1C4FFCF300EA6313 /* AppDelegate.swift in Sources */,
 				8B8D5B471CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */,
-				8BEE7A891C590B9B0072872A /* AudioWaveformView.swift in Sources */,
+				8BEE7A891C590B9B0072872A /* Plot.swift in Sources */,
 				8BEE7A851C590B9B0072872A /* UIKit+extensions.swift in Sources */,
 				5B7003D91C4FFC5D00EA6313 /* DVGVideosCollectionViewController.m in Sources */,
 				5B7003D81C4FFC5D00EA6313 /* DVCollectionViewController.m in Sources */,
-				8BEE7A871C590B9B0072872A /* AudioWaveformPlot.swift in Sources */,
+				8BEE7A871C590B9B0072872A /* Diagram.swift in Sources */,
 				8BEE7A7D1C590B9B0072872A /* Channel.swift in Sources */,
 				5B397E4B1CC413840060819D /* ChannelSourceMapper.swift in Sources */,
 				8BEE7A831C590B9B0072872A /* Protocols.swift in Sources */,
@@ -445,11 +445,11 @@
 				8BEE7A7A1C590B9B0072872A /* DVGWaveformView.swift in Sources */,
 				8BDC33231C4FE69A006C6F3C /* DVGCollectionReusableView.m in Sources */,
 				8B8D5B461CBBDEE000B623EF /* AudioReaderSettings.swift in Sources */,
-				8BEE7A881C590B9B0072872A /* AudioWaveformView.swift in Sources */,
+				8BEE7A881C590B9B0072872A /* Plot.swift in Sources */,
 				8BEE7A841C590B9B0072872A /* UIKit+extensions.swift in Sources */,
 				8BDC331D1C4FE656006C6F3C /* DVCollectionViewController.m in Sources */,
 				8BDC331A1C4FE51C006C6F3C /* DVGVideosCollectionViewController.m in Sources */,
-				8BEE7A861C590B9B0072872A /* AudioWaveformPlot.swift in Sources */,
+				8BEE7A861C590B9B0072872A /* Diagram.swift in Sources */,
 				8BEE7A7C1C590B9B0072872A /* Channel.swift in Sources */,
 				5B397E4A1CC4110D0060819D /* ChannelSourceMapper.swift in Sources */,
 				8BEE7A821C590B9B0072872A /* Protocols.swift in Sources */,
