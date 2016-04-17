@@ -69,7 +69,7 @@ class ScalableChannelsContainer: NSObject, ChannelSource, AudioSamplesHandler {
         scaleIndex     = min(self.numberOfScaleLevels - 1, scaleIndex)
         if scaleIndex != self.scaleIndex {
             self.scaleIndex = scaleIndex
-            self.onChannelsChanged(self)
+            self.onChannelsChanged()
         }
     }
     
@@ -115,7 +115,7 @@ class ScalableChannelsContainer: NSObject, ChannelSource, AudioSamplesHandler {
     private var channels = [Channel]()
     
     
-    var onChannelsChanged: (ChannelSource) -> () = {_ in}
+    var onChannelsChanged: () -> () = {_ in}
 
     var channelsCount: Int = 2
     

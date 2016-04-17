@@ -47,9 +47,10 @@ class AudioWaveformPlotModel: NSObject, AudioWaveformPlotDataSource {
         self.updateViewModelsForChannelsSource(channelsSource)
         
         channelsSource.onChannelsChanged = {
-            [weak self]
-            channelsSource in
-            self?.updateViewModelsForChannelsSource(channelsSource)
+            [weak self, weak channelsSource] in
+            if let channelsSource = channelsSource {
+                self?.updateViewModelsForChannelsSource(channelsSource)
+            }
         }
     }
     
