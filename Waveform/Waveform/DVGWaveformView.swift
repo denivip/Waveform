@@ -44,25 +44,26 @@ class DVGWaveformView: UIView {
         let plotView = DVGDiagram()
         plotView.selectionDelegate = self
         
-        self.plotView = plotView
-        self.plotView.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(self.plotView)
-        self.plotView.attachBoundsOfSuperview()
+        self.diagram = plotView
+        self.diagram.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.diagram)
+        self.diagram.attachBoundsOfSuperview()
     }
     
     func configure() {
         
         // Prepare Plot Model with DataSource
-        plotViewModel.addChannelSource(waveformDataSource)
-        plotViewModel.delegate = self
+        self.addDataSource(waveformDataSource)
+        self.diagramViewModel.channelsSource = channelSourceMapper
+        diagramViewModel.delegate = self
         
         // Set plot model to plot view
-        plotView.viewModel = plotViewModel
+        diagram.viewModel = diagramViewModel
     }
     
     //MARK: - For external configuration
     func waveformWithIdentifier(identifier: String) -> Plot? {
-        return self.plotView.plotWithIdentifier(identifier)
+        return self.diagram.plotWithIdentifier(identifier)
     }
 
     func maxValuesWaveform() -> Plot? {
@@ -76,7 +77,7 @@ class DVGWaveformView: UIView {
     //MARK: -
     //MARK: - Reading
     func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
-        self.plotView.startSynchingWithDataSource()
+        self.diagram.startSynchingWithDataSource()
         let date = NSDate()
         
         self.samplesReader.readAudioFormat {
@@ -84,29 +85,29 @@ class DVGWaveformView: UIView {
         
             guard let _ = format else {
                 completion(error)
-                self?.plotView.stopSynchingWithDataSource()
+                self?.diagram.stopSynchingWithDataSource()
                 return
             }
         
             self?.samplesReader.readSamples(completion: { (error) in
                 completion(error)
                 print("time: \(-date.timeIntervalSinceNow)")
-                self?.plotView.stopSynchingWithDataSource()
+                self?.diagram.stopSynchingWithDataSource()
             })
         }
     }
     
     func addDataSource(dataSource: ChannelSource) {
-        self.plotViewModel.addChannelSource(dataSource)
+        channelSourceMapper.addChannelSource(dataSource)
     }
     
     //MARK: -
     //MARK: - Private vars
-    private var plotView: Diagram!
-    private var plotViewModel = DiagramModel()
+    private var diagram: Diagram!
+    private var diagramViewModel = DiagramModel()
     private var samplesReader: AudioSamplesReader!
     private var waveformDataSource = ScalableChannelsContainer()
-    
+    private var channelSourceMapper = ChannelSourceMapper()
     //MARK: - Public vars
     weak var delegate: DVGWaveformViewDelegate?
     var asset: AVAsset? {
@@ -140,7 +141,7 @@ extension DVGWaveformView: DiagramViewModelDelegate {
 
 extension DVGWaveformView: DVGDiagramDelegate {
     func plotSelectedAreaWithRange(range: DataRange) {
-        let range = self.plotViewModel.absoluteRangeFromRelativeRange(range)
+        let range = self.diagramViewModel.absoluteRangeFromRelativeRange(range)
         self.delegate?.plotSelectedAreaWithLocation(range.location, length: range.length)
     }
 }

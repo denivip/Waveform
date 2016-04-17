@@ -11,77 +11,58 @@ import UIKit.UIColor
 
 class DiagramModel: NSObject, DiagramDataSource {
     
+    weak var channelsSource: ChannelSource? {
+        didSet{
+            guard let channelsSource = channelsSource else {
+                return
+            }
+            channelsSource.onChannelsChanged = {
+                [weak self, weak channelsSource] in
+                if let channelsSource = channelsSource {
+                    self?.resetChannelsFromDataSources(channelsSource)
+                }
+            }
+            self.resetChannelsFromDataSources(channelsSource)
+        }
+    }
     weak var delegate: DiagramViewModelDelegate?
     
     private var viewModels = [PlotModel]()
     
-    override init() {
-        super.init()
-    }
-
     var scale: CGFloat = 1.0
     var start: CGFloat = 0.0
     var onPlotUpdate: () -> () = {}
-    var dataSources = [ChannelSource]()
 
     var plotDataSourcesCount: Int { return self.viewModels.count }
     func plotDataSourceAtIndex(index: Int) -> PlotDataSource {
         return self.viewModels[index]
     }
     
-    func addChannelSource(channelsSource: ChannelSource) {
-        
-        self.dataSources.append(channelsSource)
-        
-//        for index in 0..<channelsSource.channelsCount {
-//            
-//            let channel         = channelsSource.channelAtIndex(index)
-//            let viewModel       = PlotModel()
-//            
-//            viewModel.channel   = channel
-//            viewModel.plotModel = self
-//            
-//            self.viewModels.append(viewModel)
-//        }
-        
-        self.updateViewModelsForChannelsSource(channelsSource)
-        
-        channelsSource.onChannelsChanged = {
-            [weak self, weak channelsSource] in
-            if let channelsSource = channelsSource {
-                self?.updateViewModelsForChannelsSource(channelsSource)
-            }
-        }
-    }
-    
-    func resetChannelsFromDataSources() {
-        for dataSource in self.dataSources {
-            self.updateViewModelsForChannelsSource(dataSource)
-        }
-    }
-    
-    func updateViewModelsForChannelsSource(channelsSource: ChannelSource) {
-
+    func resetChannelsFromDataSources(channelsSource: ChannelSource) {
+        self.adjustViewModelsCountWithCount(channelsSource.channelsCount)
         for index in 0..<channelsSource.channelsCount {
-            
-            let channel    = channelsSource.channelAtIndex(index)
-            let identifier = channel.identifier
-            
-            if let viewModel = self.viewModelWithIdentifier(identifier) {
-               
-                viewModel.channel = channel
-                viewModel.updateGeometry()
-                
-            } else {
-                
-                let viewModel       = PlotModel()
-                viewModel.channel   = channel
-                viewModel.plotModel = self
-                self.viewModels.append(viewModel)
-                
+            let channel = channelsSource.channelAtIndex(index)
+            let viewModel = self.viewModels[index]
+            viewModel.plotModel = self
+            viewModel.channel = channel
+        }
+    }
+    
+    func adjustViewModelsCountWithCount(count: Int) {
+        if viewModels.count == count {
+            return
+        }
+        if viewModels.count < count {
+            for _ in viewModels.count..<count {
+                viewModels.append(PlotModel())
+            }
+            return
+        }
+        if viewModels.count > count {
+            for _ in count..<viewModels.count {
+                viewModels.removeLast()
             }
         }
-        self.onPlotUpdate()
     }
     
     func viewModelWithIdentifier(identifier: String) -> PlotModel? {
@@ -95,12 +76,13 @@ class DiagramModel: NSObject, DiagramDataSource {
 
     func maxWafeformBounds() -> CGSize {
         var maxHeight: CGFloat = 0.1
-        for dataSource in self.dataSources {
-            for index in 0..<dataSource.channelsCount {
-                let channel = dataSource.channelAtIndex(index)
-                if CGFloat(channel.maxValue) > maxHeight {
-                    maxHeight = CGFloat(channel.maxValue)
-                }
+        guard let channelsSource = channelsSource else {
+            return .zero
+        }
+        for index in 0..<channelsSource.channelsCount {
+            let channel = channelsSource.channelAtIndex(index)
+            if CGFloat(channel.maxValue) > maxHeight {
+                maxHeight = CGFloat(channel.maxValue)
             }
         }
         return CGSize(width: 1.0, height: maxHeight)
