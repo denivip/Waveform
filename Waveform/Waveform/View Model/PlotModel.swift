@@ -70,7 +70,7 @@ class PlotModel: NSObject, PlotDataSource {
         
         self.pointsCount = count
 
-        let bounds  = self.plotModel!.maxWafeformBounds()
+        let bounds  = self.plotModel!.maxBounds()
         self.bounds = bounds
         
         self.onGeometryUpdate()

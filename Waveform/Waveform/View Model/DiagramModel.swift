@@ -74,7 +74,7 @@ class DiagramModel: NSObject, DiagramDataSource {
         return nil
     }
 
-    func maxWafeformBounds() -> CGSize {
+    func maxBounds() -> CGSize {
         var maxHeight: CGFloat = 0.1
         guard let channelsSource = channelsSource else {
             return .zero
