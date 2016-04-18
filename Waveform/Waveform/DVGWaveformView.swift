@@ -48,7 +48,6 @@ class DVGWaveformController: NSObject {
         diagram.dataSource = diagramViewModel
         
         diagramViewModel.movementsDelegate = self
-        self.samplesReader.samplesHandler = waveformDataSource
     }
     
     //MARK: - For external configuration
@@ -106,6 +105,7 @@ class DVGWaveformController: NSObject {
             if let asset = asset {
                 self.samplesReader = AudioSamplesReader(asset: asset)
                 self.configure()
+                self.samplesReader.samplesHandler = waveformDataSource
             }
         }
     }
