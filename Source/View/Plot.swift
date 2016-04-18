@@ -18,7 +18,7 @@ class Plot: UIView {
     
     var lineColor: UIColor = .blackColor() {
         didSet{
-            self.pathLayer.strokeColor = lineColor.CGColor
+            self.pathLayer.fillColor = lineColor.CGColor
         }
     }
 
@@ -44,8 +44,8 @@ class Plot: UIView {
     func setupPathLayer() {
         
         self.pathLayer             = CAShapeLayer()
-        self.pathLayer.strokeColor = UIColor.blackColor().CGColor
-        self.pathLayer.lineWidth   = 1.0
+        self.pathLayer.fillColor   = UIColor.blackColor().CGColor
+//        self.pathLayer.lineWidth   = 1.0
         self.layer.addSublayer(self.pathLayer)
         
         self.pathLayer.drawsAsynchronously = true
@@ -67,6 +67,8 @@ class Plot: UIView {
     
     private func newPathPart() -> CGPathRef {
         
+        let lineWidth: CGFloat = 1
+        
         guard let dataSource = self.dataSource else {
             return CGPathCreateMutable()
         }
@@ -75,8 +77,7 @@ class Plot: UIView {
         let sourceBounds = dataSource.dataSourceFrame.size
         
         let mPath        = CGPathCreateMutable()
-        
-        CGPathMoveToPoint(mPath, nil, 0, self.bounds.midY)
+        CGPathMoveToPoint(mPath, nil, 0, self.bounds.midY - lineWidth/2)
         
         let wProportion = self.bounds.size.width / sourceBounds.width
         let hPropostion = self.bounds.size.height / sourceBounds.height
@@ -87,13 +88,27 @@ class Plot: UIView {
                 x: point.x * wProportion,
                 y: point.y * hPropostion / 2.0)
             
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY - adjustedPoint.y)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY + adjustedPoint.y)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY - lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY - adjustedPoint.y - lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY - adjustedPoint.y - lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY - lineWidth/2)
         }
-        CGPathMoveToPoint(mPath, nil, CGPathGetCurrentPoint(mPath).x, self.bounds.midY)
+        CGPathAddLineToPoint(mPath, nil, CGPathGetCurrentPoint(mPath).x, self.bounds.midY)
+        for index in 0..<currentCount {
+            let index = currentCount - index - 1
+            let point         = dataSource.pointAtIndex(index)
+            let adjustedPoint = CGPoint(
+                x: point.x * wProportion,
+                y: point.y * hPropostion / 2.0)
+            
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY + lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY + adjustedPoint.y + lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY + adjustedPoint.y + lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY + lineWidth/2)
+        }
         
+        CGPathAddLineToPoint(mPath, nil, 0.0, self.bounds.midY)
+        CGPathCloseSubpath(mPath)
         return mPath
     }
 }

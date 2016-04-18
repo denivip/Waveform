@@ -81,7 +81,6 @@ class DVGWaveformController: NSObject {
             self?.samplesReader.readSamples(completion: { (error) in
                 completion(error)
                 print("time: \(-date.timeIntervalSinceNow)")
-                self?.diagram.waveformDiagramView.stopSynchingWithDataSource()
             })
         }
     }
