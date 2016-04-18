@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
     s.version               = "0.0.1"
 
     s.license               = { :type => "MIT", :file => "LICENSE" }
-    s.author                = { "Anton Belousov" => "belousov@denivip.ru" }
+    s.author                = { "AntonBelousov" => "antbelousov@gmail.com" }
 
     s.homepage              = "https://github.com/AntonBelousov/Waveform"
 
