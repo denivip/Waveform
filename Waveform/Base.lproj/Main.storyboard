@@ -31,7 +31,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="39" id="bdp-iO-1Ip"/>
                                 </constraints>
-                                <state key="normal" title="Read">
+                                <state key="normal" title="Read samples">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -62,7 +62,7 @@
         <!--Collection View-->
         <scene sceneID="HMb-Fd-B9i">
             <objects>
-                <collectionViewController title="Collection View" modalTransitionStyle="partialCurl" modalPresentationStyle="pageSheet" id="Vqw-9f-dTX" customClass="DVGVideosCollectionViewController" sceneMemberID="viewController">
+                <collectionViewController title="Collection View" modalTransitionStyle="partialCurl" modalPresentationStyle="pageSheet" id="Vqw-9f-dTX" customClass="VideoCollectionViewController" customModule="Waveform" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" id="2fu-Tq-0Fx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -75,7 +75,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="g0I-tt-SGg" customClass="DenoiseCollectionViewCell">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="video_collection_view_cell" id="g0I-tt-SGg" customClass="VideoCollectionViewCell" customModule="Waveform" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="124" width="150" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -86,40 +86,51 @@
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="112"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gYi-QV-TTE">
-                                            <rect key="frame" x="110" y="91" width="35" height="20"/>
-                                            <accessibility key="accessibilityConfiguration">
-                                                <bool key="isElement" value="NO"/>
-                                            </accessibility>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3hU-FI-7pg" userLabel="Time Label Container">
+                                            <rect key="frame" x="8" y="82" width="65" height="22"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="list_camera_icon" translatesAutoresizingMaskIntoConstraints="NO" id="13X-1p-M9s" userLabel="Time Label Icon">
+                                                    <rect key="frame" x="8" y="8" width="12" height="7"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJY-t0-mbF" userLabel="Time Label">
+                                                    <rect key="frame" x="25" y="2" width="33" height="18"/>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="13"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.40000000000000002" colorSpace="calibratedWhite"/>
                                             <constraints>
-                                                <constraint firstAttribute="height" constant="20" id="TXk-1I-uDL"/>
-                                                <constraint firstAttribute="width" constant="35" id="mc2-SD-F2i"/>
+                                                <constraint firstItem="13X-1p-M9s" firstAttribute="centerY" secondItem="fJY-t0-mbF" secondAttribute="centerY" id="BUf-ea-DVR"/>
+                                                <constraint firstItem="fJY-t0-mbF" firstAttribute="leading" secondItem="13X-1p-M9s" secondAttribute="trailing" constant="5" id="Yva-WD-Zac"/>
+                                                <constraint firstAttribute="trailing" secondItem="fJY-t0-mbF" secondAttribute="trailing" constant="7" id="aTe-OL-yy8"/>
+                                                <constraint firstAttribute="bottom" secondItem="fJY-t0-mbF" secondAttribute="bottom" constant="2" id="dOq-ig-SOM"/>
+                                                <constraint firstItem="fJY-t0-mbF" firstAttribute="top" secondItem="3hU-FI-7pg" secondAttribute="top" constant="2" id="rQy-Ds-3OP"/>
+                                                <constraint firstItem="13X-1p-M9s" firstAttribute="leading" secondItem="3hU-FI-7pg" secondAttribute="leadingMargin" id="xhL-T7-lfp"/>
                                             </constraints>
-                                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="13"/>
-                                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="cWQ-Gd-ryP" secondAttribute="trailing" id="3d4-lT-dXG"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="gYi-QV-TTE" secondAttribute="trailing" constant="-3" id="J5C-lI-Cay"/>
+                                    <constraint firstAttribute="leadingMargin" secondItem="3hU-FI-7pg" secondAttribute="leading" id="7sD-6S-aHF"/>
                                     <constraint firstItem="cWQ-Gd-ryP" firstAttribute="leading" secondItem="g0I-tt-SGg" secondAttribute="leading" id="Ntv-Rh-aKt"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="3hU-FI-7pg" secondAttribute="bottom" id="VEL-bk-kiJ"/>
                                     <constraint firstItem="cWQ-Gd-ryP" firstAttribute="top" secondItem="g0I-tt-SGg" secondAttribute="top" id="VIm-Us-thX"/>
-                                    <constraint firstItem="cWQ-Gd-ryP" firstAttribute="bottom" secondItem="gYi-QV-TTE" secondAttribute="bottom" constant="1" id="YQ5-jv-g8a"/>
                                     <constraint firstAttribute="bottom" secondItem="cWQ-Gd-ryP" secondAttribute="bottom" id="hp5-3W-B9t"/>
                                 </constraints>
                                 <size key="customSize" width="150" height="112"/>
                                 <connections>
                                     <outlet property="imageView" destination="cWQ-Gd-ryP" id="CLb-6M-BeW"/>
-                                    <outlet property="timeLabel" destination="gYi-QV-TTE" id="y5m-p7-O59"/>
+                                    <outlet property="timeLabel" destination="fJY-t0-mbF" id="KAt-vu-037"/>
+                                    <outlet property="timeLabelContainer" destination="3hU-FI-7pg" id="RaR-IY-4SQ"/>
                                     <segue destination="BYZ-38-t0r" kind="show" id="d4X-eu-ryH"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DVGCollectionReusableView" id="nRv-zv-v0T" customClass="DVGCollectionReusableView">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="video_collection_view_header" id="nRv-zv-v0T" customClass="VideoCollectionReusableView" customModule="Waveform" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="64" width="320" height="60"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -156,7 +167,7 @@
                             <outlet property="delegate" destination="Vqw-9f-dTX" id="YE1-mL-Zo9"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Denoise" id="8qh-eu-xgJ"/>
+                    <navigationItem key="navigationItem" title="Waveform" id="8qh-eu-xgJ"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="haY-My-OR3" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -183,4 +194,7 @@
             <point key="canvasLocation" x="-268" y="-184"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="list_camera_icon" width="12" height="7"/>
+    </resources>
 </document>

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct DiagramGeometry {
     var start = 0.0

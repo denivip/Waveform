@@ -21,7 +21,7 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
         
         // Waveform Customization
         self.waveform = DVGWaveformController(containerView: self.waveformContainerView)
-
+        self.configureWaveform()
         
         // Get AVAsset from PHAsset
         if let phAsset = self.phAsset {
@@ -32,16 +32,19 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
                 dispatch_async(dispatch_get_main_queue()) { 
                     if let asset = contentEditingInput?.avAsset {
                         self.waveform.asset = asset
-                        self.waveform.movementDelegate = self
-                        let waveform1 = self.waveform.maxValuesWaveform()
-                        waveform1?.lineColor = UIColor.redColor()
-                        
-                        let waveform2 = self.waveform.avgValuesWaveform()
-                        waveform2?.lineColor = UIColor.greenColor()
                     }
                 }
             }
         }
+    }
+    
+    func configureWaveform() {
+        self.waveform.movementDelegate = self
+        let waveform1 = self.waveform.maxValuesWaveform()
+        waveform1?.lineColor = UIColor.redColor()
+        
+        let waveform2 = self.waveform.avgValuesWaveform()
+        waveform2?.lineColor = UIColor.greenColor()
     }
     
     func diagramDidSelect(dataRange: DataRange) {

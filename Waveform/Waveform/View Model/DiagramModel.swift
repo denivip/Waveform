@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import UIKit.UIColor
+import UIKit
 
 class DiagramModel: NSObject, DiagramDataSource {
     
@@ -40,7 +40,7 @@ class DiagramModel: NSObject, DiagramDataSource {
         for index in 0..<channelsSource.channelsCount {
             let channel = channelsSource.channelAtIndex(index)
             let viewModel = self.viewModels[index]
-            viewModel.plotModel = self
+            viewModel.diagramModel = self
             viewModel.channel = channel
         }
         onPlotUpdate()
@@ -72,7 +72,7 @@ class DiagramModel: NSObject, DiagramDataSource {
         return nil
     }
 
-    func maxBounds() -> CGSize {
+    func maxWafeformBounds() -> CGRect {
         var maxHeight: CGFloat = 0.1
         guard let channelsSource = channelsSource else {
             return .zero
@@ -83,7 +83,7 @@ class DiagramModel: NSObject, DiagramDataSource {
                 maxHeight = CGFloat(channel.maxValue)
             }
         }
-        return CGSize(width: 1.0, height: maxHeight)
+        return CGRect(origin: .zero, size: CGSize(width: 1.0, height: maxHeight))
     }
     
     func absoluteRangeFromRelativeRange(range: DataRange) -> DataRange {

@@ -10,9 +10,9 @@ import UIKit.UIView
 
 protocol PlotDataSource: class {
     var identifier: String { get }
-    var bounds: CGSize { get }
+    var dataSourceFrame: CGRect { get }
     var pointsCount: Int { get }
-    var onGeometryUpdate: () -> () {set get}
+    var needsRedraw: Bool { get set }
     func updateGeometry()
     func pointAtIndex(index: Int) -> CGPoint
 }

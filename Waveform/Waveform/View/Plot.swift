@@ -13,9 +13,6 @@ class Plot: UIView {
     weak var dataSource: PlotDataSource? {
         didSet {
             identifier = dataSource?.identifier ?? ""
-            dataSource?.onGeometryUpdate = {
-                self.appendNewPathToPathLayer()
-            }
         }
     }
     
@@ -46,9 +43,9 @@ class Plot: UIView {
     
     func setupPathLayer() {
         
-        self.pathLayer                 = CAShapeLayer()
-        self.pathLayer.strokeColor     = UIColor.blackColor().CGColor
-        self.pathLayer.lineWidth       = 1.0
+        self.pathLayer             = CAShapeLayer()
+        self.pathLayer.strokeColor = UIColor.blackColor().CGColor
+        self.pathLayer.lineWidth   = 1.0
         self.layer.addSublayer(self.pathLayer)
         
         self.pathLayer.drawsAsynchronously = true
@@ -75,7 +72,7 @@ class Plot: UIView {
         }
         
         let currentCount = dataSource.pointsCount
-        let sourceBounds = dataSource.bounds
+        let sourceBounds = dataSource.dataSourceFrame.size
         
         let mPath        = CGPathCreateMutable()
         

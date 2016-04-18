@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol DVGDiagramMovementsDelegate: class {
     func diagramDidSelect(dataRange: DataRange)

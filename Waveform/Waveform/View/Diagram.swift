@@ -113,7 +113,10 @@ extension Diagram {
     
     func redraw() {
         for plot in self.plots {
-            plot.dataSource?.updateGeometry()
+            if let dataSource = plot.dataSource where dataSource.needsRedraw {
+                plot.redraw()
+                dataSource.needsRedraw = false
+            }
         }
     }
     

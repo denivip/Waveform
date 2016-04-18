@@ -11,23 +11,41 @@ import Foundation
 
 class PlotModel: NSObject, PlotDataSource {
     
-    weak var plotModel: DiagramModel?
+    weak var diagramModel: DiagramModel?
     var channel: Channel? {
         didSet{
             self.identifier = channel?.identifier ?? ""
+            channel?.onUpdate = { [weak self] in
+                dispatch_async(dispatch_get_main_queue(), {
+                    self?.updateGeometry()
+                })
+            }
         }
     }
     
     var pointsCount = 0
     var bounds      = CGSize(width: 1.0, height: 1.0)
-    var scale: CGFloat { return CGFloat(self.plotModel?.geometry.scale ?? 1.0) }
-    var start: CGFloat { return CGFloat(self.plotModel?.geometry.start ?? 0.0) }
+    var scale: CGFloat { return CGFloat(self.diagramModel?.geometry.scale ?? 1.0) }
+    var start: CGFloat { return CGFloat(self.diagramModel?.geometry.start ?? 0.0) }
     
     var scaledDx: CGFloat     = 0
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
-    var identifier            = ""
-    var onGeometryUpdate: () -> () = {}
+    
+    var dataSourceFrame: CGRect {
+        
+        if let diagramModel = self.diagramModel {
+            return diagramModel.maxWafeformBounds()
+        }
+        
+        if let valuesCollection = self.channel {
+            return CGRect(x: 0, y: 0, width: 1, height: valuesCollection.maxValue)
+        }
+        
+        return .zero
+    }
+    var identifier  = ""
+    var needsRedraw = false
     
     func pointAtIndex(index: Int) -> CGPoint {
         guard let channel = self.channel else {
@@ -69,11 +87,9 @@ class PlotModel: NSObject, PlotDataSource {
         count     = max(0, min(count, self.channel!.count - startIndex))
         
         self.pointsCount = count
-
-        let bounds  = self.plotModel!.maxBounds()
-        self.bounds = bounds
         
-        self.onGeometryUpdate()
+        //TODO: syncronization needed
+        self.needsRedraw = true
     }
     
     deinit {

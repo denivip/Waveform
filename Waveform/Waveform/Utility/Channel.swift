@@ -27,7 +27,8 @@ class Channel {
     private var currentBlockSize = 0
     public var maxValue: Double { return buffer.maxValue }
     public var minValue: Double { return buffer.minValue }
-    
+    var onUpdate: () -> () = {}
+
     public subscript(index: Int) -> Double {
         get {
             return buffer.valueAtIndex(index)
@@ -45,6 +46,7 @@ class Channel {
     
     func appendValueToBuffer(value: Double) {
         buffer.appendValue(value)
+        onUpdate()
     }
     
     private func clear() {
