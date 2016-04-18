@@ -45,6 +45,7 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
         
         let waveform2 = self.waveform.avgValuesWaveform()
         waveform2?.lineColor = UIColor.greenColor()
+        self.waveform.numberOfPointsOnThePlot = 2000
     }
     
     func diagramDidSelect(dataRange: DataRange) {

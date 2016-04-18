@@ -1,0 +1,450 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8BD39EE61CC559FA005E8947 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EDA1CC559FA005E8947 /* AppDelegate.swift */; };
+		8BD39EE81CC559FA005E8947 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BD39EDB1CC559FA005E8947 /* Assets.xcassets */; };
+		8BD39EEA1CC559FA005E8947 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BD39EDC1CC559FA005E8947 /* LaunchScreen.storyboard */; };
+		8BD39EEC1CC559FA005E8947 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BD39EDE1CC559FA005E8947 /* Main.storyboard */; };
+		8BD39EEE1CC559FA005E8947 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8BD39EE01CC559FA005E8947 /* Info.plist */; };
+		8BD39EF01CC559FA005E8947 /* VideoCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EE11CC559FA005E8947 /* VideoCollectionReusableView.swift */; };
+		8BD39EF21CC559FA005E8947 /* VideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EE21CC559FA005E8947 /* VideoCollectionViewCell.swift */; };
+		8BD39EF41CC559FA005E8947 /* VideoCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EE31CC559FA005E8947 /* VideoCollectionViewController.swift */; };
+		8BD39EF61CC559FA005E8947 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EE41CC559FA005E8947 /* ViewController.swift */; };
+		8BD39F141CC55A01005E8947 /* AudioSamplesReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EFA1CC55A01005E8947 /* AudioSamplesReader.swift */; };
+		8BD39F161CC55A01005E8947 /* ScalableChannelsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EFB1CC55A01005E8947 /* ScalableChannelsContainer.swift */; };
+		8BD39F181CC55A01005E8947 /* DVGAudioWaveformDiagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EFC1CC55A01005E8947 /* DVGAudioWaveformDiagram.swift */; };
+		8BD39F1A1CC55A01005E8947 /* DVGAudioWaveformDiagramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EFD1CC55A01005E8947 /* DVGAudioWaveformDiagramModel.swift */; };
+		8BD39F1C1CC55A01005E8947 /* DVGWaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39EFE1CC55A01005E8947 /* DVGWaveformView.swift */; };
+		8BD39F1E1CC55A01005E8947 /* AudioReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F001CC55A01005E8947 /* AudioReaderSettings.swift */; };
+		8BD39F201CC55A01005E8947 /* AudioSamplesContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F011CC55A01005E8947 /* AudioSamplesContainer.swift */; };
+		8BD39F221CC55A01005E8947 /* Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F021CC55A01005E8947 /* Buffer.swift */; };
+		8BD39F241CC55A01005E8947 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F031CC55A01005E8947 /* Channel.swift */; };
+		8BD39F261CC55A01005E8947 /* DiagramGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F041CC55A01005E8947 /* DiagramGeometry.swift */; };
+		8BD39F281CC55A01005E8947 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F051CC55A01005E8947 /* Dispatch.swift */; };
+		8BD39F2A1CC55A01005E8947 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F061CC55A01005E8947 /* Error.swift */; };
+		8BD39F2C1CC55A01005E8947 /* LogicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F071CC55A01005E8947 /* LogicProvider.swift */; };
+		8BD39F2E1CC55A01005E8947 /* NumberTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F081CC55A01005E8947 /* NumberTypes.swift */; };
+		8BD39F301CC55A01005E8947 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F091CC55A01005E8947 /* Protocols.swift */; };
+		8BD39F321CC55A01005E8947 /* UIKit+extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F0A1CC55A01005E8947 /* UIKit+extensions.swift */; };
+		8BD39F341CC55A01005E8947 /* Diagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F0C1CC55A01005E8947 /* Diagram.swift */; };
+		8BD39F361CC55A01005E8947 /* PlaybackPositionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F0D1CC55A01005E8947 /* PlaybackPositionView.swift */; };
+		8BD39F381CC55A01005E8947 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F0E1CC55A01005E8947 /* Plot.swift */; };
+		8BD39F3A1CC55A01005E8947 /* SelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F0F1CC55A01005E8947 /* SelectionView.swift */; };
+		8BD39F3C1CC55A01005E8947 /* ChannelSourceMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F111CC55A01005E8947 /* ChannelSourceMapper.swift */; };
+		8BD39F3E1CC55A01005E8947 /* DiagramModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F121CC55A01005E8947 /* DiagramModel.swift */; };
+		8BD39F401CC55A01005E8947 /* PlotModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD39F131CC55A01005E8947 /* PlotModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8B3F34EE1C243BA6006A4B67 /* Waveform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Waveform.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BD39EDA1CC559FA005E8947 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8BD39EDB1CC559FA005E8947 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8BD39EDD1CC559FA005E8947 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8BD39EDF1CC559FA005E8947 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8BD39EE01CC559FA005E8947 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8BD39EE11CC559FA005E8947 /* VideoCollectionReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCollectionReusableView.swift; sourceTree = "<group>"; };
+		8BD39EE21CC559FA005E8947 /* VideoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewCell.swift; sourceTree = "<group>"; };
+		8BD39EE31CC559FA005E8947 /* VideoCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewController.swift; sourceTree = "<group>"; };
+		8BD39EE41CC559FA005E8947 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		8BD39EE51CC559FA005E8947 /* Waveform-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Waveform-Bridging-Header.h"; sourceTree = "<group>"; };
+		8BD39EFA1CC55A01005E8947 /* AudioSamplesReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesReader.swift; sourceTree = "<group>"; };
+		8BD39EFB1CC55A01005E8947 /* ScalableChannelsContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScalableChannelsContainer.swift; sourceTree = "<group>"; };
+		8BD39EFC1CC55A01005E8947 /* DVGAudioWaveformDiagram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioWaveformDiagram.swift; sourceTree = "<group>"; };
+		8BD39EFD1CC55A01005E8947 /* DVGAudioWaveformDiagramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGAudioWaveformDiagramModel.swift; sourceTree = "<group>"; };
+		8BD39EFE1CC55A01005E8947 /* DVGWaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DVGWaveformView.swift; sourceTree = "<group>"; };
+		8BD39F001CC55A01005E8947 /* AudioReaderSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioReaderSettings.swift; sourceTree = "<group>"; };
+		8BD39F011CC55A01005E8947 /* AudioSamplesContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioSamplesContainer.swift; sourceTree = "<group>"; };
+		8BD39F021CC55A01005E8947 /* Buffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Buffer.swift; sourceTree = "<group>"; };
+		8BD39F031CC55A01005E8947 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		8BD39F041CC55A01005E8947 /* DiagramGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagramGeometry.swift; sourceTree = "<group>"; };
+		8BD39F051CC55A01005E8947 /* Dispatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
+		8BD39F061CC55A01005E8947 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		8BD39F071CC55A01005E8947 /* LogicProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogicProvider.swift; sourceTree = "<group>"; };
+		8BD39F081CC55A01005E8947 /* NumberTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberTypes.swift; sourceTree = "<group>"; };
+		8BD39F091CC55A01005E8947 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		8BD39F0A1CC55A01005E8947 /* UIKit+extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIKit+extensions.swift"; sourceTree = "<group>"; };
+		8BD39F0C1CC55A01005E8947 /* Diagram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diagram.swift; sourceTree = "<group>"; };
+		8BD39F0D1CC55A01005E8947 /* PlaybackPositionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaybackPositionView.swift; sourceTree = "<group>"; };
+		8BD39F0E1CC55A01005E8947 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
+		8BD39F0F1CC55A01005E8947 /* SelectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectionView.swift; sourceTree = "<group>"; };
+		8BD39F111CC55A01005E8947 /* ChannelSourceMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelSourceMapper.swift; sourceTree = "<group>"; };
+		8BD39F121CC55A01005E8947 /* DiagramModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiagramModel.swift; sourceTree = "<group>"; };
+		8BD39F131CC55A01005E8947 /* PlotModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlotModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8B3F34EB1C243BA6006A4B67 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8B3F34E51C243BA6006A4B67 = {
+			isa = PBXGroup;
+			children = (
+				8BD39EF81CC55A01005E8947 /* Source */,
+				8BD39ED91CC559FA005E8947 /* Waveform */,
+				8B3F34EF1C243BA6006A4B67 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8B3F34EF1C243BA6006A4B67 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8B3F34EE1C243BA6006A4B67 /* Waveform.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8BD39ED91CC559FA005E8947 /* Waveform */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39EDA1CC559FA005E8947 /* AppDelegate.swift */,
+				8BD39EDB1CC559FA005E8947 /* Assets.xcassets */,
+				8BD39EDC1CC559FA005E8947 /* LaunchScreen.storyboard */,
+				8BD39EDE1CC559FA005E8947 /* Main.storyboard */,
+				8BD39EE01CC559FA005E8947 /* Info.plist */,
+				8BD39EE11CC559FA005E8947 /* VideoCollectionReusableView.swift */,
+				8BD39EE21CC559FA005E8947 /* VideoCollectionViewCell.swift */,
+				8BD39EE31CC559FA005E8947 /* VideoCollectionViewController.swift */,
+				8BD39EE41CC559FA005E8947 /* ViewController.swift */,
+				8BD39EE51CC559FA005E8947 /* Waveform-Bridging-Header.h */,
+			);
+			path = Waveform;
+			sourceTree = "<group>";
+		};
+		8BD39EF81CC55A01005E8947 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39EF91CC55A01005E8947 /* Data Source */,
+				8BD39EFC1CC55A01005E8947 /* DVGAudioWaveformDiagram.swift */,
+				8BD39EFD1CC55A01005E8947 /* DVGAudioWaveformDiagramModel.swift */,
+				8BD39EFE1CC55A01005E8947 /* DVGWaveformView.swift */,
+				8BD39EFF1CC55A01005E8947 /* Utility */,
+				8BD39F0B1CC55A01005E8947 /* View */,
+				8BD39F101CC55A01005E8947 /* View Model */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		8BD39EF91CC55A01005E8947 /* Data Source */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39EFA1CC55A01005E8947 /* AudioSamplesReader.swift */,
+				8BD39EFB1CC55A01005E8947 /* ScalableChannelsContainer.swift */,
+			);
+			path = "Data Source";
+			sourceTree = "<group>";
+		};
+		8BD39EFF1CC55A01005E8947 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39F001CC55A01005E8947 /* AudioReaderSettings.swift */,
+				8BD39F011CC55A01005E8947 /* AudioSamplesContainer.swift */,
+				8BD39F021CC55A01005E8947 /* Buffer.swift */,
+				8BD39F031CC55A01005E8947 /* Channel.swift */,
+				8BD39F041CC55A01005E8947 /* DiagramGeometry.swift */,
+				8BD39F051CC55A01005E8947 /* Dispatch.swift */,
+				8BD39F061CC55A01005E8947 /* Error.swift */,
+				8BD39F071CC55A01005E8947 /* LogicProvider.swift */,
+				8BD39F081CC55A01005E8947 /* NumberTypes.swift */,
+				8BD39F091CC55A01005E8947 /* Protocols.swift */,
+				8BD39F0A1CC55A01005E8947 /* UIKit+extensions.swift */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		8BD39F0B1CC55A01005E8947 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39F0C1CC55A01005E8947 /* Diagram.swift */,
+				8BD39F0D1CC55A01005E8947 /* PlaybackPositionView.swift */,
+				8BD39F0E1CC55A01005E8947 /* Plot.swift */,
+				8BD39F0F1CC55A01005E8947 /* SelectionView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8BD39F101CC55A01005E8947 /* View Model */ = {
+			isa = PBXGroup;
+			children = (
+				8BD39F111CC55A01005E8947 /* ChannelSourceMapper.swift */,
+				8BD39F121CC55A01005E8947 /* DiagramModel.swift */,
+				8BD39F131CC55A01005E8947 /* PlotModel.swift */,
+			);
+			path = "View Model";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8B3F34ED1C243BA6006A4B67 /* Waveform */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B3F35001C243BA7006A4B67 /* Build configuration list for PBXNativeTarget "Waveform" */;
+			buildPhases = (
+				8B3F34EA1C243BA6006A4B67 /* Sources */,
+				8B3F34EB1C243BA6006A4B67 /* Frameworks */,
+				8B3F34EC1C243BA6006A4B67 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Waveform;
+			productName = Waveform;
+			productReference = 8B3F34EE1C243BA6006A4B67 /* Waveform.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8B3F34E61C243BA6006A4B67 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0720;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = developer;
+				TargetAttributes = {
+					8B3F34ED1C243BA6006A4B67 = {
+						CreatedOnToolsVersion = 7.2;
+					};
+				};
+			};
+			buildConfigurationList = 8B3F34E91C243BA6006A4B67 /* Build configuration list for PBXProject "Waveform" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8B3F34E51C243BA6006A4B67;
+			productRefGroup = 8B3F34EF1C243BA6006A4B67 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8B3F34ED1C243BA6006A4B67 /* Waveform */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8B3F34EC1C243BA6006A4B67 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BD39EEE1CC559FA005E8947 /* Info.plist in Resources */,
+				8BD39EEC1CC559FA005E8947 /* Main.storyboard in Resources */,
+				8BD39EE81CC559FA005E8947 /* Assets.xcassets in Resources */,
+				8BD39EEA1CC559FA005E8947 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8B3F34EA1C243BA6006A4B67 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8BD39F1A1CC55A01005E8947 /* DVGAudioWaveformDiagramModel.swift in Sources */,
+				8BD39F161CC55A01005E8947 /* ScalableChannelsContainer.swift in Sources */,
+				8BD39EF61CC559FA005E8947 /* ViewController.swift in Sources */,
+				8BD39F1E1CC55A01005E8947 /* AudioReaderSettings.swift in Sources */,
+				8BD39F381CC55A01005E8947 /* Plot.swift in Sources */,
+				8BD39F3C1CC55A01005E8947 /* ChannelSourceMapper.swift in Sources */,
+				8BD39F401CC55A01005E8947 /* PlotModel.swift in Sources */,
+				8BD39F201CC55A01005E8947 /* AudioSamplesContainer.swift in Sources */,
+				8BD39EF41CC559FA005E8947 /* VideoCollectionViewController.swift in Sources */,
+				8BD39EF21CC559FA005E8947 /* VideoCollectionViewCell.swift in Sources */,
+				8BD39F241CC55A01005E8947 /* Channel.swift in Sources */,
+				8BD39F261CC55A01005E8947 /* DiagramGeometry.swift in Sources */,
+				8BD39F2A1CC55A01005E8947 /* Error.swift in Sources */,
+				8BD39F281CC55A01005E8947 /* Dispatch.swift in Sources */,
+				8BD39F341CC55A01005E8947 /* Diagram.swift in Sources */,
+				8BD39F1C1CC55A01005E8947 /* DVGWaveformView.swift in Sources */,
+				8BD39F221CC55A01005E8947 /* Buffer.swift in Sources */,
+				8BD39F361CC55A01005E8947 /* PlaybackPositionView.swift in Sources */,
+				8BD39F141CC55A01005E8947 /* AudioSamplesReader.swift in Sources */,
+				8BD39F321CC55A01005E8947 /* UIKit+extensions.swift in Sources */,
+				8BD39EE61CC559FA005E8947 /* AppDelegate.swift in Sources */,
+				8BD39F301CC55A01005E8947 /* Protocols.swift in Sources */,
+				8BD39F3E1CC55A01005E8947 /* DiagramModel.swift in Sources */,
+				8BD39F2E1CC55A01005E8947 /* NumberTypes.swift in Sources */,
+				8BD39F2C1CC55A01005E8947 /* LogicProvider.swift in Sources */,
+				8BD39EF01CC559FA005E8947 /* VideoCollectionReusableView.swift in Sources */,
+				8BD39F181CC55A01005E8947 /* DVGAudioWaveformDiagram.swift in Sources */,
+				8BD39F3A1CC55A01005E8947 /* SelectionView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8BD39EDC1CC559FA005E8947 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BD39EDD1CC559FA005E8947 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8BD39EDE1CC559FA005E8947 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8BD39EDF1CC559FA005E8947 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8B3F34FE1C243BA7006A4B67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Waveform-Swift.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8B3F34FF1C243BA7006A4B67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "Waveform-Swift.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8B3F35011C243BA7006A4B67 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Waveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
+			};
+			name = Debug;
+		};
+		8B3F35021C243BA7006A4B67 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Waveform/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = denivip.Waveform;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Waveform/Waveform-Bridging-Header.h";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8B3F34E91C243BA6006A4B67 /* Build configuration list for PBXProject "Waveform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B3F34FE1C243BA7006A4B67 /* Debug */,
+				8B3F34FF1C243BA7006A4B67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B3F35001C243BA7006A4B67 /* Build configuration list for PBXNativeTarget "Waveform" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B3F35011C243BA7006A4B67 /* Debug */,
+				8B3F35021C243BA7006A4B67 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8B3F34E61C243BA6006A4B67 /* Project object */;
+}
