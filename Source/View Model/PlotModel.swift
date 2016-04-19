@@ -16,10 +16,9 @@ class PlotModel: NSObject, PlotDataSource {
         didSet{
             self.identifier = channel?.identifier ?? ""
             channel?.onUpdate = { [weak self] in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self?.updateGeometry()
-                })
+                self?.updateGeometry()
             }
+            self.updateGeometry()
         }
     }
     
