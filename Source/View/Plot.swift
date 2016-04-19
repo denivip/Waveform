@@ -18,7 +18,7 @@ class Plot: UIView {
     
     var lineColor: UIColor = .blackColor() {
         didSet{
-            self.pathLayer.fillColor = lineColor.CGColor
+//            self.pathLayer.strokeColor = lineColor.CGColor
         }
     }
 
@@ -28,24 +28,24 @@ class Plot: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupPathLayer()
+        self.opaque = false
     }
     
     convenience init(){
         self.init(frame: CGRectZero)
-        self.setupPathLayer()
+        self.opaque = false
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.setupPathLayer()
+        self.opaque = false
     }
     
     func setupPathLayer() {
         
         self.pathLayer             = CAShapeLayer()
-        self.pathLayer.fillColor   = UIColor.blackColor().CGColor
-//        self.pathLayer.lineWidth   = 1.0
+        self.pathLayer.strokeColor = UIColor.blackColor().CGColor
+        self.pathLayer.lineWidth   = 1.0
         self.layer.addSublayer(self.pathLayer)
         
         self.pathLayer.drawsAsynchronously = true
@@ -53,16 +53,25 @@ class Plot: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.pathLayer.frame = self.bounds
         self.redraw()
     }
     
     func redraw() {
-        self.appendNewPathToPathLayer()
+        self.setNeedsDisplay()
     }
     
-    private func appendNewPathToPathLayer() {
-        self.pathLayer.path = self.newPathPart()
+    override func drawRect(rect: CGRect) {
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
+        
+        CGContextSetLineWidth(context, 1)///UIScreen.mainScreen().scale)
+        CGContextAddPath(context, self.newPathPart())
+        CGContextSetStrokeColorWithColor(context, self.lineColor.CGColor)
+        CGContextSetInterpolationQuality(context, .None);
+        CGContextSetAllowsAntialiasing(context, false);
+        CGContextSetShouldAntialias(context, false);
+        CGContextStrokePath(context)
     }
     
     private func newPathPart() -> CGPathRef {
@@ -88,23 +97,10 @@ class Plot: UIView {
                 x: point.x * wProportion,
                 y: point.y * hPropostion / 2.0)
             
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY - lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY - adjustedPoint.y - lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY - adjustedPoint.y - lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY - lineWidth/2)
-        }
-        CGPathAddLineToPoint(mPath, nil, CGPathGetCurrentPoint(mPath).x, self.bounds.midY)
-        for index in 0..<currentCount {
-            let index = currentCount - index - 1
-            let point         = dataSource.pointAtIndex(index)
-            let adjustedPoint = CGPoint(
-                x: point.x * wProportion,
-                y: point.y * hPropostion / 2.0)
-            
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY + lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x,               self.bounds.midY + adjustedPoint.y + lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY + adjustedPoint.y + lineWidth/2)
-            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x + lineWidth,   self.bounds.midY + lineWidth/2)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY - adjustedPoint.y)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY + adjustedPoint.y)
+            CGPathAddLineToPoint(mPath, nil, adjustedPoint.x, self.bounds.midY)
         }
         
         CGPathAddLineToPoint(mPath, nil, 0.0, self.bounds.midY)
@@ -112,3 +108,5 @@ class Plot: UIView {
         return mPath
     }
 }
+
+
