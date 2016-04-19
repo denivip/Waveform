@@ -19,7 +19,7 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
         
         super.viewDidLoad()
         
-        // Waveform Customization
+        // Waveform Instatiation
         self.waveform = DVGWaveformController(containerView: self.waveformContainerView)
         
         // Get AVAsset from PHAsset
@@ -28,14 +28,28 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
             options.canHandleAdjustmentData = {_ in return false}
             
             phAsset.requestContentEditingInputWithOptions(options) { contentEditingInput, info in
+                print(contentEditingInput, info)
                 dispatch_async(dispatch_get_main_queue()) { 
                     if let asset = contentEditingInput?.avAsset {
                         self.waveform.asset = asset
                         self.configureWaveform()
+                    } else {
+                        print(info[PHContentEditingInputResultIsInCloudKey])
+                        if let value = info[PHContentEditingInputResultIsInCloudKey] as? Int where value == 1 {
+                            self.showAlert("Load video from iCloud first")
+                        } else {
+                            self.showAlert("Can't get audio from this video.")
+                        }
                     }
                 }
             }
         }
+    }
+    
+    func showAlert(message: String) {
+        let alert = UIAlertController(title: nil, message: message, preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     func configureWaveform() {
@@ -49,17 +63,18 @@ class ViewController: UIViewController, DVGDiagramMovementsDelegate {
     }
     
     func diagramDidSelect(dataRange: DataRange) {
-        
+        print("\(#function), dataRange: \(dataRange)")
     }
     
     func diagramMoved(scale scale: Double, start: Double) {
-    
+        print("\(#function), scale: \(scale), start: \(start)")
     }
     
     @IBAction func readAudioAndDrawWaveform() {
-        self.waveform.readAndDrawSynchronously({
+        self.waveform.readAndDrawSynchronously({[weak self] in
             if $0 != nil {
                 print("error:", $0!)
+                self?.showAlert("Can't read asset")
             } else {
                 print("waveform finished drawing")
             }

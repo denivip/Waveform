@@ -66,6 +66,12 @@ class DVGWaveformController: NSObject {
     //MARK: -
     //MARK: - Reading
     func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
+        
+        if self.samplesReader == nil {
+            completion(NSError(domain: "",code: -1, userInfo: nil))
+            return
+        }
+        
         self.diagram.waveformDiagramView.startSynchingWithDataSource()
         let date = NSDate()
         
