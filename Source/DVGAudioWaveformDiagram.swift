@@ -8,6 +8,8 @@
 
 import UIKit
 
+@objc
+public
 class DVGAudioWaveformDiagram: UIView {
     
     var panToSelect: UIPanGestureRecognizer!
@@ -35,7 +37,7 @@ class DVGAudioWaveformDiagram: UIView {
         self.setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
@@ -226,8 +228,8 @@ class DVGAudioWaveformDiagram: UIView {
         let width = max(endPosition - startPosition, minSelectionWidth)
         
         let range = DataRange(
-            location: startPosition / self.bounds.width,
-            length:   width / self.bounds.width)
+            location: Double(startPosition / self.bounds.width),
+            length:   Double(width / self.bounds.width))
 
         self.selection = range.convertFromGeometry(self.dataSource!.geometry)
     }
@@ -235,7 +237,7 @@ class DVGAudioWaveformDiagram: UIView {
 }
 
 extension DVGAudioWaveformDiagram: UIGestureRecognizerDelegate {
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    public func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         switch (gestureRecognizer, otherGestureRecognizer) {
         case (panToSelect, tapToSelect):
             fallthrough
@@ -246,7 +248,7 @@ extension DVGAudioWaveformDiagram: UIGestureRecognizerDelegate {
         }
     }
     
-    override func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
+    override public func gestureRecognizerShouldBegin(gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer == self.panToSelect {
             self.tapToSelect.enabled = false
             self.tapToSelect.enabled = true

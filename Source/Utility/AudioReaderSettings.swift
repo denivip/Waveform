@@ -8,8 +8,14 @@
 
 import Foundation
 
-struct AudioFormat {
+public
+class AudioFormat: NSObject {
     let samplesRate: Int
     let bitsDepth: Int
     let numberOfChannels: Int
+    init(samplesRate: Int, bitsDepth: Int, numberOfChannels: Int) {
+        self.samplesRate = samplesRate
+        self.bitsDepth = bitsDepth
+        self.numberOfChannels = numberOfChannels
+    }
 }

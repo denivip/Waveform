@@ -8,6 +8,7 @@
 
 import UIKit
 
+public
 class PlaybackPositionView: UIView {
     
     init() {
@@ -15,12 +16,12 @@ class PlaybackPositionView: UIView {
         self.opaque = false
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.opaque = false
     }
 
-    override func drawRect(rect: CGRect) {
+    override public func drawRect(rect: CGRect) {
         super.drawRect(rect)
         guard let relativePosition = self.position else {
             return

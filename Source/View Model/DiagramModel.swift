@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+@objc
+public
 class DiagramModel: NSObject, DiagramDataSource {
     
     weak var channelsSource: ChannelSource? {
@@ -23,11 +25,11 @@ class DiagramModel: NSObject, DiagramDataSource {
     
     private var viewModels = [PlotModel]()
     
-    var geometry = DiagramGeometry()
-    var onPlotUpdate: () -> () = {}
+    public var geometry = DiagramGeometry()
+    public var onPlotUpdate: () -> () = {}
     var onGeometryUpdate: () -> () = {}
-    var plotDataSourcesCount: Int { return self.viewModels.count }
-    func plotDataSourceAtIndex(index: Int) -> PlotDataSource {
+    public var plotDataSourcesCount: Int { return self.viewModels.count }
+    public func plotDataSourceAtIndex(index: Int) -> PlotDataSource {
         return self.viewModels[index]
     }
     
@@ -99,7 +101,7 @@ extension DiagramModel: DiagramDelegate {
         }
     }
     
-    func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat) {
+    public func zoomAt(zoomAreaCenter: CGFloat, relativeScale: CGFloat) {
         let newScale = max(1.0, relativeScale * CGFloat(self.geometry.scale))
         var start    = CGFloat(self.geometry.start) + zoomAreaCenter * (1/CGFloat(self.geometry.scale) - 1/newScale)
         start        = max(0, min(start, 1 - 1/newScale))
@@ -113,7 +115,7 @@ extension DiagramModel: DiagramDelegate {
         }
     }
     
-    func moveByDistance(relativeDeltaX: CGFloat) {
+    public func moveByDistance(relativeDeltaX: CGFloat) {
         let relativeStart = CGFloat(self.geometry.start) - relativeDeltaX / CGFloat(self.geometry.scale)
         self.moveToPosition(relativeStart)
     }

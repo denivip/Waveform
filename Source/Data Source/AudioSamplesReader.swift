@@ -13,7 +13,7 @@ struct Constants {
     static var DefaultAudioFormat = AudioFormat.init(samplesRate: 44100, bitsDepth: 16, numberOfChannels: 2)
 }
 
-@objc final
+@objc final public
 class AudioSamplesReader: NSObject {
     
     var asset: AVAsset

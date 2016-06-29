@@ -9,18 +9,21 @@
 import Foundation
 import UIKit
 
+@objc
 protocol DVGDiagramMovementsDelegate: class {
     func diagramDidSelect(dataRange: DataRange)
     func diagramMoved(scale scale: Double, start: Double)
 }
 
+@objc
+public
 class DVGAudioWaveformDiagramModel: DiagramModel, DVGDiagramDelegate {
     
     weak var movementsDelegate: DVGDiagramMovementsDelegate?
     
     var originalSelection: DataRange?
     
-    func diagramDidSelect(dataRange: DataRange) {
+    public func diagramDidSelect(dataRange: DataRange) {
         self.originalSelection = dataRange
         self.movementsDelegate?.diagramDidSelect(dataRange)
     }

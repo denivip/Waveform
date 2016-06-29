@@ -45,7 +45,7 @@ class Buffer {
         return _buffer[index]
     }
 }
-
+public
 final
 class GenericBuffer<T: NumberType>: Buffer {
     var __buffer: UnsafeMutablePointer<T> = nil

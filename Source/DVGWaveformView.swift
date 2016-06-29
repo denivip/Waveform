@@ -13,7 +13,7 @@ import AVFoundation
 /// Entry point for Waveform UI Component
 /// Creates all needed data sources, view models and views and sets needed dependencies between them
 /// By default draws waveforms for max values and average values (see. LogicProvider class)
-
+public
 class DVGWaveformController: NSObject {
 
     //MARK: - Initialization
@@ -26,15 +26,21 @@ class DVGWaveformController: NSObject {
         super.init()
     }
 
+    deinit {
+        self.diagram?.removeFromSuperview()
+    }
+    
     //MARK: -
     //MARK: - Configuration
     //MARK: - Internal configuration
     func addPlotViewToContainerView(containerView: UIView) {
         let diagram = DVGAudioWaveformDiagram()
+        
+        diagram.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(diagram)
+        diagram.attachBoundsOfSuperview()
+        
         self.diagram = diagram
-        self.diagram.translatesAutoresizingMaskIntoConstraints = false
-        containerView.addSubview(self.diagram)
-        self.diagram.attachBoundsOfSuperview()
     }
     
     func configure() {
@@ -44,15 +50,15 @@ class DVGWaveformController: NSObject {
         self.diagramViewModel.channelsSource = channelSourceMapper
         
         // Set plot model to plot view
-        diagram.delegate = diagramViewModel
-        diagram.dataSource = diagramViewModel
+        diagram?.delegate = diagramViewModel
+        diagram?.dataSource = diagramViewModel
         
         diagramViewModel.movementsDelegate = self
     }
     
     //MARK: - For external configuration
     func waveformWithIdentifier(identifier: String) -> Plot? {
-        return self.diagram.waveformDiagramView.plotWithIdentifier(identifier)
+        return self.diagram?.waveformDiagramView.plotWithIdentifier(identifier)
     }
 
     func maxValuesWaveform() -> Plot? {
@@ -65,41 +71,52 @@ class DVGWaveformController: NSObject {
 
     //MARK: -
     //MARK: - Reading
-    func readAndDrawSynchronously(completion: (ErrorType?) -> ()) {
+    func readAndDrawSynchronously(completion: (Bool, NSError?) -> ()) {
         
         if self.samplesReader == nil {
-            completion(NSError(domain: "",code: -1, userInfo: nil))
+            completion(false, NSError(domain: "",code: -1, userInfo: nil))
             return
         }
         
-        self.diagram.waveformDiagramView.startSynchingWithDataSource()
+        self.diagram?.waveformDiagramView.startSynchingWithDataSource()
         let date = NSDate()
         
-        self.samplesReader.readAudioFormat {
+        self.samplesReader?.readAudioFormat {
             [weak self] (format, error) in
         
             guard let _ = format else {
-                completion(error)
-                self?.diagram.waveformDiagramView.stopSynchingWithDataSource()
+                completion(false, NSError(domain: "DVGWaveform", code: -1, userInfo: nil))
+                self?.diagram?.waveformDiagramView.stopSynchingWithDataSource()
                 return
             }
         
-            self?.samplesReader.readSamples(completion: { (error) in
-                completion(error)
+            self?.samplesReader?.readSamples(completion: { (error) in
+                if error == nil {
+                    completion(true, nil)
+                } else {
+                    completion(false, NSError(domain: "DVGWaveform", code: -1, userInfo: nil))
+                }
                 print("time: \(-date.timeIntervalSinceNow)")
             })
         }
     }
     
-    func addDataSource(dataSource: ChannelSource) {
+    public func addDataSource(dataSource: ChannelSource) {
         channelSourceMapper.addChannelSource(dataSource)
+        self.diagramViewModel.channelsSource = channelSourceMapper
+        
+        // Set plot model to plot view
+        diagram?.delegate = diagramViewModel
+        diagram?.dataSource = diagramViewModel
+        
+        diagramViewModel.movementsDelegate = self
     }
     
     //MARK: -
     //MARK: - Private vars
-    private var diagram: DVGAudioWaveformDiagram!
+    private var diagram: DVGAudioWaveformDiagram?
     private var diagramViewModel = DVGAudioWaveformDiagramModel()
-    private var samplesReader: AudioSamplesReader!
+    private var samplesReader: AudioSamplesReader?
     private var waveformDataSource = ScalableChannelsContainer()
     private var channelSourceMapper = ChannelSourceMapper()
     
@@ -110,7 +127,7 @@ class DVGWaveformController: NSObject {
             if let asset = asset {
                 self.samplesReader = AudioSamplesReader(asset: asset)
                 self.configure()
-                self.samplesReader.samplesHandler = waveformDataSource
+                self.samplesReader?.samplesHandler = waveformDataSource
             }
         }
     }
@@ -128,12 +145,12 @@ class DVGWaveformController: NSObject {
     }
     
     var _playbackRelativePosition: CGFloat? {
-        get { return self.diagram.playbackRelativePosition }
-        set { self.diagram.playbackRelativePosition = newValue }
+        get { return self.diagram?.playbackRelativePosition }
+        set { self.diagram?.playbackRelativePosition = newValue }
     }
     
-    var progress: NSProgress {
-        return self.samplesReader.progress
+    var progress: NSProgress? {
+        return self.samplesReader?.progress
     }
 }
 

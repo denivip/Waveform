@@ -7,15 +7,17 @@
 //
 import Foundation
 
+@objc
 public
 final
-class Channel {
+class Channel: NSObject {
     
     let logicProvider: LogicProvider
     let buffer: Buffer
     public init(logicProvider: LogicProvider, buffer: Buffer = GenericBuffer<Int>()) {
         self.logicProvider = logicProvider
         self.buffer = buffer
+        super.init()
         self.logicProvider.channel = self
     }
     

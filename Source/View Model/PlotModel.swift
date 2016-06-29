@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 
+public
 class PlotModel: NSObject, PlotDataSource {
     
     weak var diagramModel: DiagramModel?
@@ -22,7 +23,7 @@ class PlotModel: NSObject, PlotDataSource {
         }
     }
     
-    var pointsCount = 0
+    public var pointsCount = 0
     var bounds      = CGSize(width: 1.0, height: 1.0)
     var scale: CGFloat { return CGFloat(self.diagramModel?.geometry.scale ?? 1.0) }
     var start: CGFloat { return CGFloat(self.diagramModel?.geometry.start ?? 0.0) }
@@ -31,7 +32,7 @@ class PlotModel: NSObject, PlotDataSource {
     var scaledStartX: CGFloat = 0
     var startIndex: Int       = 0
     
-    var dataSourceFrame: CGRect {
+    public var dataSourceFrame: CGRect {
         
         if let diagramModel = self.diagramModel {
             return diagramModel.maxWafeformBounds()
@@ -43,10 +44,10 @@ class PlotModel: NSObject, PlotDataSource {
         
         return .zero
     }
-    var identifier  = ""
-    var needsRedraw = false
+    public var identifier  = ""
+    public var needsRedraw = false
     
-    func pointAtIndex(index: Int) -> CGPoint {
+    public func pointAtIndex(index: Int) -> CGPoint {
         guard let channel = self.channel else {
             return .zero
         }
@@ -64,7 +65,7 @@ class PlotModel: NSObject, PlotDataSource {
         return CGPoint(x: pointX, y: CGFloat(pointY))
     }
     
-    func updateGeometry() {
+    public func updateGeometry() {
         
         if channel == nil {
             self.pointsCount = 0

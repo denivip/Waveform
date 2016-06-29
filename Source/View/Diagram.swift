@@ -8,6 +8,7 @@
 
 import UIKit
 
+public
 class Diagram: UIView {
     
     var containerView: UIView!
@@ -43,7 +44,7 @@ class Diagram: UIView {
         self.setup()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
     }
@@ -103,6 +104,7 @@ extension Diagram {
     }
     
     func plotWithIdentifier(identifier: String) -> Plot? {
+        print(plots.map({$0.identifier}))
         for plot in self.plots {
             if plot.identifier == identifier {
                 return plot

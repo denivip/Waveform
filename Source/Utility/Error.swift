@@ -8,6 +8,7 @@
 
 import Foundation
 
+public
 enum SamplesReaderError: ErrorType {
     case NoSound
     case InvalidAudioFormat

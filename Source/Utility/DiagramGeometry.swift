@@ -9,9 +9,14 @@
 import Foundation
 import UIKit
 
-struct DiagramGeometry {
+public
+class DiagramGeometry: NSObject {
     var start = 0.0
     var scale = 1.0
+    init(start: Double = 0.0, scale: Double = 1.0) {
+        self.start = start
+        self.scale = scale
+    }
 }
 
 extension Double {

@@ -8,37 +8,34 @@
 
 import UIKit
 
+@objc
+public
 class SelectionView: UIView {
-    
     var selectionLayer: CALayer!
     init() {
         super.init(frame: .zero)
         self.setup()
-        self.clipsToBounds = true
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setup()
-        self.clipsToBounds = true
     }
     
     func setup() {
         self.setupSelectionLayer()
-        self.backgroundColor = .clearColor()
     }
     
     func setupSelectionLayer() {
         let layer             = CALayer()
-        layer.borderColor     = UIColor.grayColor().CGColor
         layer.cornerRadius    = 5.0
-        layer.borderWidth     = 2.0
-        layer.backgroundColor = UIColor.clearColor().CGColor
+        layer.borderWidth     = 0.0
+        layer.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5).CGColor
         self.layer.addSublayer(layer)
         self.selectionLayer   = layer
     }
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         super.layoutSubviews()
         self.layoutSelection(self.selection)
     }
@@ -49,10 +46,10 @@ class SelectionView: UIView {
     
     func layoutSelection(dataRange: DataRange?) {
         guard let dataRange = dataRange else {
-            self.selectionLayer.borderColor = UIColor.clearColor().CGColor
+            self.selectionLayer.backgroundColor = UIColor.clearColor().CGColor
             return
         }
-        self.selectionLayer.borderColor = UIColor.grayColor().CGColor
+        self.selectionLayer.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.5).CGColor
         
         let startLocation  = self.bounds.width * CGFloat(dataRange.location)
         let selectionWidth = self.bounds.width * CGFloat(dataRange.length)

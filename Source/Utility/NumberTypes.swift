@@ -79,6 +79,7 @@ enum NumberWrapper {
     }
 }
 
+public
 func abs(number: NumberWrapper) -> NumberWrapper {
     switch number {
     case .int(let v):
